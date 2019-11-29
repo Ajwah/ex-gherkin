@@ -1,0 +1,79 @@
+{
+  "pickle": {
+    "id": "9",
+    "language": "en",
+    "name": "They are the future",
+    "sourceIds": [
+      "6"
+    ],
+    "steps": [
+      {
+        "argument": {
+          "dataTable": {
+            "rows": [
+              {
+                "cells": [
+                  {
+                    "value": "æ"
+                  },
+                  {
+                    "value": "o"
+                  }
+                ]
+              },
+              {
+                "cells": [
+                  {
+                    "value": "a"
+                  },
+                  {
+                    "value": "ø"
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "id": "7",
+        "sourceIds": [
+          "2"
+        ],
+        "text": "they have arrived"
+      },
+      {
+        "argument": {
+          "dataTable": {
+            "rows": [
+              {
+                "cells": [
+                  {
+                    "value": "|æ\\n"
+                  },
+                  {
+                    "value": "\\o\no\\"
+                  }
+                ]
+              },
+              {
+                "cells": [
+                  {
+                    "value": "\\|a\\\\n"
+                  },
+                  {
+                    "value": "ø\\\nø\\"
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "id": "8",
+        "sourceIds": [
+          "5"
+        ],
+        "text": "they have arrived"
+      }
+    ],
+    "uri": "testdata/good/escaped_pipes.feature"
+  }
+}

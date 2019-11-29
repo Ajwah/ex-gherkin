@@ -1,0 +1,98 @@
+{
+  "pickle": {
+    "id": "15",
+    "language": "en",
+    "name": "minimalistic",
+    "sourceIds": [
+      "7"
+    ],
+    "steps": [
+      {
+        "argument": {
+          "docString": {
+            "content": "first line (no indent)\n  second line (indented with two spaces)\n\nthird line was empty"
+          }
+        },
+        "id": "8",
+        "sourceIds": [
+          "0"
+        ],
+        "text": "a simple DocString"
+      },
+      {
+        "argument": {
+          "docString": {
+            "content": "<foo>\n  <bar />\n</foo>",
+            "contentType": "xml"
+          }
+        },
+        "id": "9",
+        "sourceIds": [
+          "1"
+        ],
+        "text": "a DocString with content type"
+      },
+      {
+        "argument": {
+          "docString": {
+            "content": "wrongly indented line"
+          }
+        },
+        "id": "10",
+        "sourceIds": [
+          "2"
+        ],
+        "text": "a DocString with wrong indentation"
+      },
+      {
+        "argument": {
+          "docString": {
+            "content": "first line\nsecond line"
+          }
+        },
+        "id": "11",
+        "sourceIds": [
+          "3"
+        ],
+        "text": "a DocString with alternative separator"
+      },
+      {
+        "argument": {
+          "docString": {
+            "content": "first line\n\"\"\"\nthird line"
+          }
+        },
+        "id": "12",
+        "sourceIds": [
+          "4"
+        ],
+        "text": "a DocString with normal separator inside"
+      },
+      {
+        "argument": {
+          "docString": {
+            "content": "first line\n```\nthird line"
+          }
+        },
+        "id": "13",
+        "sourceIds": [
+          "5"
+        ],
+        "text": "a DocString with alternative separator inside"
+      },
+      {
+        "argument": {
+          "docString": {
+            "content": "first line\n\"\"\"\nthird line"
+          }
+        },
+        "id": "14",
+        "sourceIds": [
+          "6"
+        ],
+        "text": "a DocString with escaped separator inside"
+      }
+    ],
+    "uri": "testdata/good/docstrings.feature"
+  }
+}

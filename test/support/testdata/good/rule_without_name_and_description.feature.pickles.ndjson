@@ -1,0 +1,19 @@
+{
+  "pickle": {
+    "id": "3",
+    "language": "en",
+    "sourceIds": [
+      "1"
+    ],
+    "steps": [
+      {
+        "id": "2",
+        "sourceIds": [
+          "0"
+        ],
+        "text": "text"
+      }
+    ],
+    "uri": "testdata/good/rule_without_name_and_description.feature"
+  }
+}

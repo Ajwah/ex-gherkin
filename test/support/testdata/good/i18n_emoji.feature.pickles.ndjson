@@ -1,0 +1,20 @@
+{
+  "pickle": {
+    "id": "3",
+    "language": "em",
+    "name": "💃",
+    "sourceIds": [
+      "1"
+    ],
+    "steps": [
+      {
+        "id": "2",
+        "sourceIds": [
+          "0"
+        ],
+        "text": "🎸"
+      }
+    ],
+    "uri": "testdata/good/i18n_emoji.feature"
+  }
+}

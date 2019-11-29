@@ -1,0 +1,159 @@
+{
+  "pickle": {
+    "id": "19",
+    "language": "en",
+    "name": "minimalistic",
+    "sourceIds": [
+      "13"
+    ],
+    "steps": [
+      {
+        "argument": {
+          "dataTable": {
+            "rows": [
+              {
+                "cells": [
+                  {
+                    "value": "foo"
+                  },
+                  {
+                    "value": "bar"
+                  }
+                ]
+              },
+              {
+                "cells": [
+                  {
+                    "value": "boz"
+                  },
+                  {
+                    "value": "boo"
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "id": "14",
+        "sourceIds": [
+          "2"
+        ],
+        "text": "a simple data table"
+      },
+      {
+        "argument": {
+          "dataTable": {
+            "rows": [
+              {
+                "cells": [
+                  {
+                    "value": "foo"
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "id": "15",
+        "sourceIds": [
+          "4"
+        ],
+        "text": "a data table with a single cell"
+      },
+      {
+        "argument": {
+          "dataTable": {
+            "rows": [
+              {
+                "cells": [
+                  {
+                    "value": "foo"
+                  },
+                  {
+                    "value": "bar"
+                  },
+                  {
+                    "value": "boz"
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "id": "16",
+        "sourceIds": [
+          "6"
+        ],
+        "text": "a data table with different fromatting"
+      },
+      {
+        "argument": {
+          "dataTable": {
+            "rows": [
+              {
+                "cells": [
+                  {
+                    "value": "foo"
+                  },
+                  {},
+                  {
+                    "value": "boz"
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "id": "17",
+        "sourceIds": [
+          "8"
+        ],
+        "text": "a data table with an empty cell"
+      },
+      {
+        "argument": {
+          "dataTable": {
+            "rows": [
+              {
+                "cells": [
+                  {
+                    "value": "foo"
+                  },
+                  {
+                    "value": "bar"
+                  }
+                ]
+              },
+              {
+                "cells": [
+                  {
+                    "value": "boz"
+                  },
+                  {
+                    "value": "boo"
+                  }
+                ]
+              },
+              {
+                "cells": [
+                  {
+                    "value": "boz2"
+                  },
+                  {
+                    "value": "boo2"
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "id": "18",
+        "sourceIds": [
+          "12"
+        ],
+        "text": "a data table with comments and newlines inside"
+      }
+    ],
+    "uri": "testdata/good/datatables.feature"
+  }
+}

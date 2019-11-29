@@ -1,0 +1,61 @@
+{
+  "pickle": {
+    "id": "9",
+    "language": "en",
+    "name": "Example A",
+    "sourceIds": [
+      "3"
+    ],
+    "steps": [
+      {
+        "id": "6",
+        "sourceIds": [
+          "0"
+        ],
+        "text": "fb"
+      },
+      {
+        "id": "7",
+        "sourceIds": [
+          "1"
+        ],
+        "text": "ab"
+      },
+      {
+        "id": "8",
+        "sourceIds": [
+          "2"
+        ],
+        "text": "a"
+      }
+    ],
+    "uri": "testdata/good/rule.feature"
+  }
+}
+{
+  "pickle": {
+    "id": "12",
+    "language": "en",
+    "name": "Example B",
+    "sourceIds": [
+      "5"
+    ],
+    "steps": [
+      {
+        "id": "10",
+        "sourceIds": [
+          "0"
+        ],
+        "text": "fb"
+      },
+      {
+        "id": "11",
+        "sourceIds": [
+          "4"
+        ],
+        "text": "b"
+      }
+    ],
+    "uri": "testdata/good/rule.feature"
+  }
+}

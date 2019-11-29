@@ -1,0 +1,22 @@
+{
+  "pickle": {
+    "id": "5",
+    "language": "en",
+    "name": "minimalistic",
+    "sourceIds": [
+      "3",
+      "2"
+    ],
+    "steps": [
+      {
+        "id": "4",
+        "sourceIds": [
+          "0",
+          "2"
+        ],
+        "text": "the minimalism"
+      }
+    ],
+    "uri": "testdata/good/scenario_outline_no_newline.feature"
+  }
+}

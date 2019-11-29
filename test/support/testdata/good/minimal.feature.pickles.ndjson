@@ -1,0 +1,20 @@
+{
+  "pickle": {
+    "id": "3",
+    "language": "en",
+    "name": "minimalistic",
+    "sourceIds": [
+      "1"
+    ],
+    "steps": [
+      {
+        "id": "2",
+        "sourceIds": [
+          "0"
+        ],
+        "text": "the minimalism"
+      }
+    ],
+    "uri": "testdata/good/minimal.feature"
+  }
+}

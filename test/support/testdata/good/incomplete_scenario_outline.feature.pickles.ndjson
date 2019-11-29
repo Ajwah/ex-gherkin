@@ -1,0 +1,50 @@
+{
+  "pickle": {
+    "id": "12",
+    "language": "en",
+    "name": "steps, no examples",
+    "sourceIds": [
+      "2"
+    ],
+    "steps": [
+      {
+        "id": "10",
+        "sourceIds": [
+          "0"
+        ],
+        "text": "a step"
+      },
+      {
+        "id": "11",
+        "sourceIds": [
+          "1"
+        ],
+        "text": "a step"
+      }
+    ],
+    "uri": "testdata/good/incomplete_scenario_outline.feature"
+  }
+}
+{
+  "pickle": {
+    "id": "13",
+    "language": "en",
+    "name": "no steps, no examples",
+    "sourceIds": [
+      "3"
+    ],
+    "uri": "testdata/good/incomplete_scenario_outline.feature"
+  }
+}
+{
+  "pickle": {
+    "id": "14",
+    "language": "en",
+    "name": "no steps, one example header",
+    "sourceIds": [
+      "9",
+      "8"
+    ],
+    "uri": "testdata/good/incomplete_scenario_outline.feature"
+  }
+}

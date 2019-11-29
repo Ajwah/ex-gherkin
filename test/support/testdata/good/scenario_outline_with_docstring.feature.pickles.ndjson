@@ -1,0 +1,56 @@
+{
+  "pickle": {
+    "id": "6",
+    "language": "en",
+    "name": "Greetings come in many forms",
+    "sourceIds": [
+      "4",
+      "2"
+    ],
+    "steps": [
+      {
+        "argument": {
+          "docString": {
+            "content": "Greeting:Hello",
+            "contentType": "en"
+          }
+        },
+        "id": "5",
+        "sourceIds": [
+          "0",
+          "2"
+        ],
+        "text": "this file:"
+      }
+    ],
+    "uri": "testdata/good/scenario_outline_with_docstring.feature"
+  }
+}
+{
+  "pickle": {
+    "id": "8",
+    "language": "en",
+    "name": "Greetings come in many forms",
+    "sourceIds": [
+      "4",
+      "3"
+    ],
+    "steps": [
+      {
+        "argument": {
+          "docString": {
+            "content": "Greeting:Bonjour",
+            "contentType": "fr"
+          }
+        },
+        "id": "7",
+        "sourceIds": [
+          "0",
+          "3"
+        ],
+        "text": "this file:"
+      }
+    ],
+    "uri": "testdata/good/scenario_outline_with_docstring.feature"
+  }
+}

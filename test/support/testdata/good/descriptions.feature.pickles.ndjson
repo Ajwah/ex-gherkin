@@ -1,0 +1,162 @@
+{
+  "pickle": {
+    "id": "19",
+    "language": "en",
+    "name": "two lines",
+    "sourceIds": [
+      "1"
+    ],
+    "steps": [
+      {
+        "id": "18",
+        "sourceIds": [
+          "0"
+        ],
+        "text": "the minimalism"
+      }
+    ],
+    "uri": "testdata/good/descriptions.feature"
+  }
+}
+{
+  "pickle": {
+    "id": "21",
+    "language": "en",
+    "name": "without indentation",
+    "sourceIds": [
+      "3"
+    ],
+    "steps": [
+      {
+        "id": "20",
+        "sourceIds": [
+          "2"
+        ],
+        "text": "the minimalism"
+      }
+    ],
+    "uri": "testdata/good/descriptions.feature"
+  }
+}
+{
+  "pickle": {
+    "id": "23",
+    "language": "en",
+    "name": "empty lines in the middle",
+    "sourceIds": [
+      "5"
+    ],
+    "steps": [
+      {
+        "id": "22",
+        "sourceIds": [
+          "4"
+        ],
+        "text": "the minimalism"
+      }
+    ],
+    "uri": "testdata/good/descriptions.feature"
+  }
+}
+{
+  "pickle": {
+    "id": "25",
+    "language": "en",
+    "name": "empty lines around",
+    "sourceIds": [
+      "7"
+    ],
+    "steps": [
+      {
+        "id": "24",
+        "sourceIds": [
+          "6"
+        ],
+        "text": "the minimalism"
+      }
+    ],
+    "uri": "testdata/good/descriptions.feature"
+  }
+}
+{
+  "pickle": {
+    "id": "27",
+    "language": "en",
+    "name": "comment after description",
+    "sourceIds": [
+      "9"
+    ],
+    "steps": [
+      {
+        "id": "26",
+        "sourceIds": [
+          "8"
+        ],
+        "text": "the minimalism"
+      }
+    ],
+    "uri": "testdata/good/descriptions.feature"
+  }
+}
+{
+  "pickle": {
+    "id": "29",
+    "language": "en",
+    "name": "comment right after description",
+    "sourceIds": [
+      "11"
+    ],
+    "steps": [
+      {
+        "id": "28",
+        "sourceIds": [
+          "10"
+        ],
+        "text": "the minimalism"
+      }
+    ],
+    "uri": "testdata/good/descriptions.feature"
+  }
+}
+{
+  "pickle": {
+    "id": "31",
+    "language": "en",
+    "name": "description with escaped docstring separator",
+    "sourceIds": [
+      "13"
+    ],
+    "steps": [
+      {
+        "id": "30",
+        "sourceIds": [
+          "12"
+        ],
+        "text": "the minimalism"
+      }
+    ],
+    "uri": "testdata/good/descriptions.feature"
+  }
+}
+{
+  "pickle": {
+    "id": "33",
+    "language": "en",
+    "name": "scenario outline with a description",
+    "sourceIds": [
+      "17",
+      "16"
+    ],
+    "steps": [
+      {
+        "id": "32",
+        "sourceIds": [
+          "14",
+          "16"
+        ],
+        "text": "the minimalism"
+      }
+    ],
+    "uri": "testdata/good/descriptions.feature"
+  }
+}

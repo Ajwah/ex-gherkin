@@ -1,0 +1,20 @@
+{
+  "pickle": {
+    "id": "3",
+    "language": "en",
+    "name": "still pickles up",
+    "sourceIds": [
+      "1"
+    ],
+    "steps": [
+      {
+        "id": "2",
+        "sourceIds": [
+          "0"
+        ],
+        "text": "a step"
+      }
+    ],
+    "uri": "testdata/good/incomplete_background_2.feature"
+  }
+}
