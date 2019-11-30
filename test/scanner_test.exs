@@ -1,4 +1,6 @@
 defmodule ScannerTest do
+  @moduledoc false
+
   use ExUnit.Case
   alias Gherkin.Scanner
   alias Gherkin.Scanner.SyntaxError
@@ -31,37 +33,46 @@ defmodule ScannerTest do
     @keywords
     |> Enum.each(fn {textual_syntax, keyword} ->
       test "Gherkin Keyword: `#{textual_syntax}`" do
-        assert [{:token, unquote(keyword), {:location, 1, 1}, unquote(@some_text)}] ==
+        assert [
+                 {unquote(keyword), unquote(textual_syntax), {:location, 1, 1},
+                  unquote(@some_text)}
+               ] ==
                  tokenize(["#{unquote(textual_syntax)} #{@some_text}"])
       end
     end)
 
     test "Recognizes Comment: `#`" do
-      assert [{:token, :comment, {:location, 1, 1}, " This is some comment"}] == tokenize(["# This is some comment"])
+      assert [{:comment, "#", {:location, 1, 1}, " This is some comment"}] ==
+               tokenize(["# This is some comment"])
     end
 
     test "Recognizes Tag: `@`" do
-      assert [{:token, :tag, {:location, 1, 1}, ["some_tag"]}] == tokenize(["@some_tag"])
+      assert [{:tag, "@", {:location, 1, 1}, ["some_tag"]}] == tokenize(["@some_tag"])
     end
 
     test "Recognizes Table: `|`" do
-      assert [{:token, :data_table, {:location, 1, 1}, ["A", "B", "C"]}] == tokenize(["| A | B | C |"])
+      assert [{:data_table, "|", {:location, 1, 1}, ["A", "B", "C"]}] ==
+               tokenize(["| A | B | C |"])
     end
 
     test "Recognizes Docstring: `\"\"\"`" do
       delim = "\"\"\""
-      assert [{:token, :doc_string, {:location, 1, 1}, {delim, :plain}} | _] = tokenize([delim, "a", delim])
+
+      assert [{:doc_string, "\"\"\"", {:location, 1, 1}, {delim, :plain}}] ==
+               tokenize([delim])
     end
 
     test "Recognizes Docstring with annotated type: `\"\"\"ruby`" do
       delim = "\"\"\""
-      assert [{:token, :doc_string, {:location, 1, 1}, {delim, :ruby}}] == tokenize(["#{delim}ruby"])
+
+      assert [{:doc_string, "\"\"\"", {:location, 1, 1}, {delim, :ruby}}] ==
+               tokenize(["#{delim}ruby"])
     end
   end
 
   describe "#tokenize(path: _) works for all Good Feature Files" do
     __DIR__
-    |> Path.join("support/testdata/good/*.feature")
+    |> Path.join("support/testdata/good/docstrings.feature")
     |> Path.wildcard()
     |> Enum.each(fn path ->
       file =
@@ -72,8 +83,7 @@ defmodule ScannerTest do
       test "#{file}" do
         result =
           [path: unquote(path)]
-          |> Scanner.tokenize()
-          |> Enum.take(1000)
+          |> tokenize()
 
         assert is_list(result)
       end
@@ -104,9 +114,10 @@ defmodule ScannerTest do
 
         ["\"\"\"" | docstring_lines]
         |> tokenize
-        |> Enum.each(fn {:token, actual_keyword, _, _} ->
+        |> Enum.each(fn {actual_keyword, actual_textual_syntax, _, _} ->
           assert actual_keyword != unquote(keyword)
-          assert actual_keyword in [:doc_string, :string, :empty]
+          assert actual_textual_syntax != unquote(textual_syntax)
+          assert actual_keyword in [:doc_string, :content, :empty]
         end)
       end
     end)
@@ -122,6 +133,10 @@ defmodule ScannerTest do
     test "Starting and ending with typed delim" do
       assert_raise SyntaxError, fn ->
         tokenize(["\"\"\"ruby", "a\n", "\"\"\"ruby"])
+      end
+
+      assert_raise SyntaxError, fn ->
+        tokenize(["\"\"\"ruby", "a\n", "\"\"\"ruby", "\"\"\""])
       end
     end
   end

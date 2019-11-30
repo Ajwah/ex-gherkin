@@ -10,75 +10,169 @@ defmodule Gherkin.Scanner.Token do
   alias Gherkin.Scanner.Location
   import Location
 
-  defrecord(:token, label: :feature, cord: location(line: 1, column: 1), text: "")
+  defrecord(:token,
+    label: :feature,
+    label_text: "Feature:",
+    cord: location(line: 1, column: 1),
+    text: "Some Text"
+  )
 
-  @type t() :: record(:token, label: atom, cord: Coordinate.t, text: String.t)
+  @type t() ::
+          record(:token,
+            label: atom,
+            label_text: String.t(),
+            cord: Coordinate.t(),
+            text: String.t()
+          )
 
-  def feature(line, column, text) do
-    token(label: :feature, cord: location(line: line, column: column), text: text)
+  def strip_record_name({:token, label, label_text, cord, text}),
+    do: {label, label_text, cord, text}
+
+  def feature(line, column, label_text, text) do
+    token(
+      label: :feature,
+      label_text: label_text,
+      cord: location(line: line, column: column),
+      text: text
+    )
   end
 
-  def rule(line, column, text) do
-    token(label: :rule, cord: location(line: line, column: column), text: text)
+  def rule(line, column, label_text, text) do
+    token(
+      label: :rule,
+      label_text: label_text,
+      cord: location(line: line, column: column),
+      text: text
+    )
   end
 
-  def scenario(line, column, text) do
-    token(label: :scenario, cord: location(line: line, column: column), text: text)
+  def scenario(line, column, label_text, text) do
+    token(
+      label: :scenario,
+      label_text: label_text,
+      cord: location(line: line, column: column),
+      text: text
+    )
   end
 
-  def given(line, column, text) do
-    token(label: :given, cord: location(line: line, column: column), text: text)
+  def given(line, column, label_text, text) do
+    token(
+      label: :given,
+      label_text: label_text,
+      cord: location(line: line, column: column),
+      text: text
+    )
   end
 
-  def _when(line, column, text) do
-    token(label: :when, cord: location(line: line, column: column), text: text)
+  def _when(line, column, label_text, text) do
+    token(
+      label: :when,
+      label_text: label_text,
+      cord: location(line: line, column: column),
+      text: text
+    )
   end
 
-  def then(line, column, text) do
-    token(label: :then, cord: location(line: line, column: column), text: text)
+  def then(line, column, label_text, text) do
+    token(
+      label: :then,
+      label_text: label_text,
+      cord: location(line: line, column: column),
+      text: text
+    )
   end
 
-  def but(line, column, text) do
-    token(label: :but, cord: location(line: line, column: column), text: text)
+  def but(line, column, label_text, text) do
+    token(
+      label: :but,
+      label_text: label_text,
+      cord: location(line: line, column: column),
+      text: text
+    )
   end
 
-  def _and(line, column, text) do
-    token(label: :and, cord: location(line: line, column: column), text: text)
+  def _and(line, column, label_text, text) do
+    token(
+      label: :and,
+      label_text: label_text,
+      cord: location(line: line, column: column),
+      text: text
+    )
   end
 
-  def background(line, column, text) do
-    token(label: :background, cord: location(line: line, column: column), text: text)
+  def background(line, column, label_text, text) do
+    token(
+      label: :background,
+      label_text: label_text,
+      cord: location(line: line, column: column),
+      text: text
+    )
   end
 
-  def scenario_outline(line, column, text) do
-    token(label: :scenario_outline, cord: location(line: line, column: column), text: text)
+  def scenario_outline(line, column, label_text, text) do
+    token(
+      label: :scenario_outline,
+      label_text: label_text,
+      cord: location(line: line, column: column),
+      text: text
+    )
   end
 
-  def scenarios(line, column, text) do
-    token(label: :scenarios, cord: location(line: line, column: column), text: text)
+  def scenarios(line, column, label_text, text) do
+    token(
+      label: :scenarios,
+      label_text: label_text,
+      cord: location(line: line, column: column),
+      text: text
+    )
   end
 
-  def doc_string(line, column, text) do
-    token(label: :doc_string, cord: location(line: line, column: column), text: text)
+  def doc_string(line, column, label_text, text) do
+    token(
+      label: :doc_string,
+      label_text: label_text,
+      cord: location(line: line, column: column),
+      text: text
+    )
   end
 
-  def data_table(line, column, text) do
-    token(label: :data_table, cord: location(line: line, column: column), text: text)
+  def data_table(line, column, label_text, text) do
+    token(
+      label: :data_table,
+      label_text: label_text,
+      cord: location(line: line, column: column),
+      text: text
+    )
   end
 
-  def tag(line, column, text) do
-    token(label: :tag, cord: location(line: line, column: column), text: text)
+  def tag(line, column, label_text, text) do
+    token(
+      label: :tag,
+      label_text: label_text,
+      cord: location(line: line, column: column),
+      text: text
+    )
   end
 
-  def comment(line, column, text) do
-    token(label: :comment, cord: location(line: line, column: column), text: text)
+  def comment(line, column, label_text, text) do
+    token(
+      label: :comment,
+      label_text: label_text,
+      cord: location(line: line, column: column),
+      text: text
+    )
   end
 
   def content(line, column, text) do
-    token(label: :string, cord: location(line: line, column: column), text: text)
+    token(
+      label: :content,
+      label_text: "",
+      cord: location(line: line, column: column),
+      text: text
+    )
   end
 
   def empty(line, column) do
-    token(label: :empty, cord: location(line: line, column: column), text: "")
+    token(label: :empty, label_text: "", cord: location(line: line, column: column), text: "")
   end
 end
