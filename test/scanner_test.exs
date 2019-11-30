@@ -81,11 +81,14 @@ defmodule ScannerTest do
         |> List.last()
 
       test "#{file}" do
+        expected = File.read!("#{unquote(path)}.tokens")
+
         result =
           [path: unquote(path)]
           |> tokenize()
+          |> ScannerSupport.to_feature_tokens_format()
 
-        assert is_list(result)
+        assert expected == result
       end
     end)
   end

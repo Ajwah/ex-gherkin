@@ -59,8 +59,12 @@ defmodule Gherkin.Scanner do
     handle_doc_string(trimmed_line, "```", String.to_atom(rest), index, column, context)
   end
 
-  def map_to_token(trimmed_line, index, column, context = %Context{doc_string: {offset, _}}) do
-    {handle_plain_text(trimmed_line, index, column - offset + 1), context}
+  def map_to_token(trimmed_line, index, _, context = %Context{doc_string: {_, _}}) do
+    if trimmed_line == "\\\"\\\"\\\"" do
+      {handle_plain_text("\"\"\"", index, 1), context}
+    else
+      {handle_plain_text(trimmed_line, index, 1), context}
+    end
   end
 
   def map_to_token(
@@ -242,7 +246,7 @@ defmodule Gherkin.Scanner do
          Context.reset(context, :doc_string)}
 
       {false, _} ->
-        {Token.content(index, column, trimmed_line), context}
+        {Token.content(index, 1, trimmed_line), context}
 
       {true, false} ->
         SyntaxError.raise(
