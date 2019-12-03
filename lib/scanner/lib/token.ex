@@ -28,12 +28,14 @@ defmodule Gherkin.Scanner.Token do
   def strip_record_name({:token, label, label_text, cord, text}),
     do: {label, label_text, cord, text}
 
+  def column(t = {:token, _, _, _, _}), do: location(token(t, :cord), :column)
+
   def feature(line, column, label_text, text) do
     token(
       label: :feature,
       label_text: label_text,
       cord: location(line: line, column: column),
-      text: text
+      text: String.trim_leading(text)
     )
   end
 
@@ -42,7 +44,7 @@ defmodule Gherkin.Scanner.Token do
       label: :rule,
       label_text: label_text,
       cord: location(line: line, column: column),
-      text: text
+      text: String.trim_leading(text)
     )
   end
 
@@ -51,7 +53,7 @@ defmodule Gherkin.Scanner.Token do
       label: :scenario,
       label_text: label_text,
       cord: location(line: line, column: column),
-      text: text
+      text: String.trim_leading(text)
     )
   end
 
@@ -114,7 +116,7 @@ defmodule Gherkin.Scanner.Token do
       label: :scenario_outline,
       label_text: label_text,
       cord: location(line: line, column: column),
-      text: text
+      text: String.trim_leading(text)
     )
   end
 
@@ -148,6 +150,15 @@ defmodule Gherkin.Scanner.Token do
   def tag(line, column, label_text, text) do
     token(
       label: :tag,
+      label_text: label_text,
+      cord: location(line: line, column: column),
+      text: text
+    )
+  end
+
+  def language(line, column, label_text, text) do
+    token(
+      label: :language,
       label_text: label_text,
       cord: location(line: line, column: column),
       text: text

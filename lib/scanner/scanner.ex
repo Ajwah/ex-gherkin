@@ -1,29 +1,11 @@
 defmodule Gherkin.Scanner do
   @moduledoc false
-  defmodule Context do
-    @moduledoc false
-    defstruct doc_string: false
-
-    def new, do: %__MODULE__{}
-    def reset(%__MODULE__{}, :doc_string), do: new()
-
-    def new(doc_string) do
-      struct(
-        __MODULE__,
-        doc_string: doc_string
-      )
-    end
-
-    def doc_string(c = %__MODULE__{}, trim_length, past_delimiter),
-      do: %{c | doc_string: {trim_length, past_delimiter}}
-  end
-
   alias __MODULE__.{
+    Context,
     SyntaxError,
-    Token
+    Token,
+    Utils
   }
-
-  import Gherkin.Scanner.Utils
 
   def tokenize(path: path) do
     path
@@ -35,31 +17,38 @@ defmodule Gherkin.Scanner do
     content
     |> Stream.with_index(1)
     |> Stream.transform(Context.new(), fn {line, index}, context = %Context{} ->
-      {trimmed_line, column_count} = trim_line(line, context)
+      {trimmed_line, column_count} = Utils.trim_line(line, context)
 
-      {tokenized, updated_context} = map_to_token(trimmed_line, index, column_count, context)
+      {tokenized, updated_context} =
+        map_to_token(
+          context.language,
+          trimmed_line,
+          index,
+          column_count,
+          Context.original_line(context, line)
+        )
 
       {[Token.strip_record_name(tokenized)], updated_context}
     end)
   end
 
-  def map_to_token(trimmed_line = current_delimiter = "\"\"\"", index, column, context) do
+  def map_to_token(_, trimmed_line = current_delimiter = "\"\"\"", index, column, context) do
     handle_doc_string(trimmed_line, current_delimiter, :plain, index, column, context)
   end
 
-  def map_to_token(trimmed_line = <<"\"\"\"", rest::binary>>, index, column, context) do
+  def map_to_token(_, trimmed_line = <<"\"\"\"", rest::binary>>, index, column, context) do
     handle_doc_string(trimmed_line, "\"\"\"", String.to_atom(rest), index, column, context)
   end
 
-  def map_to_token(trimmed_line = current_delimiter = "```", index, column, context) do
+  def map_to_token(_, trimmed_line = current_delimiter = "```", index, column, context) do
     handle_doc_string(trimmed_line, current_delimiter, :plain, index, column, context)
   end
 
-  def map_to_token(trimmed_line = <<"```", rest::binary>>, index, column, context) do
+  def map_to_token(_, trimmed_line = <<"```", rest::binary>>, index, column, context) do
     handle_doc_string(trimmed_line, "```", String.to_atom(rest), index, column, context)
   end
 
-  def map_to_token(trimmed_line, index, _, context = %Context{doc_string: {_, _}}) do
+  def map_to_token(_, trimmed_line, index, _, context = %Context{doc_string: {_, _}}) do
     if trimmed_line == "\\\"\\\"\\\"" do
       {handle_plain_text("\"\"\"", index, 1), context}
     else
@@ -67,155 +56,272 @@ defmodule Gherkin.Scanner do
     end
   end
 
-  def map_to_token(
-        <<"Feature:", " ", rest::binary>>,
-        index,
-        column,
-        context = %Context{}
-      ) do
-    {Token.feature(index, column, "Feature:", rest), context}
-  end
+  @languages Gherkin.Scanner.LanguageSupport.all()
 
-  def map_to_token(
-        <<"Rule:", " ", rest::binary>>,
-        index,
-        column,
-        context = %Context{}
-      ) do
-    {Token.rule(index, column, "Rule:", rest), context}
-  end
+  Enum.each(@languages, fn {language,
+                            %{
+                              feature: feature_phrasals,
+                              rule: rule_phrasals,
+                              background: background_phrasals,
+                              scenario_outline: scenario_outline_phrasals,
+                              example: example_phrasals,
+                              given: given_phrasals,
+                              when: when_phrasals,
+                              then: then_phrasals,
+                              but: but_phrasals,
+                              and: and_phrasals,
+                              examples: examples_phrasals,
+                              direction: language_direction
+                            }} ->
+    Enum.each(feature_phrasals, fn phrasal ->
+      def map_to_token(
+            unquote(language),
+            <<unquote(phrasal), ":", rest::binary>>,
+            index,
+            column,
+            context = %Context{}
+          ) do
+        _language_direction = unquote(language_direction)
+        token = Token.feature(index, column, unquote(phrasal), rest)
+        {token, Context.push(context, token)}
+      end
+    end)
 
-  def map_to_token(
-        <<"Example:", " ", rest::binary>>,
-        index,
-        column,
-        context = %Context{}
-      ) do
-    {Token.scenario(index, column, "Example:", rest), context}
-  end
+    Enum.each(rule_phrasals, fn phrasal ->
+      def map_to_token(
+            unquote(language),
+            <<unquote(phrasal), ":", rest::binary>>,
+            index,
+            column,
+            context = %Context{}
+          ) do
+        _language_direction = unquote(language_direction)
+        token = Token.rule(index, column, unquote(phrasal), rest)
+        {token, Context.push(context, token)}
+      end
+    end)
 
-  def map_to_token(
-        <<"Scenario:", " ", rest::binary>>,
-        index,
-        column,
-        context = %Context{}
-      ) do
-    {Token.scenario(index, column, "Scenario:", rest), context}
-  end
+    Enum.each(example_phrasals, fn phrasal ->
+      def map_to_token(
+            unquote(language),
+            <<unquote(phrasal), ":", rest::binary>>,
+            index,
+            column,
+            context = %Context{}
+          ) do
+        _language_direction = unquote(language_direction)
+        token = Token.scenario(index, column, unquote(phrasal), rest)
+        {token, Context.push(context, token)}
+      end
+    end)
 
-  def map_to_token(
-        <<"Given", " ", rest::binary>>,
-        index,
-        column,
-        context = %Context{}
-      ) do
-    {Token.given(index, column, "Given", rest), context}
-  end
+    Enum.each(given_phrasals, fn phrasal ->
+      def map_to_token(
+            unquote(language),
+            <<unquote(phrasal), rest::binary>>,
+            index,
+            column,
+            context = %Context{}
+          ) do
+        _language_direction = unquote(language_direction)
 
-  def map_to_token(
-        <<"When", " ", rest::binary>>,
-        index,
-        column,
-        context = %Context{}
-      ) do
-    {Token._when(index, column, "When", rest), context}
-  end
+        token = Token.given(index, column, unquote(phrasal), rest)
+        {token, Context.push(context, token)}
+      end
+    end)
 
-  def map_to_token(
-        <<"Then", " ", rest::binary>>,
-        index,
-        column,
-        context = %Context{}
-      ) do
-    {Token.then(index, column, "Then", rest), context}
-  end
+    Enum.each(when_phrasals, fn phrasal ->
+      def map_to_token(
+            unquote(language),
+            <<unquote(phrasal), rest::binary>>,
+            index,
+            column,
+            context = %Context{}
+          ) do
+        _language_direction = unquote(language_direction)
+        token = Token._when(index, column, unquote(phrasal), rest)
+        {token, Context.push(context, token)}
+      end
+    end)
 
-  def map_to_token(
-        <<"But", " ", rest::binary>>,
-        index,
-        column,
-        context = %Context{}
-      ) do
-    {Token.but(index, column, "But", rest), context}
-  end
+    Enum.each(then_phrasals, fn phrasal ->
+      def map_to_token(
+            unquote(language),
+            <<unquote(phrasal), rest::binary>>,
+            index,
+            column,
+            context = %Context{}
+          ) do
+        _language_direction = unquote(language_direction)
+        token = Token.then(index, column, unquote(phrasal), rest)
+        {token, Context.push(context, token)}
+      end
+    end)
 
-  def map_to_token(
-        <<"And", " ", rest::binary>>,
-        index,
-        column,
-        context = %Context{}
-      ) do
-    {Token._and(index, column, "And", rest), context}
-  end
+    Enum.each(but_phrasals, fn phrasal ->
+      def map_to_token(
+            unquote(language),
+            <<unquote(phrasal), rest::binary>>,
+            index,
+            column,
+            context = %Context{}
+          ) do
+        _language_direction = unquote(language_direction)
+        token = Token.but(index, column, unquote(phrasal), rest)
+        {token, Context.push(context, token)}
+      end
+    end)
 
-  def map_to_token(
-        <<"Background:", " ", rest::binary>>,
-        index,
-        column,
-        context = %Context{}
-      ) do
-    {Token.background(index, column, "Background:", rest), context}
-  end
+    Enum.each(and_phrasals, fn phrasal ->
+      def map_to_token(
+            unquote(language),
+            <<unquote(phrasal), rest::binary>>,
+            index,
+            column,
+            context = %Context{}
+          ) do
+        _language_direction = unquote(language_direction)
+        token = Token._and(index, column, unquote(phrasal), rest)
+        {token, Context.push(context, token)}
+      end
+    end)
 
-  def map_to_token(
-        <<"Scenario Outline:", " ", rest::binary>>,
-        index,
-        column,
-        context = %Context{}
-      ) do
-    {Token.scenario_outline(index, column, "Scenario Outline:", rest), context}
-  end
+    Enum.each(background_phrasals, fn phrasal ->
+      def map_to_token(
+            unquote(language),
+            <<unquote(phrasal), ":", rest::binary>>,
+            index,
+            column,
+            context = %Context{}
+          ) do
+        _language_direction = unquote(language_direction)
+        token = Token.background(index, column, unquote(phrasal), String.trim_leading(rest))
+        {token, Context.push(context, token)}
+      end
+    end)
 
-  def map_to_token(
-        <<"Scenario Template:", " ", rest::binary>>,
-        index,
-        column,
-        context = %Context{}
-      ) do
-    {Token.scenario_outline(index, column, "Scenario Template:", rest), context}
-  end
+    Enum.each(scenario_outline_phrasals, fn phrasal ->
+      def map_to_token(
+            unquote(language),
+            <<unquote(phrasal), ":", rest::binary>>,
+            index,
+            column,
+            context = %Context{}
+          ) do
+        _language_direction = unquote(language_direction)
+        token = Token.scenario_outline(index, column, unquote(phrasal), rest)
+        {token, Context.push(context, token)}
+      end
+    end)
 
-  def map_to_token(
-        <<"Examples:", " ", rest::binary>>,
-        index,
-        column,
-        context = %Context{}
-      ) do
-    {Token.scenarios(index, column, "Examples:", rest), context}
-  end
+    Enum.each(examples_phrasals, fn phrasal ->
+      def map_to_token(
+            unquote(language),
+            <<unquote(phrasal), ":", rest::binary>>,
+            index,
+            column,
+            context = %Context{}
+          ) do
+        _language_direction = unquote(language_direction)
+        token = Token.scenarios(index, column, unquote(phrasal), String.trim_leading(rest))
+        {token, Context.push(context, token)}
+      end
+    end)
+  end)
 
-  def map_to_token(
-        <<"Scenarios:", " ", rest::binary>>,
-        index,
-        column,
-        context = %Context{}
-      ) do
-    {Token.scenarios(index, column, "Scenarios:", rest), context}
-  end
+  def map_to_token(_, <<"|", rest::binary>>, index, column, context = %Context{}) do
+    text =
+      rest
+      |> String.trim_trailing("|")
+      |> Utils.data_table_pipe_splitter(column)
+      |> Enum.map(fn {offset_count, e} ->
+        {offset_count, String.trim(e)}
+      end)
 
-  def map_to_token(<<"|", rest::binary>>, index, column, context = %Context{}) do
     {Token.data_table(
        index,
        column,
        "|",
-       rest |> String.split("|", trim: true) |> Enum.map(&String.trim/1)
+       text
      ), context}
   end
 
-  def map_to_token(<<"@", rest::binary>>, index, column, context = %Context{}) do
+  def map_to_token(_, <<"@", rest::binary>>, index, column, context = %Context{}) do
+    {_, text} =
+      rest
+      |> String.split("@")
+      |> Enum.reduce({column, []}, fn tag, {left_offset, tags} ->
+        {left_offset, trimmed_leading} = Utils.count_spaces_before(tag, left_offset)
+
+        {left_offset + String.length(trimmed_leading) + 1,
+         tags ++ [{left_offset, "@" <> String.trim_trailing(trimmed_leading)}]}
+      end)
+
     {Token.tag(
        index,
        column,
        "@",
-       rest |> String.split("@", trim: true) |> Enum.map(&String.trim/1)
+       text
      ), context}
   end
 
-  def map_to_token(<<"#", rest::binary>>, index, column, context = %Context{}) do
-    {Token.comment(index, column, "#", rest), context}
+  def map_to_token(_, <<"# language:", rest::binary>>, index, column, context = %Context{}) do
+    language = String.trim(rest)
+    {Token.language(index, column, "#", language), Context.language(context, language)}
   end
 
-  def map_to_token(text, index, column, context = %Context{}) do
+  def map_to_token(_, <<"#language:", rest::binary>>, index, column, context = %Context{}) do
+    language = String.trim(rest)
+    {Token.language(index, column, "#", language), Context.language(context, language)}
+  end
+
+  def map_to_token(language, <<"#", rest::binary>>, index, column, context = %Context{}) do
+    language_test = String.split(rest, "language")
+
+    if length(language_test) == 2 do
+      [_, language_part] = language_test
+      language_test = String.split(language_part, ":")
+
+      if length(language_test) == 2 do
+        [_, language_part] = language_test
+
+        map_to_token(
+          language,
+          "# language:" <> String.trim(language_part),
+          index,
+          column,
+          context
+        )
+      else
+        handle_comment(index, column, context)
+      end
+    else
+      handle_comment(index, column, context)
+    end
+  end
+
+  def map_to_token(_, text, index, column, context = %Context{}) do
+    {text, column} =
+      context
+      |> Context.peek()
+      |> case do
+        token = {:token, :feature, _, _, _} ->
+          new_column = Token.column(token)
+          {Utils.pad_leading(text, column - new_column), new_column}
+
+        {:token, :scenario, _, _, _} ->
+          {Utils.pad_leading(text, column - 1), 1}
+
+        {:token, :rule, _, _, _} ->
+          {Utils.pad_leading(text, column - 1), 1}
+
+        {:token, :background, _, _, _} ->
+          {Utils.pad_leading(text, column - 1), 1}
+
+        _ ->
+          {text, column}
+      end
+
     {handle_plain_text(text, index, column), context}
   end
 
@@ -258,6 +364,16 @@ defmodule Gherkin.Scanner do
           :ending_docstring_delim_typed
         )
     end
+  end
+
+  defp handle_comment(index, column, context) do
+    line_with_white_spaces_at_end_preserved =
+      context.original_line
+      |> String.trim_leading()
+      |> String.trim_leading("#")
+      |> String.trim_trailing("\n")
+
+    {Token.comment(index, column, "#", line_with_white_spaces_at_end_preserved), context}
   end
 
   defp handle_plain_text("", index, column) do

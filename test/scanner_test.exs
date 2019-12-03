@@ -1,6 +1,5 @@
 defmodule ScannerTest do
   @moduledoc false
-
   use ExUnit.Case
   alias Gherkin.Scanner
   alias Gherkin.Scanner.SyntaxError
@@ -10,11 +9,11 @@ defmodule ScannerTest do
     {"Rule:", :rule},
     {"Example:", :scenario},
     {"Scenario:", :scenario},
-    {"Given", :given},
-    {"When", :when},
-    {"Then", :then},
-    {"But", :but},
-    {"And", :and},
+    {"Given ", :given},
+    {"When ", :when},
+    {"Then ", :then},
+    {"But ", :but},
+    {"And ", :and},
     {"Background:", :background},
     {"Scenario Outline:", :scenario_outline},
     {"Scenario Template:", :scenario_outline},
@@ -25,7 +24,7 @@ defmodule ScannerTest do
   def tokenize(contents) do
     contents
     |> Scanner.tokenize()
-    |> Enum.take(1000)
+    |> Enum.take(2000)
   end
 
   describe "#tokenize(list) Recognizes Primitives:" do
@@ -34,10 +33,10 @@ defmodule ScannerTest do
     |> Enum.each(fn {textual_syntax, keyword} ->
       test "Gherkin Keyword: `#{textual_syntax}`" do
         assert [
-                 {unquote(keyword), unquote(textual_syntax), {:location, 1, 1},
+                 {unquote(keyword), String.trim(unquote(textual_syntax), ":"), {:location, 1, 1},
                   unquote(@some_text)}
                ] ==
-                 tokenize(["#{unquote(textual_syntax)} #{@some_text}"])
+                 tokenize(["#{String.trim(unquote(textual_syntax))} #{@some_text}"])
       end
     end)
 
@@ -47,11 +46,13 @@ defmodule ScannerTest do
     end
 
     test "Recognizes Tag: `@`" do
-      assert [{:tag, "@", {:location, 1, 1}, ["some_tag"]}] == tokenize(["@some_tag"])
+      assert [{:tag, "@", {:location, 1, 1}, [{1, "@some_tag"}]}] == tokenize(["@some_tag"])
     end
 
     test "Recognizes Table: `|`" do
-      assert [{:data_table, "|", {:location, 1, 1}, ["A", "B", "C"]}] ==
+      assert [
+               {:data_table, "|", {:location, 1, 1}, [{3, "A"}, {7, "B"}, {11, "C"}]}
+             ] ==
                tokenize(["| A | B | C |"])
     end
 
@@ -72,7 +73,7 @@ defmodule ScannerTest do
 
   describe "#tokenize(path: _) works for all Good Feature Files" do
     __DIR__
-    |> Path.join("support/testdata/good/docstrings.feature")
+    |> Path.join("support/testdata/good/*.feature")
     |> Path.wildcard()
     |> Enum.each(fn path ->
       file =
@@ -87,6 +88,10 @@ defmodule ScannerTest do
           [path: unquote(path)]
           |> tokenize()
           |> ScannerSupport.to_feature_tokens_format()
+
+        if expected != result do
+          IO.inspect(unquote(path), label: :failed, syntax_colors: [string: :red])
+        end
 
         assert expected == result
       end

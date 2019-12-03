@@ -1,6 +1,164 @@
 defmodule Gherkin.Scanner.Utils do
   @moduledoc false
 
+  def data_table_pipe_splitter(line, offset_count \\ 0)
+
+  def data_table_pipe_splitter(line, offset_count) when is_integer(offset_count) do
+    data_table_pipe_splitter(line, {true, offset_count, offset_count, "", []})
+  end
+
+  def data_table_pipe_splitter("", {_, prev_count, _, cell, cells}) do
+    cells ++ [{prev_count, cell}]
+  end
+
+  def data_table_pipe_splitter(
+        <<"|", rest::binary>>,
+        {leading_spaces_to_skip?, prev_count, count, cell, cells}
+      ) do
+    if leading_spaces_to_skip? do
+      data_table_pipe_splitter(
+        rest,
+        {true, count + 1, count + 1, "", cells ++ [{prev_count + 1, cell}]}
+      )
+    else
+      data_table_pipe_splitter(
+        rest,
+        {true, count + 1, count + 1, "", cells ++ [{prev_count, cell}]}
+      )
+    end
+  end
+
+  def data_table_pipe_splitter(
+        <<"\\\\", rest::binary>>,
+        {leading_spaces_to_skip?, prev_count, count, cell, cells}
+      ) do
+    if leading_spaces_to_skip? do
+      data_table_pipe_splitter(rest, {false, prev_count + 1, count + 2, cell <> "\\", cells})
+    else
+      data_table_pipe_splitter(rest, {false, prev_count, count + 2, cell <> "\\", cells})
+    end
+  end
+
+  def data_table_pipe_splitter(
+        <<"\\|", rest::binary>>,
+        {leading_spaces_to_skip?, prev_count, count, cell, cells}
+      ) do
+    if leading_spaces_to_skip? do
+      data_table_pipe_splitter(rest, {false, prev_count + 1, count + 2, cell <> "|", cells})
+    else
+      data_table_pipe_splitter(rest, {false, prev_count, count + 2, cell <> "|", cells})
+    end
+  end
+
+  def data_table_pipe_splitter(
+        <<"\\n", rest::binary>>,
+        {leading_spaces_to_skip?, prev_count, count, cell, cells}
+      ) do
+    if leading_spaces_to_skip? do
+      data_table_pipe_splitter(rest, {false, prev_count + 1, count + 2, cell <> "\n", cells})
+    else
+      data_table_pipe_splitter(rest, {false, prev_count, count + 2, cell <> "\n", cells})
+    end
+  end
+
+  def data_table_pipe_splitter(
+        <<"\\", rest::binary>>,
+        {leading_spaces_to_skip?, prev_count, count, cell, cells}
+      ) do
+    if leading_spaces_to_skip? do
+      data_table_pipe_splitter(rest, {false, prev_count + 1, count + 2, cell <> "\\", cells})
+    else
+      data_table_pipe_splitter(rest, {false, prev_count, count + 2, cell <> "\\", cells})
+    end
+  end
+
+  def data_table_pipe_splitter(
+        <<"\n", rest::binary>>,
+        {leading_spaces_to_skip?, prev_count, count, cell, cells}
+      ) do
+    if leading_spaces_to_skip? do
+      data_table_pipe_splitter(rest, {false, prev_count + 1, count + 2, cell <> "\n", cells})
+    else
+      data_table_pipe_splitter(rest, {false, prev_count, count + 2, cell <> "\n", cells})
+    end
+  end
+
+  def data_table_pipe_splitter(
+        <<"\t", rest::binary>>,
+        {leading_spaces_to_skip?, prev_count, count, cell, cells}
+      ) do
+    if leading_spaces_to_skip? do
+      data_table_pipe_splitter(rest, {leading_spaces_to_skip?, prev_count, count, cell, cells})
+    else
+      data_table_pipe_splitter(rest, {leading_spaces_to_skip?, prev_count, count, cell, cells})
+    end
+  end
+
+  def data_table_pipe_splitter(
+        <<160::utf8, rest::binary>>,
+        {leading_spaces_to_skip?, prev_count, count, cell, cells}
+      ) do
+    if leading_spaces_to_skip? do
+      data_table_pipe_splitter(
+        rest,
+        {leading_spaces_to_skip?, prev_count + 2, count + 2, cell, cells}
+      )
+    else
+      data_table_pipe_splitter(
+        rest,
+        {leading_spaces_to_skip?, prev_count, count + 2, cell, cells}
+      )
+    end
+  end
+
+  def data_table_pipe_splitter(
+        <<" ", rest::binary>>,
+        {leading_spaces_to_skip?, prev_count, count, cell, cells}
+      ) do
+    if leading_spaces_to_skip? do
+      data_table_pipe_splitter(
+        rest,
+        {leading_spaces_to_skip?, prev_count + 1, count + 1, cell, cells}
+      )
+    else
+      data_table_pipe_splitter(
+        rest,
+        {leading_spaces_to_skip?, prev_count, count + 1, cell <> " ", cells}
+      )
+    end
+  end
+
+  def data_table_pipe_splitter(
+        <<char::utf8, rest::binary>>,
+        {leading_spaces_to_skip?, prev_count, count, cell, cells}
+      ) do
+    if leading_spaces_to_skip? do
+      data_table_pipe_splitter(
+        rest,
+        {false, prev_count + 1, count + 1, cell <> <<char::utf8>>, cells}
+      )
+    else
+      data_table_pipe_splitter(
+        rest,
+        {false, prev_count, count + 1, cell <> <<char::utf8>>, cells}
+      )
+    end
+  end
+
+  def count_spaces_before(<<" ", rest::binary>>, count) do
+    count_spaces_before(rest, count + 1)
+  end
+
+  def count_spaces_before(trimmed_trailing, count) do
+    {count, trimmed_trailing}
+  end
+
+  def pad_leading(line, 0), do: line
+
+  def pad_leading(line, amount_spaces) do
+    pad_leading(" " <> line, amount_spaces - 1)
+  end
+
   def trim_line(line, %{doc_string: false}) do
     {line, column_count} = trim_leading_white_spaces(line, 1)
     {String.trim_trailing(line), column_count}
@@ -16,7 +174,7 @@ defmodule Gherkin.Scanner.Utils do
       |> trim_fixed_number_leading_white_spaces(trim_length)
       |> case do
         {trimmed_line, :wrongly_indented_line_within_doc_string} ->
-          IO.warn("Wrongly indented line within `DocString`: #{line}")
+          # IO.warn("Wrongly indented line within `DocString`: #{line}")
           trimmed_line
 
         {trimmed_line, _} ->
