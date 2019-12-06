@@ -57,6 +57,7 @@ defmodule Gherkin.Scanner do
   end
 
   @languages Gherkin.Scanner.LanguageSupport.all()
+  # @languages []
 
   Enum.each(@languages, fn {language,
                             %{
@@ -71,8 +72,34 @@ defmodule Gherkin.Scanner do
                               but: but_phrasals,
                               and: and_phrasals,
                               examples: examples_phrasals,
-                              direction: language_direction
+                              direction: language_direction,
+                              homonyms: homonym_phrasals,
                             }} ->
+
+    Enum.each(homonym_phrasals, fn {phrasal, next_in_sequence_lookup} ->
+      {%{default: default_homonym}, next_in_sequence_lookup} = Map.split(next_in_sequence_lookup, [:default])
+
+      def map_to_token(
+            unquote(language),
+            <<unquote(phrasal), rest::binary>>,
+            index,
+            column,
+            context = %Context{}
+          ) do
+        {:token, prev_keyword, _, _, _} = Context.peek(context)
+
+        unquote(Macro.escape(next_in_sequence_lookup))
+        |> Map.get(prev_keyword, unquote(default_homonym))
+        |> case do
+          :given -> handle_given(unquote(language_direction), unquote(phrasal), rest, index, column, context)
+          :when -> handle_when(unquote(language_direction), unquote(phrasal), rest, index, column, context)
+          :then -> handle_then(unquote(language_direction), unquote(phrasal), rest, index, column, context)
+          :and -> handle_and(unquote(language_direction), unquote(phrasal), rest, index, column, context)
+          :but -> handle_but(unquote(language_direction), unquote(phrasal), rest, index, column, context)
+        end
+      end
+    end)
+
     Enum.each(feature_phrasals, fn phrasal ->
       def map_to_token(
             unquote(language),
@@ -123,14 +150,12 @@ defmodule Gherkin.Scanner do
             column,
             context = %Context{}
           ) do
-        _language_direction = unquote(language_direction)
-
-        token = Token.given(index, column, unquote(phrasal), rest)
-        {token, Context.push(context, token)}
+        handle_given(unquote(language_direction), unquote(phrasal), rest, index, column, context)
       end
     end)
 
     Enum.each(when_phrasals, fn phrasal ->
+      # IO.puts(":when, #{language}, #{phrasal}")
       def map_to_token(
             unquote(language),
             <<unquote(phrasal), rest::binary>>,
@@ -138,13 +163,13 @@ defmodule Gherkin.Scanner do
             column,
             context = %Context{}
           ) do
-        _language_direction = unquote(language_direction)
-        token = Token._when(index, column, unquote(phrasal), rest)
-        {token, Context.push(context, token)}
+
+        handle_when(unquote(language_direction), unquote(phrasal), rest, index, column, context)
       end
     end)
 
     Enum.each(then_phrasals, fn phrasal ->
+      # IO.puts(":then, #{language}, #{phrasal}")
       def map_to_token(
             unquote(language),
             <<unquote(phrasal), rest::binary>>,
@@ -152,9 +177,7 @@ defmodule Gherkin.Scanner do
             column,
             context = %Context{}
           ) do
-        _language_direction = unquote(language_direction)
-        token = Token.then(index, column, unquote(phrasal), rest)
-        {token, Context.push(context, token)}
+        handle_then(unquote(language_direction), unquote(phrasal), rest, index, column, context)
       end
     end)
 
@@ -166,9 +189,7 @@ defmodule Gherkin.Scanner do
             column,
             context = %Context{}
           ) do
-        _language_direction = unquote(language_direction)
-        token = Token.but(index, column, unquote(phrasal), rest)
-        {token, Context.push(context, token)}
+        handle_but(unquote(language_direction), unquote(phrasal), rest, index, column, context)
       end
     end)
 
@@ -180,9 +201,7 @@ defmodule Gherkin.Scanner do
             column,
             context = %Context{}
           ) do
-        _language_direction = unquote(language_direction)
-        token = Token._and(index, column, unquote(phrasal), rest)
-        {token, Context.push(context, token)}
+        handle_and(unquote(language_direction), unquote(phrasal), rest, index, column, context)
       end
     end)
 
@@ -375,6 +394,32 @@ defmodule Gherkin.Scanner do
 
     {Token.comment(index, column, "#", line_with_white_spaces_at_end_preserved), context}
   end
+
+  def handle_given(_language_direction, phrasal, rest, index, column, context) do
+    token = Token.given(index, column, phrasal, rest)
+    {token, Context.push(context, token)}
+  end
+
+  def handle_when(_language_direction, phrasal, rest, index, column, context) do
+    token = Token._when(index, column, phrasal, rest)
+    {token, Context.push(context, token)}
+  end
+
+  def handle_then(_language_direction, phrasal, rest, index, column, context) do
+    token = Token.then(index, column, phrasal, rest)
+    {token, Context.push(context, token)}
+  end
+
+  def handle_and(_language_direction, phrasal, rest, index, column, context) do
+    token = Token._and(index, column, phrasal, rest)
+    {token, Context.push(context, token)}
+  end
+
+  def handle_but(_language_direction, phrasal, rest, index, column, context) do
+    token = Token.but(index, column, phrasal, rest)
+    {token, Context.push(context, token)}
+  end
+
 
   defp handle_plain_text("", index, column) do
     Token.empty(index, column)
