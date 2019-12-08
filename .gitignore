@@ -23,3 +23,5 @@ erl_crash.dump
 ex_gherkin-*.tar
 
 .elixir_ls/
+
+*.terms

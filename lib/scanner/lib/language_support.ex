@@ -1,8 +1,7 @@
 defmodule Gherkin.Scanner.LanguageSupport do
-  @gherkin_languages "gherkin-languages"
-  @gherkin_languages_source "#{@gherkin_languages}.json"
-  @gherkin_languages_resource "#{@gherkin_languages}.terms"
-  @homonyms ["Агар ", "* ", "अनी ", "Tha ", "Þá ", "Ða ", "Þa "]
+  @gherkin_languages_source Application.get_env(:ex_gherkin, :file).source
+  @gherkin_languages_resource Application.get_env(:ex_gherkin, :file).resource
+  @homonyms Application.get_env(:ex_gherkin, :homonyms)
   @moduledoc_homonyms @homonyms |> Enum.map(&("      * '#{&1}'")) |> Enum.join("\n")
 
   @moduledoc """
@@ -96,16 +95,19 @@ defmodule Gherkin.Scanner.LanguageSupport do
   Saves parsed content to: '#{@gherkin_languages_resource}' in `binary`
   format.
   """
-  def unload do
-    content = parse() |> :erlang.term_to_binary()
-    File.write!(@gherkin_languages_resource, content)
+  def unload(source \\ @gherkin_languages_source, resource \\ @gherkin_languages_resource, homonyms \\ @homonyms, languages \\ :all) do
+    content = source
+      |> parse(homonyms, languages)
+      |> :erlang.term_to_binary()
+
+    File.write!(resource, content)
   end
 
   @doc """
   Loads: '#{@gherkin_languages_resource}' as Erlang compatible `terms`.
   """
-  def load do
-    @gherkin_languages_resource
+  def load(resource \\ @gherkin_languages_resource) do
+    resource
     |> File.read!()
     |> :erlang.binary_to_term()
   end
@@ -114,10 +116,11 @@ defmodule Gherkin.Scanner.LanguageSupport do
   Parses the content of '#{@gherkin_languages_source}' into the desired
   format.
   """
-  def parse do
-    @gherkin_languages_source
+  def parse(source \\ @gherkin_languages_source, all_homonyms \\ @homonyms, languages \\ :all) do
+    source
     |> File.read!()
     |> :jiffy.decode([:return_maps, :copy_strings])
+    |> filter_languages_to_use(languages)
     |> Enum.reduce(%{}, fn {language, translations}, a ->
       {%{homonyms: homonyms}, remainder} =
         Enum.reduce(translations, %{}, fn
@@ -126,7 +129,7 @@ defmodule Gherkin.Scanner.LanguageSupport do
           {key, vals}, a -> normalized_key = handle_key(key)
             {homonyms, remainder} = vals
               |> Enum.uniq
-              |> seperate_out_homonyms(@homonyms)
+              |> seperate_out_homonyms(all_homonyms)
 
             a
             |> Map.put(normalized_key, remainder)
@@ -160,6 +163,9 @@ defmodule Gherkin.Scanner.LanguageSupport do
       Map.put(a, language, normalized_translations)
     end)
   end
+
+  defp filter_languages_to_use(all_json_entries, :all), do: all_json_entries
+  defp filter_languages_to_use(all_json_entries, languages), do: Enum.filter(all_json_entries, fn {k, _} -> k in languages end)
 
   defp seperate_out_homonyms(words, homonyms) do
     words
