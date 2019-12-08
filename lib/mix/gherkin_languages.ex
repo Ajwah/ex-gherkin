@@ -11,7 +11,16 @@ defmodule Mix.Tasks.GherkinLanguages do
   alias Gherkin.Scanner.LanguageSupport
   @shortdoc "Converts `gherkin-languages.json` to pallatable format"
   def run(args) do
-    {opts, _, _} = OptionParser.parse(args, switches: [debug: :boolean, source: :string, resource: :string, homonyms: :string, languages: :string])
+    {opts, _, _} =
+      OptionParser.parse(args,
+        switches: [
+          debug: :boolean,
+          source: :string,
+          resource: :string,
+          homonyms: :string,
+          languages: :string
+        ]
+      )
 
     source = opts[:source] || @gherkin_languages_source
     resource = opts[:resource] || @gherkin_languages_resource
@@ -61,6 +70,7 @@ defmodule Mix.Tasks.GherkinLanguages do
   end
 
   defp trim(nil, :fully), do: nil
+
   defp trim(input, :fully) when is_binary(input) do
     input
     |> String.split(",", trim: true)
@@ -68,6 +78,7 @@ defmodule Mix.Tasks.GherkinLanguages do
   end
 
   defp trim(nil), do: nil
+
   defp trim(input) when is_binary(input) do
     input
     |> String.split(",", trim: true)
@@ -75,11 +86,12 @@ defmodule Mix.Tasks.GherkinLanguages do
 
   defp bullet_list(ls) do
     ls
-    |> Enum.map(&("   * '#{&1}'"))
+    |> Enum.map(&"   * '#{&1}'")
     |> Enum.join("\n")
   end
 
   defp format_languages(:all), do: "Languages: All"
+
   defp format_languages(languages) do
     """
     Languages:

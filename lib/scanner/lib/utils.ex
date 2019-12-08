@@ -4,143 +4,168 @@ defmodule Gherkin.Scanner.Utils do
   def data_table_pipe_splitter(line, offset_count \\ 0)
 
   def data_table_pipe_splitter(line, offset_count) when is_integer(offset_count) do
-    data_table_pipe_splitter(line, {true, offset_count, offset_count, "", []})
+    data_table_pipe_splitter(line, {true, false, offset_count, offset_count, "", []})
   end
 
-  def data_table_pipe_splitter("", {_, prev_count, _, cell, cells}) do
-    cells ++ [{prev_count, cell}]
+  def data_table_pipe_splitter("", {_, _, prev_count, _, cell, cells}) do
+    if cell == "" do
+      cells ++ [{prev_count + 1, cell}]
+    else
+      cells ++ [{prev_count, cell}]
+    end
   end
 
   def data_table_pipe_splitter(
         <<"|", rest::binary>>,
-        {leading_spaces_to_skip?, prev_count, count, cell, cells}
+        {leading_spaces_to_skip?, _, prev_count, count, cell, cells}
       ) do
     if leading_spaces_to_skip? do
       data_table_pipe_splitter(
         rest,
-        {true, count + 1, count + 1, "", cells ++ [{prev_count + 1, cell}]}
+        {true, false, count + 1, count + 1, "", cells ++ [{prev_count + 1, cell}]}
       )
     else
       data_table_pipe_splitter(
         rest,
-        {true, count + 1, count + 1, "", cells ++ [{prev_count, cell}]}
+        {true, false, count + 1, count + 1, "", cells ++ [{prev_count, cell}]}
       )
     end
   end
 
   def data_table_pipe_splitter(
         <<"\\\\", rest::binary>>,
-        {leading_spaces_to_skip?, prev_count, count, cell, cells}
+        {leading_spaces_to_skip?, _, prev_count, count, cell, cells}
       ) do
     if leading_spaces_to_skip? do
-      data_table_pipe_splitter(rest, {false, prev_count + 1, count + 2, cell <> "\\", cells})
+      data_table_pipe_splitter(
+        rest,
+        {false, false, prev_count + 1, count + 2, cell <> "\\", cells}
+      )
     else
-      data_table_pipe_splitter(rest, {false, prev_count, count + 2, cell <> "\\", cells})
+      data_table_pipe_splitter(rest, {false, false, prev_count, count + 2, cell <> "\\", cells})
     end
   end
 
   def data_table_pipe_splitter(
         <<"\\|", rest::binary>>,
-        {leading_spaces_to_skip?, prev_count, count, cell, cells}
+        {leading_spaces_to_skip?, _, prev_count, count, cell, cells}
       ) do
     if leading_spaces_to_skip? do
-      data_table_pipe_splitter(rest, {false, prev_count + 1, count + 2, cell <> "|", cells})
+      data_table_pipe_splitter(
+        rest,
+        {false, false, prev_count + 1, count + 2, cell <> "|", cells}
+      )
     else
-      data_table_pipe_splitter(rest, {false, prev_count, count + 2, cell <> "|", cells})
+      data_table_pipe_splitter(rest, {false, false, prev_count, count + 2, cell <> "|", cells})
     end
   end
 
   def data_table_pipe_splitter(
         <<"\\n", rest::binary>>,
-        {leading_spaces_to_skip?, prev_count, count, cell, cells}
+        {leading_spaces_to_skip?, _, prev_count, count, cell, cells}
       ) do
     if leading_spaces_to_skip? do
-      data_table_pipe_splitter(rest, {false, prev_count + 1, count + 2, cell <> "\n", cells})
+      data_table_pipe_splitter(
+        rest,
+        {false, false, prev_count + 1, count + 2, cell <> "\n", cells}
+      )
     else
-      data_table_pipe_splitter(rest, {false, prev_count, count + 2, cell <> "\n", cells})
+      data_table_pipe_splitter(rest, {false, false, prev_count, count + 2, cell <> "\n", cells})
     end
   end
 
   def data_table_pipe_splitter(
         <<"\\", rest::binary>>,
-        {leading_spaces_to_skip?, prev_count, count, cell, cells}
+        {leading_spaces_to_skip?, _, prev_count, count, cell, cells}
       ) do
     if leading_spaces_to_skip? do
-      data_table_pipe_splitter(rest, {false, prev_count + 1, count + 2, cell <> "\\", cells})
+      data_table_pipe_splitter(
+        rest,
+        {false, false, prev_count + 1, count + 2, cell <> "\\", cells}
+      )
     else
-      data_table_pipe_splitter(rest, {false, prev_count, count + 2, cell <> "\\", cells})
+      data_table_pipe_splitter(rest, {false, false, prev_count, count + 2, cell <> "\\", cells})
     end
   end
 
   def data_table_pipe_splitter(
         <<"\n", rest::binary>>,
-        {leading_spaces_to_skip?, prev_count, count, cell, cells}
+        {leading_spaces_to_skip?, _, prev_count, count, cell, cells}
       ) do
     if leading_spaces_to_skip? do
-      data_table_pipe_splitter(rest, {false, prev_count + 1, count + 2, cell <> "\n", cells})
+      data_table_pipe_splitter(
+        rest,
+        {false, false, prev_count + 1, count + 2, cell <> "\n", cells}
+      )
     else
-      data_table_pipe_splitter(rest, {false, prev_count, count + 2, cell <> "\n", cells})
+      data_table_pipe_splitter(rest, {false, false, prev_count, count + 2, cell <> "\n", cells})
     end
   end
 
   def data_table_pipe_splitter(
         <<"\t", rest::binary>>,
-        {leading_spaces_to_skip?, prev_count, count, cell, cells}
+        {leading_spaces_to_skip?, _, prev_count, count, cell, cells}
       ) do
     if leading_spaces_to_skip? do
-      data_table_pipe_splitter(rest, {leading_spaces_to_skip?, prev_count, count, cell, cells})
+      data_table_pipe_splitter(
+        rest,
+        {leading_spaces_to_skip?, false, prev_count, count, cell, cells}
+      )
     else
-      data_table_pipe_splitter(rest, {leading_spaces_to_skip?, prev_count, count, cell, cells})
+      data_table_pipe_splitter(
+        rest,
+        {leading_spaces_to_skip?, false, prev_count, count, cell, cells}
+      )
     end
   end
 
   def data_table_pipe_splitter(
         <<160::utf8, rest::binary>>,
-        {leading_spaces_to_skip?, prev_count, count, cell, cells}
+        {leading_spaces_to_skip?, _, prev_count, count, cell, cells}
       ) do
     if leading_spaces_to_skip? do
       data_table_pipe_splitter(
         rest,
-        {leading_spaces_to_skip?, prev_count + 2, count + 2, cell, cells}
+        {leading_spaces_to_skip?, false, prev_count + 2, count + 2, cell, cells}
       )
     else
       data_table_pipe_splitter(
         rest,
-        {leading_spaces_to_skip?, prev_count, count + 2, cell, cells}
+        {leading_spaces_to_skip?, false, prev_count, count + 2, cell, cells}
       )
     end
   end
 
   def data_table_pipe_splitter(
         <<" ", rest::binary>>,
-        {leading_spaces_to_skip?, prev_count, count, cell, cells}
+        {leading_spaces_to_skip?, _, prev_count, count, cell, cells}
       ) do
     if leading_spaces_to_skip? do
       data_table_pipe_splitter(
         rest,
-        {leading_spaces_to_skip?, prev_count + 1, count + 1, cell, cells}
+        {leading_spaces_to_skip?, true, prev_count + 1, count + 1, cell, cells}
       )
     else
       data_table_pipe_splitter(
         rest,
-        {leading_spaces_to_skip?, prev_count, count + 1, cell <> " ", cells}
+        {leading_spaces_to_skip?, false, prev_count, count + 1, cell <> " ", cells}
       )
     end
   end
 
   def data_table_pipe_splitter(
         <<char::utf8, rest::binary>>,
-        {leading_spaces_to_skip?, prev_count, count, cell, cells}
+        {leading_spaces_to_skip?, _, prev_count, count, cell, cells}
       ) do
     if leading_spaces_to_skip? do
       data_table_pipe_splitter(
         rest,
-        {false, prev_count + 1, count + 1, cell <> <<char::utf8>>, cells}
+        {false, false, prev_count + 1, count + 1, cell <> <<char::utf8>>, cells}
       )
     else
       data_table_pipe_splitter(
         rest,
-        {false, prev_count, count + 1, cell <> <<char::utf8>>, cells}
+        {false, false, prev_count, count + 1, cell <> <<char::utf8>>, cells}
       )
     end
   end

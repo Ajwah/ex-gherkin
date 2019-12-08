@@ -1,0 +1,18 @@
+(1:1)Language:/en/
+(2:1)FeatureLine:Feature/Addition/
+(3:1)Other:/  In order to avoid silly mistakes/
+(4:1)Other:/  As a math idiot/
+(5:1)Other:/  I want to be told the sum of two numbers/
+(6:1)Other://
+(7:3)ScenarioLine:Scenario Outline/Add two numbers/
+(8:5)StepLine:Given /I have entered <input_1> into the calculator/
+(9:5)StepLine:And /I have entered <input_2> into the calculator/
+(10:5)StepLine:When /I press <button>/
+(11:5)StepLine:Then /the result should be <output> on the screen/
+(12:1)Empty://
+(13:3)ExamplesLine:Examples//
+(14:5)TableRow://7:input_1,17:input_2,27:button,36:output
+(15:5)TableRow://7:20,17:30,27:add,36:50
+(16:5)TableRow://7:2,17:5,27:add,36:7
+(17:5)TableRow://7:0,17:40,27:add,36:40
+EOF

@@ -1,0 +1,147 @@
+(1:1)TagLine://1:@spawn
+(2:1)FeatureLine:Feature/Rake task/
+(3:1)Other:/  In order to ease the development process/
+(4:1)Other:/  As a developer and CI server administrator/
+(5:1)Other:/  Cucumber features should be executable via Rake/
+(6:1)Other://
+(7:3)BackgroundLine:Background//
+(8:5)StepLine:And /a file named "features/missing_step_definitions.feature" with:/
+(9:7)DocStringSeparator:"""//
+(10:1)Other:/Feature: Sample/
+(11:1)Other://
+(12:1)Other:/  Scenario: Wanted/
+(13:1)Other:/    Given I want to run this/
+(14:1)Other://
+(15:1)Other:/  Scenario: Unwanted/
+(16:1)Other:/    Given I don't want this ran/
+(17:7)DocStringSeparator:"""//
+(18:1)Empty://
+(19:3)TagLine://3:@todo-windows
+(20:3)ScenarioLine:Scenario/rake task with a defined profile/
+(21:5)StepLine:Given /the following profile is defined:/
+(22:7)DocStringSeparator:"""//
+(23:1)Other:/foo: --quiet --no-color features/missing_step_definitions.feature:3/
+(24:7)DocStringSeparator:"""//
+(25:5)StepLine:And /a file named "Rakefile" with:/
+(26:7)DocStringSeparator:"""//
+(27:1)Other:/require 'cucumber/rake/task'/
+(28:1)Other://
+(29:1)Other:/Cucumber::Rake::Task.new do |t|/
+(30:1)Other:/  t.profile = "foo"/
+(31:1)Other:/end/
+(32:7)DocStringSeparator:"""//
+(33:5)StepLine:When /I run `rake cucumber`/
+(34:5)StepLine:Then /it should pass with:/
+(35:7)DocStringSeparator:"""//
+(36:1)Other:/Feature: Sample/
+(37:1)Other://
+(38:1)Other:/  Scenario: Wanted/
+(39:1)Other:/    Given I want to run this/
+(40:1)Other://
+(41:1)Other:/1 scenario (1 undefined)/
+(42:1)Other:/1 step (1 undefined)/
+(43:7)DocStringSeparator:"""//
+(44:1)Empty://
+(45:3)TagLine://3:@todo-windows
+(46:3)ScenarioLine:Scenario/rake task without a profile/
+(47:5)StepLine:Given /a file named "Rakefile" with:/
+(48:7)DocStringSeparator:"""//
+(49:1)Other:/require 'cucumber/rake/task'/
+(50:1)Other://
+(51:1)Other:/Cucumber::Rake::Task.new do |t|/
+(52:1)Other:/  t.cucumber_opts = %w{--quiet --no-color}/
+(53:1)Other:/end/
+(54:7)DocStringSeparator:"""//
+(55:5)StepLine:When /I run `rake cucumber`/
+(56:5)StepLine:Then /it should pass with:/
+(57:7)DocStringSeparator:"""//
+(58:1)Other:/Feature: Sample/
+(59:1)Other://
+(60:1)Other:/  Scenario: Wanted/
+(61:1)Other:/    Given I want to run this/
+(62:1)Other://
+(63:1)Other:/  Scenario: Unwanted/
+(64:1)Other:/    Given I don't want this ran/
+(65:1)Other://
+(66:1)Other:/2 scenarios (2 undefined)/
+(67:1)Other:/2 steps (2 undefined)/
+(68:7)DocStringSeparator:"""//
+(69:1)Empty://
+(70:3)TagLine://3:@todo-windows
+(71:3)ScenarioLine:Scenario/rake task with a defined profile and cucumber_opts/
+(72:5)StepLine:Given /the following profile is defined:/
+(73:7)DocStringSeparator:"""//
+(74:1)Other:/bar: ['features/missing_step_definitions.feature:3']/
+(75:7)DocStringSeparator:"""//
+(76:5)StepLine:And /a file named "Rakefile" with:/
+(77:7)DocStringSeparator:"""//
+(78:1)Other:/require 'cucumber/rake/task'/
+(79:1)Other://
+(80:1)Other:/Cucumber::Rake::Task.new do |t|/
+(81:1)Other:/  t.profile = "bar"/
+(82:1)Other:/  t.cucumber_opts = %w{--quiet --no-color}/
+(83:1)Other:/end/
+(84:7)DocStringSeparator:"""//
+(85:5)StepLine:When /I run `rake cucumber`/
+(86:5)StepLine:Then /it should pass with:/
+(87:7)DocStringSeparator:"""//
+(88:1)Other:/Feature: Sample/
+(89:1)Other://
+(90:1)Other:/  Scenario: Wanted/
+(91:1)Other:/    Given I want to run this/
+(92:1)Other://
+(93:1)Other:/1 scenario (1 undefined)/
+(94:1)Other:/1 step (1 undefined)/
+(95:7)DocStringSeparator:"""//
+(96:1)Empty://
+(97:3)TagLine://3:@todo-windows
+(98:3)ScenarioLine:Scenario/respect requires/
+(99:5)StepLine:Given /an empty file named "features/support/env.rb"/
+(100:5)StepLine:And /an empty file named "features/support/dont_require_me.rb"/
+(101:5)StepLine:And /the following profile is defined:/
+(102:7)DocStringSeparator:"""//
+(103:1)Other:/no_bomb: features/missing_step_definitions.feature:3 --require features/support/env.rb --verbose/
+(104:7)DocStringSeparator:"""//
+(105:5)StepLine:And /a file named "Rakefile" with:/
+(106:7)DocStringSeparator:"""//
+(107:1)Other:/require 'cucumber/rake/task'/
+(108:1)Other://
+(109:1)Other:/Cucumber::Rake::Task.new do |t|/
+(110:1)Other:/  t.profile = "no_bomb"/
+(111:1)Other:/  t.cucumber_opts = %w{--quiet --no-color}/
+(112:1)Other:/end/
+(113:7)DocStringSeparator:"""//
+(114:5)StepLine:When /I run `rake cucumber`/
+(115:5)StepLine:Then /it should pass/
+(116:5)StepLine:And /the output should not contain:/
+(117:7)DocStringSeparator:"""//
+(118:1)Other:/  * features/support/dont_require_me.rb/
+(119:7)DocStringSeparator:"""//
+(120:1)Empty://
+(121:3)TagLine://3:@todo-windows
+(122:3)ScenarioLine:Scenario/feature files with spaces/
+(123:5)StepLine:Given /a file named "features/spaces are nasty.feature" with:/
+(124:8)DocStringSeparator:"""//
+(125:1)Other:/Feature: The futures green/
+(126:1)Other://
+(127:1)Other:/  Scenario: Orange/
+(128:1)Other:/    Given this is missing/
+(129:8)DocStringSeparator:"""//
+(130:5)StepLine:And /a file named "Rakefile" with:/
+(131:8)DocStringSeparator:"""//
+(132:1)Other:/require 'cucumber/rake/task'/
+(133:1)Other://
+(134:1)Other:/Cucumber::Rake::Task.new do |t|/
+(135:1)Other:/  t.cucumber_opts = %w{--quiet --no-color}/
+(136:1)Other:/end/
+(137:8)DocStringSeparator:"""//
+(138:5)StepLine:When /I run `rake cucumber`/
+(139:5)StepLine:Then /it should pass with:/
+(140:8)DocStringSeparator:"""//
+(141:1)Other:/Feature: The futures green/
+(142:1)Other://
+(143:1)Other:/  Scenario: Orange/
+(144:1)Other:/    Given this is missing/
+(145:1)Other://
+(146:8)DocStringSeparator:"""//
+EOF

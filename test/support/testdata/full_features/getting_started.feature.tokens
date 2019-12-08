@@ -1,0 +1,29 @@
+(1:1)FeatureLine:Feature/Getting started/
+(2:1)Empty://
+(3:1)Other:/  To get started, just open a command prompt in an empty directory and run/
+(4:1)Other:/  `cucumber`. You'll be prompted for what to do next./
+(5:1)Other://
+(6:3)TagLine://3:@spawn,10:@todo-windows
+(7:3)ScenarioLine:Scenario/Run Cucumber in an empty directory/
+(8:5)StepLine:Given /a directory without standard Cucumber project directory structure/
+(9:5)StepLine:When /I run `cucumber`/
+(10:5)StepLine:Then /it should fail with:/
+(11:7)DocStringSeparator:"""//
+(12:1)Other:/No such file or directory - features. You can use `cucumber --init` to get started./
+(13:7)DocStringSeparator:"""//
+(14:1)Empty://
+(15:3)TagLine://3:@todo-windows
+(16:3)ScenarioLine:Scenario/Accidentally run Cucumber in a folder with Ruby files in it./
+(17:5)StepLine:Given /a directory without standard Cucumber project directory structure/
+(18:5)StepLine:And /a file named "should_not_load.rb" with:/
+(19:7)DocStringSeparator:"""//
+(20:1)Other:/puts 'this will not be shown'/
+(21:7)DocStringSeparator:"""//
+(22:5)StepLine:When /I run `cucumber`/
+(23:5)StepLine:Then /the exit status should be 2/
+(24:5)StepLine:And /the output should not contain:/
+(25:7)DocStringSeparator:"""//
+(26:1)Other:/this will not be shown/
+(27:1)Other://
+(28:7)DocStringSeparator:"""//
+EOF

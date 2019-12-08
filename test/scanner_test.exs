@@ -2,7 +2,11 @@ defmodule ScannerTest do
   @moduledoc false
   use ExUnit.Case
   alias Gherkin.Scanner
-  alias Gherkin.Scanner.SyntaxError
+
+  alias Gherkin.Scanner.{
+    Context,
+    SyntaxError
+  }
 
   @keywords [
     {"Feature:", :feature},
@@ -27,16 +31,29 @@ defmodule ScannerTest do
     |> Enum.take(2000)
   end
 
+  def tokenize(contents, context) do
+    contents
+    |> Scanner.tokenize(context)
+    |> Enum.take(2000)
+  end
+
   describe "#tokenize(list) Recognizes Primitives:" do
     @some_text "This is some text"
     @keywords
     |> Enum.each(fn {textual_syntax, keyword} ->
       test "Gherkin Keyword: `#{textual_syntax}`" do
+        ctx =
+          if unquote(keyword) in [:and, :but] do
+            Context.new() |> Context.stepline()
+          else
+            Context.new()
+          end
+
         assert [
                  {unquote(keyword), String.trim(unquote(textual_syntax), ":"), {:location, 1, 1},
                   unquote(@some_text)}
                ] ==
-                 tokenize(["#{String.trim(unquote(textual_syntax))} #{@some_text}"])
+                 tokenize(["#{String.trim(unquote(textual_syntax))} #{@some_text}"], ctx)
       end
     end)
 
@@ -68,6 +85,34 @@ defmodule ScannerTest do
 
       assert [{:doc_string, "\"\"\"", {:location, 1, 1}, {delim, :ruby}}] ==
                tokenize(["#{delim}ruby"])
+    end
+  end
+
+  describe "#tokenize(list) docstring" do
+    test "incorrectly indented" do
+      delim = "\"\"\""
+
+      content =
+        """
+        Scenario: Some Scenario
+           #{delim}
+                 1
+                 2
+                 3
+        #{delim}
+        """
+        |> String.split("\n", trim: true)
+
+      expected = [
+        {:scenario, "Scenario", {:location, 1, 1}, "Some Scenario"},
+        {:doc_string, "\"\"\"", {:location, 2, 4}, {delim, :plain}},
+        {:content, "", {:location, 3, 1}, "      1"},
+        {:content, "", {:location, 4, 1}, "      2"},
+        {:content, "", {:location, 5, 1}, "      3"},
+        {:doc_string, "\"\"\"", {:location, 6, 1}, {delim, :plain}}
+      ]
+
+      assert expected == tokenize(content)
     end
   end
 
@@ -147,5 +192,60 @@ defmodule ScannerTest do
         tokenize(["\"\"\"ruby", "a\n", "\"\"\"ruby", "\"\"\""])
       end
     end
+  end
+
+  describe "#tokenize handles i18n" do
+    __DIR__
+    |> Path.join("support/testdata/i18n/*.feature")
+    |> Path.wildcard()
+    |> Enum.each(fn path ->
+      file =
+        path
+        |> String.split()
+        |> List.last()
+
+      test "#{file}" do
+        expected = File.read!("#{unquote(path)}.tokens")
+
+        result =
+          [path: unquote(path)]
+          |> tokenize()
+          |> ScannerSupport.to_feature_tokens_format()
+
+        if expected != result do
+          IO.inspect(unquote(path), label: :failed, syntax_colors: [string: :red])
+        end
+
+        assert expected == result
+      end
+    end)
+  end
+
+  describe "#tokenize handles full feature files" do
+    __DIR__
+    |> Path.join("support/testdata/full_features/*.feature")
+    |> Path.wildcard()
+    |> Enum.each(fn path ->
+      file =
+        path
+        |> String.split()
+        |> List.last()
+
+      test "#{file}" do
+        expected = File.read!("#{unquote(path)}.tokens")
+
+        result =
+          [path: unquote(path)]
+          # |> IO.inspect
+          |> tokenize()
+          |> ScannerSupport.to_feature_tokens_format()
+
+        if expected != result do
+          IO.inspect(unquote(path), label: :failed, syntax_colors: [string: :red])
+        end
+
+        assert expected == result
+      end
+    end)
   end
 end

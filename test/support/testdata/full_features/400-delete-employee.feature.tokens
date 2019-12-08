@@ -1,0 +1,21 @@
+(1:1)FeatureLine:Feature/Delete Employee/
+(2:1)Empty://
+(3:3)BackgroundLine:Background//
+(4:1)Empty://
+(5:5)StepLine:Given /an employee with the following attributes/
+(6:7)TableRow://9:id,15:firstName,27:lastName,38:dateOfBirth,52:startDate,65:employmentType,82:email
+(7:7)TableRow://9:400,15:Rachel,27:Green,38:1990-01-01,52:2018-01-01,65:Permanent,82:rachel.green@fs.com
+(8:1)Empty://
+(9:5)StepLine:And /with the following phone numbers/
+(10:7)TableRow://9:id,15:type,24:isdCode,34:phoneNumber,48:extension
+(11:7)TableRow://9:401,15:Mobile,24:+1,34:2141112222,58:
+(12:7)TableRow://9:402,15:Office,24:+1,34:8362223000,48:333
+(13:1)Empty://
+(14:5)StepLine:When /employee already exists/
+(15:1)Empty://
+(16:1)Empty://
+(17:3)ScenarioLine:Scenario/DELETE BY ID/
+(18:1)Empty://
+(19:5)StepLine:When /user wants to delete employee by id 400/
+(20:5)StepLine:Then /the delete 'IS SUCCESSFUL'/
+EOF

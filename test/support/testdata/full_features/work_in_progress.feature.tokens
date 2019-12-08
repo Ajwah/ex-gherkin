@@ -1,0 +1,158 @@
+(1:1)TagLine://1:@spawn
+(2:1)FeatureLine:Feature/Cucumber --work-in-progress switch/
+(3:1)Other:/  In order to ensure that feature scenarios do not pass until they are expected to/
+(4:1)Other:/  Developers should be able to run cucumber in a mode that/
+(5:1)Other:/            - will fail if any scenario passes completely/
+(6:1)Other:/            - will not fail otherwise/
+(7:1)Other://
+(8:3)BackgroundLine:Background/A passing and a pending feature/
+(9:5)StepLine:Given /the standard step definitions/
+(10:5)StepLine:And /a file named "features/wip.feature" with:/
+(11:7)DocStringSeparator:"""//
+(12:1)Other:/Feature: WIP/
+(13:1)Other:/  @failing/
+(14:1)Other:/  Scenario: Failing/
+(15:1)Other:/    Given this step raises an error/
+(16:1)Other://
+(17:1)Other:/  @undefined/
+(18:1)Other:/  Scenario: Undefined/
+(19:1)Other:/    Given this step is undefined/
+(20:1)Other://
+(21:1)Other:/  @pending/
+(22:1)Other:/  Scenario: Pending/
+(23:1)Other:/    Given this step is pending/
+(24:1)Other://
+(25:1)Other:/  @passing/
+(26:1)Other:/  Scenario: Passing/
+(27:1)Other:/    Given this step passes/
+(28:7)DocStringSeparator:"""//
+(29:5)StepLine:And /a file named "features/passing_outline.feature" with:/
+(30:7)DocStringSeparator:"""//
+(31:1)Other:/Feature: Not WIP/
+(32:1)Other:/  Scenario Outline: Passing/
+(33:1)Other:/    Given this step <what>/
+(34:1)Other://
+(35:1)Other:/    Examples:/
+(36:1)Other:/      | what   |/
+(37:1)Other:/      | passes |/
+(38:7)DocStringSeparator:"""//
+(39:1)Empty://
+(40:3)TagLine://3:@todo-windows
+(41:3)ScenarioLine:Scenario/Pass with Failing Scenarios/
+(42:5)StepLine:When /I run `cucumber -q -w -t @failing features/wip.feature`/
+(43:5)StepLine:Then /the stderr should not contain anything/
+(44:5)StepLine:Then /it should pass with:/
+(45:7)DocStringSeparator:"""//
+(46:1)Other:/Feature: WIP/
+(47:1)Other://
+(48:1)Other:/  @failing/
+(49:1)Other:/  Scenario: Failing/
+(50:1)Other:/    Given this step raises an error/
+(51:1)Other:/      error (RuntimeError)/
+(52:1)Other:/      ./features/step_definitions/steps.rb:2:in `/^this step raises an error$/'/
+(53:1)Other:/      features/wip.feature:4:in `Given this step raises an error'/
+(54:1)Other://
+(55:1)Other:/Failing Scenarios:/
+(56:1)Other:/cucumber features/wip.feature:3/
+(57:1)Other://
+(58:1)Other:/1 scenario (1 failed)/
+(59:1)Other:/1 step (1 failed)/
+(60:7)DocStringSeparator:"""//
+(61:5)StepLine:And /the output should contain:/
+(62:7)DocStringSeparator:"""//
+(63:1)Other:/The --wip switch was used, so the failures were expected. All is good./
+(64:1)Other://
+(65:7)DocStringSeparator:"""//
+(66:1)Empty://
+(67:3)TagLine://3:@todo-windows
+(68:3)ScenarioLine:Scenario/Pass with Undefined Scenarios/
+(69:5)StepLine:When /I run `cucumber -q -w -t @undefined features/wip.feature`/
+(70:5)StepLine:Then /it should pass with:/
+(71:7)DocStringSeparator:"""//
+(72:1)Other:/Feature: WIP/
+(73:1)Other://
+(74:1)Other:/  @undefined/
+(75:1)Other:/  Scenario: Undefined/
+(76:1)Other:/    Given this step is undefined/
+(77:1)Other://
+(78:1)Other:/1 scenario (1 undefined)/
+(79:1)Other:/1 step (1 undefined)/
+(80:7)DocStringSeparator:"""//
+(81:5)StepLine:And /the output should contain:/
+(82:7)DocStringSeparator:"""//
+(83:1)Other:/The --wip switch was used, so the failures were expected. All is good./
+(84:1)Other://
+(85:7)DocStringSeparator:"""//
+(86:1)Empty://
+(87:3)TagLine://3:@todo-windows
+(88:3)ScenarioLine:Scenario/Pass with Undefined Scenarios/
+(89:5)StepLine:When /I run `cucumber -q -w -t @pending features/wip.feature`/
+(90:5)StepLine:Then /it should pass with:/
+(91:7)DocStringSeparator:"""//
+(92:1)Other:/Feature: WIP/
+(93:1)Other://
+(94:1)Other:/  @pending/
+(95:1)Other:/  Scenario: Pending/
+(96:1)Other:/    Given this step is pending/
+(97:1)Other:/      TODO (Cucumber::Pending)/
+(98:1)Other:/      ./features/step_definitions/steps.rb:3:in `/^this step is pending$/'/
+(99:1)Other:/      features/wip.feature:12:in `Given this step is pending'/
+(100:1)Other://
+(101:1)Other:/1 scenario (1 pending)/
+(102:1)Other:/1 step (1 pending)/
+(103:7)DocStringSeparator:"""//
+(104:5)StepLine:And /the output should contain:/
+(105:7)DocStringSeparator:"""//
+(106:1)Other:/The --wip switch was used, so the failures were expected. All is good./
+(107:1)Other://
+(108:7)DocStringSeparator:"""//
+(109:1)Empty://
+(110:3)TagLine://3:@todo-windows
+(111:3)ScenarioLine:Scenario/Fail with Passing Scenarios/
+(112:5)StepLine:When /I run `cucumber -q -w -t @passing features/wip.feature`/
+(113:5)StepLine:Then /it should fail with:/
+(114:7)DocStringSeparator:"""//
+(115:1)Other:/Feature: WIP/
+(116:1)Other://
+(117:1)Other:/  @passing/
+(118:1)Other:/  Scenario: Passing/
+(119:1)Other:/    Given this step passes/
+(120:1)Other://
+(121:1)Other:/1 scenario (1 passed)/
+(122:1)Other:/1 step (1 passed)/
+(123:7)DocStringSeparator:"""//
+(124:5)StepLine:And /the output should contain:/
+(125:7)DocStringSeparator:"""//
+(126:1)Other:/The --wip switch was used, so I didn't expect anything to pass. These scenarios passed:/
+(127:1)Other:/(::) passed scenarios (::)/
+(128:1)Other://
+(129:1)Other:/features/wip.feature:15:in `Scenario: Passing'/
+(130:1)Other://
+(131:7)DocStringSeparator:"""//
+(132:1)Empty://
+(133:3)TagLine://3:@todo-windows
+(134:3)ScenarioLine:Scenario/Fail with Passing Scenario Outline/
+(135:5)StepLine:When /I run `cucumber -q -w features/passing_outline.feature`/
+(136:5)StepLine:Then /it should fail with:/
+(137:7)DocStringSeparator:"""//
+(138:1)Other:/Feature: Not WIP/
+(139:1)Other://
+(140:1)Other:/  Scenario Outline: Passing/
+(141:1)Other:/    Given this step <what>/
+(142:1)Other://
+(143:1)Other:/    Examples:/
+(144:1)Other:/      | what   |/
+(145:1)Other:/      | passes |/
+(146:1)Other://
+(147:1)Other:/1 scenario (1 passed)/
+(148:1)Other:/1 step (1 passed)/
+(149:7)DocStringSeparator:"""//
+(150:5)StepLine:And /the output should contain:/
+(151:7)DocStringSeparator:"""//
+(152:1)Other:/The --wip switch was used, so I didn't expect anything to pass. These scenarios passed:/
+(153:1)Other:/(::) passed scenarios (::)/
+(154:1)Other://
+(155:1)Other:/features/passing_outline.feature:7:in `Scenario Outline: Passing, Examples (#1)'/
+(156:1)Other://
+(157:7)DocStringSeparator:"""//
+EOF

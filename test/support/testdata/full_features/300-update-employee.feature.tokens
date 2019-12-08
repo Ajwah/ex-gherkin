@@ -1,0 +1,41 @@
+(1:1)FeatureLine:Feature/Update Employee/
+(2:1)Empty://
+(3:3)BackgroundLine:Background//
+(4:1)Empty://
+(5:5)StepLine:Given /an employee with the following attributes/
+(6:7)TableRow://9:id,15:firstName,27:lastName,38:dateOfBirth,52:startDate,65:employmentType,82:email
+(7:7)TableRow://9:300,15:Rachel,27:Green,38:1990-01-01,52:2018-01-01,65:Permanent,82:rachel.green@fs.com
+(8:1)Empty://
+(9:5)StepLine:And /with the following phone numbers/
+(10:7)TableRow://9:id,15:type,24:isdCode,34:phoneNumber,48:extension
+(11:7)TableRow://9:301,15:Mobile,24:+1,34:2141112222,58:
+(12:7)TableRow://9:302,15:Office,24:+1,34:8362223000,48:333
+(13:1)Empty://
+(14:5)StepLine:When /employee already exists/
+(15:1)Empty://
+(16:1)Empty://
+(17:3)ScenarioLine:Scenario Outline/<testCase> <expectedResult>/
+(18:1)Empty://
+(19:5)StepLine:Given /user wants to update an employee with the following attributes/
+(20:7)TableRow://9:id,16:firstName,30:lastName,43:dateOfBirth,59:startDate,73:employmentType,92:email
+(21:7)TableRow://9:<id>,16:<firstName>,30:<lastName>,43:<dateOfBirth>,59:<startDate>,73:<employmentType>,92:<email>
+(22:1)Empty://
+(23:5)StepLine:And /with the following phone numbers/
+(24:7)TableRow://9:id,15:type,24:isdCode,34:phoneNumber,48:extension
+(25:7)TableRow://9:301,15:Mobile,24:+1,34:2141112222,58:
+(26:7)TableRow://9:302,15:Office,24:+1,34:8362223000,48:333
+(27:1)Empty://
+(28:5)StepLine:When /user saves the employee '<testCase>'/
+(29:5)StepLine:Then /the save '<expectedResult>'/
+(30:1)Empty://
+(31:5)ExamplesLine:Examples//
+(32:7)TableRow://9:testCase,36:expectedResult,53:id,59:firstName,71:lastName,82:dateOfBirth,96:startDate,109:employmentType,126:email
+(33:7)TableRow://9:WITHOUT ID,36:FAILS,57:,59:Rachel,71:Green,82:1990-01-01,96:2018-01-01,109:Permanent,126:rachel.green@fs.com
+(34:7)TableRow://9:WITHOUT FIRST NAME,36:FAILS,53:300,69:,71:Green,82:1990-01-01,96:2018-01-01,109:Permanent,126:rachel.green@fs.com
+(35:7)TableRow://9:WITHOUT LAST NAME,36:FAILS,53:300,59:Rachel,80:,82:1990-01-01,96:2018-01-01,109:Permanent,126:rachel.green@fs.com
+(36:7)TableRow://9:WITHOUT DATE OF BIRTH,36:FAILS,53:300,59:Rachel,71:Green,94:,96:2018-01-01,109:Permanent,126:rachel.green@fs.com
+(37:7)TableRow://9:WITHOUT START DATE,36:FAILS,53:300,59:Rachel,71:Green,82:1990-01-01,107:,109:Permanent,126:rachel.green@fs.com
+(38:7)TableRow://9:WITHOUT EMPLOYMENT TYPE,36:FAILS,53:300,59:Rachel,71:Green,82:1990-01-01,96:2018-01-01,124:,126:rachel.green@fs.com
+(39:7)TableRow://9:WITHOUT EMAIL,36:FAILS,53:300,59:Rachel,71:Green,82:1990-01-01,96:2018-01-01,109:Permanent,146:
+(40:7)TableRow://9:WITH ALL REQUIRED FIELDS,36:IS SUCCESSFUL,53:300,59:Rachel,71:Green,82:1990-01-01,96:2018-01-01,109:Permanent,126:rachel.green@fs.com
+EOF

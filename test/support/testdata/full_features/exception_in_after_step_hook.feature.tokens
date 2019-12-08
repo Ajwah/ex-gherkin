@@ -1,0 +1,105 @@
+(1:1)FeatureLine:Feature/Exception in AfterStep Block/
+(2:1)Other:/  In order to use custom assertions at the end of each step/
+(3:1)Other:/  As a developer/
+(4:1)Other:/  I want exceptions raised in AfterStep blocks to be handled gracefully and reported by the formatters/
+(5:1)Other://
+(6:3)BackgroundLine:Background//
+(7:5)StepLine:Given /the standard step definitions/
+(8:5)StepLine:And /a file named "features/step_definitions/naughty_steps.rb" with:/
+(9:7)DocStringSeparator:"""//
+(10:1)Other:/Given /^this step does something naughty$/ do x=1/
+(11:1)Other:/  @naughty = true/
+(12:1)Other:/end/
+(13:7)DocStringSeparator:"""//
+(14:5)StepLine:And /a file named "features/support/env.rb" with:/
+(15:7)DocStringSeparator:"""//
+(16:1)Other:/class NaughtyStepException < Exception; end/
+(17:1)Other:/AfterStep do/
+(18:1)Other:/  if @naughty/
+(19:1)Other:/    raise NaughtyStepException.new("This step has been very very naughty")/
+(20:1)Other:/  end/
+(21:1)Other:/end/
+(22:7)DocStringSeparator:"""//
+(23:1)Empty://
+(24:3)TagLine://3:@todo-windows
+(25:3)ScenarioLine:Scenario/Handle Exception in standard scenario step and carry on/
+(26:5)StepLine:Given /a file named "features/naughty_step_in_scenario.feature" with:/
+(27:7)DocStringSeparator:"""//
+(28:1)Other:/Feature: Sample/
+(29:1)Other://
+(30:1)Other:/  Scenario: Naughty Step/
+(31:1)Other:/    Given this step does something naughty/
+(32:1)Other://
+(33:1)Other:/  Scenario: Success/
+(34:1)Other:/    Given this step passes/
+(35:7)DocStringSeparator:"""//
+(36:5)StepLine:When /I run `cucumber features`/
+(37:5)StepLine:Then /it should fail with:/
+(38:7)DocStringSeparator:"""//
+(39:1)Other:/Feature: Sample/
+(40:1)Other://
+(41:1)Other:/  Scenario: Naughty Step                   # features/naughty_step_in_scenario.feature:3/
+(42:1)Other:/    Given this step does something naughty # features/step_definitions/naughty_steps.rb:1/
+(43:1)Other:/      This step has been very very naughty (NaughtyStepException)/
+(44:1)Other:/      ./features/support/env.rb:4:in `AfterStep'/
+(45:1)Other:/      features/naughty_step_in_scenario.feature:4:in `Given this step does something naughty'/
+(46:1)Other://
+(47:1)Other:/  Scenario: Success        # features/naughty_step_in_scenario.feature:6/
+(48:1)Other:/    Given this step passes # features/step_definitions/steps.rb:1/
+(49:1)Other://
+(50:1)Other:/Failing Scenarios:/
+(51:1)Other:/cucumber features/naughty_step_in_scenario.feature:3 # Scenario: Naughty Step/
+(52:1)Other://
+(53:1)Other:/2 scenarios (1 failed, 1 passed)/
+(54:1)Other:/2 steps (2 passed)/
+(55:1)Other://
+(56:7)DocStringSeparator:"""//
+(57:1)Empty://
+(58:3)TagLine://3:@todo-windows
+(59:3)ScenarioLine:Scenario/Handle Exception in scenario outline table row and carry on/
+(60:5)StepLine:Given /a file named "features/naughty_step_in_scenario_outline.feature" with:/
+(61:7)DocStringSeparator:"""//
+(62:1)Other:/Feature: Sample/
+(63:1)Other://
+(64:1)Other:/  Scenario Outline: Naughty Step/
+(65:1)Other:/    Given this step <Might Work>/
+(66:1)Other://
+(67:1)Other:/    Examples:/
+(68:1)Other:/    | Might Work             |/
+(69:1)Other:/    | passes                 |/
+(70:1)Other:/    | does something naughty |/
+(71:1)Other:/    | passes                 |/
+(72:1)Other://
+(73:1)Other:/  Scenario: Success/
+(74:1)Other:/    Given this step passes/
+(75:1)Other://
+(76:7)DocStringSeparator:"""//
+(77:5)StepLine:When /I run `cucumber features`/
+(78:5)StepLine:Then /it should fail with:/
+(79:7)DocStringSeparator:"""//
+(80:1)Other:/Feature: Sample/
+(81:1)Other://
+(82:1)Other:/  Scenario Outline: Naughty Step # features/naughty_step_in_scenario_outline.feature:3/
+(83:1)Other:/    Given this step <Might Work> # features/naughty_step_in_scenario_outline.feature:4/
+(84:1)Other://
+(85:1)Other:/    Examples:/
+(86:1)Other:/      | Might Work             |/
+(87:1)Other:/      | passes                 |/
+(88:1)Other:/      | does something naughty |/
+(89:1)Other:/      This step has been very very naughty (NaughtyStepException)/
+(90:1)Other:/      ./features/support/env.rb:4:in `AfterStep'/
+(91:1)Other:/      features/naughty_step_in_scenario_outline.feature:9:in `Given this step does something naughty'/
+(92:1)Other:/      features/naughty_step_in_scenario_outline.feature:4:in `Given this step <Might Work>'/
+(93:1)Other:/      | passes                 |/
+(94:1)Other://
+(95:1)Other:/  Scenario: Success        # features/naughty_step_in_scenario_outline.feature:12/
+(96:1)Other:/    Given this step passes # features/step_definitions/steps.rb:1/
+(97:1)Other://
+(98:1)Other:/Failing Scenarios:/
+(99:1)Other:/cucumber features/naughty_step_in_scenario_outline.feature:9 # Scenario Outline: Naughty Step, Examples (#2)/
+(100:1)Other://
+(101:1)Other:/4 scenarios (1 failed, 3 passed)/
+(102:1)Other:/4 steps (4 passed)/
+(103:1)Other://
+(104:7)DocStringSeparator:"""//
+EOF

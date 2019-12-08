@@ -1,0 +1,121 @@
+(1:1)FeatureLine:Feature/Profiles/
+(2:1)Empty://
+(3:1)Other:/  In order to save time and prevent carpal tunnel syndrome/
+(4:1)Other:/  Cucumber users can save and reuse commonly used cucumber flags in a 'cucumber.yml' file./
+(5:1)Other:/  These named arguments are called profiles and the yml file should be in the root of your project./
+(6:1)Other:/  Any cucumber argument is valid in a profile.  To see all the available flags type 'cucumber --help'/
+(7:1)Other:/  For more information about profiles please see the wiki:/
+(8:1)Other:/  http://wiki.github.com/cucumber/cucumber/cucumber.yml/
+(9:1)Other://
+(10:3)BackgroundLine:Background/Basic App/
+(11:5)StepLine:Given /a file named "features/sample.feature" with:/
+(12:7)DocStringSeparator:"""//
+(13:1)Other:/Feature: Sample/
+(14:1)Other:/  Scenario: this is a test/
+(15:1)Other:/    Given this step raises an error/
+(16:7)DocStringSeparator:"""//
+(17:5)StepLine:And /an empty file named "features/support/env.rb"/
+(18:5)StepLine:And /an empty file named "features/support/super_env.rb"/
+(19:5)StepLine:And /the following profiles are defined:/
+(20:7)DocStringSeparator:"""//
+(21:1)Other:/default: features/sample.feature --require features/support/env.rb -v/
+(22:1)Other:/super: features/sample.feature --require features/support/super_env.rb -v/
+(23:7)DocStringSeparator:"""//
+(24:1)Empty://
+(25:3)ScenarioLine:Scenario/Explicitly defining a profile to run/
+(26:5)StepLine:When /I run `cucumber features/sample.feature --profile super`/
+(27:5)StepLine:Then /the output should contain:/
+(28:7)DocStringSeparator:"""//
+(29:1)Other:/Using the super profile.../
+(30:7)DocStringSeparator:"""//
+(31:5)StepLine:And /exactly these files should be loaded: features/support/super_env.rb/
+(32:1)Empty://
+(33:3)ScenarioLine:Scenario/Explicitly defining a profile defined in an ERB formatted file/
+(34:5)StepLine:Given /the following profiles are defined:/
+(35:7)DocStringSeparator:"""//
+(36:1)Other:/<% requires = "--require features/support/super_env.rb" %>/
+(37:1)Other:/super: <%= "features/sample.feature #{requires} -v" %>/
+(38:7)DocStringSeparator:"""//
+(39:5)StepLine:When /I run `cucumber features/sample.feature --profile super`/
+(40:5)StepLine:Then /the output should contain:/
+(41:7)DocStringSeparator:"""//
+(42:1)Other:/Using the super profile.../
+(43:7)DocStringSeparator:"""//
+(44:5)StepLine:And /exactly these files should be loaded: features/support/super_env.rb/
+(45:1)Empty://
+(46:3)ScenarioLine:Scenario/Defining multiple profiles to run/
+(47:5)StepLine:When /I run `cucumber features/sample.feature --profile default --profile super`/
+(48:5)StepLine:Then /the output should contain:/
+(49:7)DocStringSeparator:"""//
+(50:1)Other:/Using the default and super profiles.../
+(51:7)DocStringSeparator:"""//
+(52:5)StepLine:And /exactly these files should be loaded: features/support/env.rb, features/support/super_env.rb/
+(53:1)Empty://
+(54:3)ScenarioLine:Scenario/Arguments passed in but no profile specified/
+(55:5)StepLine:When /I run `cucumber -v`/
+(56:5)StepLine:Then /the default profile should be used/
+(57:5)StepLine:And /exactly these files should be loaded: features/support/env.rb/
+(58:1)Empty://
+(59:3)ScenarioLine:Scenario/Trying to use a missing profile/
+(60:5)StepLine:When /I run `cucumber -p foo`/
+(61:5)StepLine:Then /the stderr should contain:/
+(62:7)DocStringSeparator:"""//
+(63:1)Other:/Could not find profile: 'foo'/
+(64:1)Other://
+(65:1)Other:/Defined profiles in cucumber.yml:/
+(66:1)Other:/  * default/
+(67:1)Other:/  * super/
+(68:1)Other://
+(69:7)DocStringSeparator:"""//
+(70:1)Empty://
+(71:3)ScenarioLine:Scenario Outline/Disabling the default profile/
+(72:5)StepLine:When /I run `cucumber -v features/ <flag>`/
+(73:5)StepLine:Then /the output should contain:/
+(74:7)DocStringSeparator:"""//
+(75:1)Other:/Disabling profiles.../
+(76:7)DocStringSeparator:"""//
+(77:5)StepLine:And /exactly these files should be loaded: features/support/env.rb, features/support/super_env.rb/
+(78:1)Empty://
+(79:5)ExamplesLine:Examples//
+(80:7)TableRow://9:flag
+(81:7)TableRow://9:-P
+(82:7)TableRow://9:--no-profile
+(83:1)Empty://
+(84:3)ScenarioLine:Scenario/Overriding the profile's features to run/
+(85:5)StepLine:Given /a file named "features/another.feature" with:/
+(86:7)DocStringSeparator:"""//
+(87:1)Other:/Feature: Just this one should be run/
+(88:7)DocStringSeparator:"""//
+(89:5)StepLine:When /I run `cucumber -p default features/another.feature`/
+(90:5)StepLine:Then /exactly these features should be run: features/another.feature/
+(91:1)Empty://
+(92:3)ScenarioLine:Scenario/Overriding the profile's formatter/
+(93:1)Other:/    You will most likely want to define a formatter in your default formatter./
+(94:1)Other:/    However, you often want to run your features with a different formatter/
+(95:1)Other:/    yet still use the other the other arguments in the profile. Cucumber will/
+(96:1)Other:/    allow you to do this by giving precedence to the formatter specified on the/
+(97:1)Other:/    command line and override the one in the profile./
+(98:1)Other://
+(99:5)StepLine:Given /the following profiles are defined:/
+(100:7)DocStringSeparator:"""//
+(101:1)Other:/default: features/sample.feature --require features/support/env.rb -v --format profile/
+(102:7)DocStringSeparator:"""//
+(103:5)StepLine:When /I run `cucumber features --format pretty`/
+(104:5)StepLine:Then /the output should contain:/
+(105:7)DocStringSeparator:"""//
+(106:1)Other:/Feature: Sample/
+(107:7)DocStringSeparator:"""//
+(108:1)Empty://
+(109:3)ScenarioLine:Scenario Outline/Showing profiles when listing failing scenarios/
+(110:5)StepLine:Given /the standard step definitions/
+(111:5)StepLine:When /I run `cucumber -q -p super -p default -f <format> features/sample.feature --require features/step_definitions/steps.rb`/
+(112:5)StepLine:Then /it should fail with:/
+(113:8)DocStringSeparator:"""//
+(114:1)Other:/cucumber -p super features/sample.feature:2/
+(115:8)DocStringSeparator:"""//
+(116:1)Empty://
+(117:5)ExamplesLine:Examples//
+(118:7)TableRow://9:format
+(119:7)TableRow://9:pretty
+(120:7)TableRow://9:progress
+EOF

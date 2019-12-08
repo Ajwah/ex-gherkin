@@ -1,0 +1,64 @@
+(1:3)TagLine://3:@spawn
+(2:3)FeatureLine:Feature/Hooks execute in defined order/
+(3:1)Empty://
+(4:3)BackgroundLine:Background//
+(5:5)StepLine:Given /a file named "features/step_definitions/steps.rb" with:/
+(6:7)DocStringSeparator:"""//
+(7:1)Other:/Given /^background step$/ do; $EventOrder.push(:background_step) end/
+(8:1)Other:/Given /^scenario step$/ do; $EventOrder.push(:scenario_step) end/
+(9:7)DocStringSeparator:"""//
+(10:5)StepLine:And /a file named "features/support/hooks.rb" with:/
+(11:7)DocStringSeparator:"""//
+(12:1)Other:/$EventOrder = []/
+(13:1)Other:/Around('@around') do |scenario,block|/
+(14:1)Other:/  $EventOrder.push :around_begin/
+(15:1)Other:/  block.call/
+(16:1)Other:/  $EventOrder.push :around_end/
+(17:1)Other:/end/
+(18:1)Other:/Before('@before') do/
+(19:1)Other:/  $EventOrder.push :before/
+(20:1)Other:/end/
+(21:1)Other:/After('@after') do |scenario|/
+(22:1)Other:/  $EventOrder.push :after/
+(23:1)Other:/end/
+(24:1)Other:/at_exit {/
+(25:1)Other:/  puts "Event order: #{$EventOrder.join(' ')}"/
+(26:1)Other:/}/
+(27:7)DocStringSeparator:"""//
+(28:5)StepLine:And /a file named "features/around_hook_covers_background.feature" with:/
+(29:7)DocStringSeparator:"""//
+(30:1)Other:/@around/
+(31:1)Other:/Feature: Around hooks cover background steps/
+(32:1)Other:/  Background:/
+(33:1)Other:/    Given background step/
+(34:1)Other:/  Scenario:/
+(35:1)Other:/    Given scenario step/
+(36:7)DocStringSeparator:"""//
+(37:5)StepLine:And /a file named "features/all_hook_order.feature" with:/
+(38:7)DocStringSeparator:"""//
+(39:1)Other:/@around/
+(40:1)Other:/@before/
+(41:1)Other:/@after/
+(42:1)Other:/Feature: All hooks execute in expected order/
+(43:1)Other:/  Background:/
+(44:1)Other:/    Given background step/
+(45:1)Other:/  Scenario:/
+(46:1)Other:/    Given scenario step/
+(47:7)DocStringSeparator:"""//
+(48:1)Empty://
+(49:3)TagLine://3:@todo-windows
+(50:3)ScenarioLine:Scenario/Around hooks cover background steps/
+(51:5)StepLine:When /I run `cucumber -o /dev/null features/around_hook_covers_background.feature`/
+(52:5)StepLine:Then /the output should contain:/
+(53:7)DocStringSeparator:"""//
+(54:1)Other:/Event order: around_begin background_step scenario_step around_end/
+(55:7)DocStringSeparator:"""//
+(56:1)Empty://
+(57:3)TagLine://3:@todo-windows
+(58:3)ScenarioLine:Scenario/All hooks execute in expected order/
+(59:5)StepLine:When /I run `cucumber -o /dev/null features/all_hook_order.feature`/
+(60:5)StepLine:Then /the output should contain:/
+(61:7)DocStringSeparator:"""//
+(62:1)Other:/Event order: around_begin before background_step scenario_step after around_end/
+(63:7)DocStringSeparator:"""//
+EOF

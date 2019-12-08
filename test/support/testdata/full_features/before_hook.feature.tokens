@@ -1,0 +1,67 @@
+(1:1)FeatureLine:Feature/Before Hook/
+(2:1)Empty://
+(3:3)TagLine://3:@todo-windows
+(4:3)ScenarioLine:Scenario/Examine names of scenario and feature/
+(5:5)StepLine:Given /a file named "features/foo.feature" with:/
+(6:7)DocStringSeparator:"""//
+(7:1)Other:/Feature: Feature name/
+(8:1)Other://
+(9:1)Other:/  Scenario: Scenario name/
+(10:1)Other:/    Given a step/
+(11:7)DocStringSeparator:"""//
+(12:5)StepLine:And /a file named "features/support/hook.rb" with:/
+(13:7)DocStringSeparator:"""//
+(14:1)Other:/names = []/
+(15:1)Other:/Before do |scenario|/
+(16:1)Other:/  expect(scenario).to_not respond_to(:scenario_outline)/
+(17:1)Other:/  names << scenario.feature.name.split("\n").first/
+(18:1)Other:/  names << scenario.name.split("\n").first/
+(19:1)Other:/  if(names.size == 2)/
+(20:1)Other:/    raise "NAMES:\n" + names.join("\n") + "\n"/
+(21:1)Other:/  end/
+(22:1)Other:/end/
+(23:7)DocStringSeparator:"""//
+(24:5)StepLine:When /I run `cucumber`/
+(25:5)StepLine:Then /the output should contain:/
+(26:7)DocStringSeparator:"""//
+(27:1)Other:/  NAMES:/
+(28:1)Other:/  Feature name/
+(29:1)Other:/  Scenario name/
+(30:1)Other://
+(31:7)DocStringSeparator:"""//
+(32:1)Empty://
+(33:3)TagLine://3:@todo-windows
+(34:3)ScenarioLine:Scenario/Examine names of scenario outline and feature/
+(35:5)StepLine:Given /a file named "features/foo.feature" with:/
+(36:7)DocStringSeparator:"""//
+(37:1)Other:/Feature: Feature name/
+(38:1)Other://
+(39:1)Other:/  Scenario Outline: Scenario Outline name/
+(40:1)Other:/    Given a <placeholder>/
+(41:1)Other://
+(42:1)Other:/    Examples: Examples Table name/
+(43:1)Other:/      | <placeholder> |/
+(44:1)Other:/      | step          |/
+(45:7)DocStringSeparator:"""//
+(46:5)StepLine:And /a file named "features/support/hook.rb" with:/
+(47:7)DocStringSeparator:"""//
+(48:1)Other:/names = []/
+(49:1)Other:/Before do |scenario|/
+(50:1)Other:/  names << scenario.scenario_outline.feature.name.split("\n").first/
+(51:1)Other:/  names << scenario.scenario_outline.name.split("\n").first/
+(52:1)Other:/  names << scenario.name.split("\n").first/
+(53:1)Other:/  if(names.size == 3)/
+(54:1)Other:/    raise "NAMES:\n" + names.join("\n") + "\n"/
+(55:1)Other:/  end/
+(56:1)Other:/end/
+(57:7)DocStringSeparator:"""//
+(58:5)StepLine:When /I run `cucumber`/
+(59:5)StepLine:Then /the output should contain:/
+(60:7)DocStringSeparator:"""//
+(61:1)Other:/      NAMES:/
+(62:1)Other:/      Feature name/
+(63:1)Other:/      Scenario Outline name, Examples Table name (#1)/
+(64:1)Other:/      Scenario Outline name, Examples Table name (#1)/
+(65:1)Other://
+(66:7)DocStringSeparator:"""//
+EOF

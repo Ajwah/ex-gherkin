@@ -1,0 +1,50 @@
+(1:1)FeatureLine:Feature/Some Feature/
+(2:1)Empty://
+(3:3)BackgroundLine:Background//
+(4:1)Empty://
+(5:5)StepLine:Given /a table as follows/
+(6:7)TableRow://9:A,15:B,27:C,38:D,52:E,65:F,74:G
+(7:7)TableRow://8:a,14:b,26:c,37:d,51:e,64:f,73:g
+(8:7)TableRow://12:a,24:b,35:c,49:d,62:e,71:f,89:g
+(9:7)TableRow://13:,24:b,35:c,49:d,62:e,71:f,89:g
+(10:7)TableRow://9:a,25:,27:c,48:d,51:e,71:f,81:g
+(11:7)TableRow://9:a,19:b,36:,48:d,51:e,71:f,81:g
+(12:7)TableRow://9:a,19:b,30:c,50:,51:e,71:f,81:g
+(13:7)TableRow://9:a,19:b,30:c,43:d,63:,71:f,81:g
+(14:7)TableRow://9:a,19:b,30:c,43:d,57:e,72:,81:g
+(15:7)TableRow://9:a,19:b,30:c,43:d,57:e,68:f,90:
+(16:7)TableRow://13:,19:b,30:c,43:d,57:e,68:f,90:
+(17:7)TableRow://13:,25:,30:c,43:d,57:e,68:f,90:
+(18:7)TableRow://13:,25:,30:c,43:d,57:e,72:,90:
+(19:7)TableRow://13:,25:,30:c,50:,57:e,72:,90:
+(20:7)TableRow://13:,25:,36:,50:,57:e,72:,90:
+(21:7)TableRow://13:,25:,36:,50:,63:,72:,90:
+(22:7)TableRow://8:aaaaa,14:bbbbbbbbbbb,26:cccccccccc,37:ddddddddddddd,51:eeeeeeeeeeee,64:ffffffff,73:ggggggggggggggggg
+(23:7)TableRow://8:aaaaa,14:bbbbbbbbbbb,26:cccccccccc,50:,51:eeeeeeeeeeee,64:ffffffff,73:ggggggggggggggggg
+(24:7)TableRow://8:aaaaa,14:bbbbbbbbbbb,26:cccccccccc,37:ddddddddddddd,63:,64:ffffffff,73:ggggggggggggggggg
+(25:7)TableRow://8:aaaaa,25:,36:,50:,63:,72:,73:ggggggggggggggggg
+(26:7)TableRow://8:aaaaa,25:,36:,50:,63:,72:,90:
+(27:7)TableRow://13:,25:,36:,50:,63:,72:,73:ggggggggggggggggg
+(28:7)TableRow://9:,11:,13:,15:,17:,19:,20:ggggggggggggggggg
+(29:1)TableRow://3:,5:,7:,9:,11:,13:,14:ggggggggggggggggg
+(30:5)TableRow://7:,9:,11:,13:,15:,17:,18:ggggggggggggggggg
+(31:9)TableRow://11:,13:,15:,17:,19:,21:,22:ggggggggggggggggg
+(32:13)TableRow://15:,17:,19:,21:,23:,25:,26:ggggggggggggggggg
+(33:17)TableRow://19:,21:,23:,25:,27:,29:,30:ggggggggggggggggg
+(34:1)Empty://
+(35:5)StepLine:And /another table as follows:/
+(36:7)TableRow://9:id
+(37:7)TableRow://9:401
+(38:7)TableRow://9:
+(39:7)TableRow://8:
+(40:7)TableRow://8:a
+(41:7)TableRow://19:b
+(42:7)TableRow://8:bbbbbbbbbbbbbbbbbbbbbb
+(43:1)Empty://
+(44:5)StepLine:When /sense is made out of this madness/
+(45:1)Empty://
+(46:3)ScenarioLine:Scenario/Some Scenario/
+(47:1)Empty://
+(48:5)StepLine:When /all the tables are valid/
+(49:5)StepLine:Then /they are all valid/
+EOF

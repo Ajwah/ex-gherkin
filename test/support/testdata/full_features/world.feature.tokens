@@ -1,0 +1,130 @@
+(1:1)FeatureLine:Feature/World/
+(2:1)Empty://
+(3:1)Other:/  In order to isolate each test scenario, the steps definitions belonging to the/
+(4:1)Other:/  same scenario will run in a isolated context, called 'world'. A world also/
+(5:1)Other:/  contains the helpers methods that will be used in the step definitions./
+(6:1)Other://
+(7:1)Other:/  It is possible to add helpers methods to a world in three different ways:/
+(8:1)Other://
+(9:1)Other:/  1. Passing a module. In this case its methods will be added directly to the/
+(10:1)Other:/     world and be usable in the step definitions./
+(11:1)Other://
+(12:1)Other:/  2. Passing a block, where the return value is the world object./
+(13:1)Other://
+(14:1)Other:/  3. Passing a hash, where the keys are namespaces and the values are/
+(15:1)Other:/     modules. In this case, the methods of each module will be accessible using/
+(16:1)Other:/     the key as prefix./
+(17:1)Other://
+(18:3)ScenarioLine:Scenario/A world is extended using a module/
+(19:5)StepLine:Given /a file named "features/support/helpers.rb" with:/
+(20:7)DocStringSeparator:"""//
+(21:1)Other:/module Helpers/
+(22:1)Other:/  def helper_method/
+(23:1)Other:/    42/
+(24:1)Other:/  end/
+(25:1)Other:/end/
+(26:1)Other://
+(27:1)Other:/World(Helpers)/
+(28:7)DocStringSeparator:"""//
+(29:5)StepLine:And /a file named "features/step_definitions/step.rb" with:/
+(30:7)DocStringSeparator:"""//
+(31:1)Other:/Then /^the helper method is called$/ do/
+(32:1)Other:/  expect(helper_method).to eql(42)/
+(33:1)Other:/end/
+(34:7)DocStringSeparator:"""//
+(35:5)StepLine:And /a file named "features/f.feature" with:/
+(36:7)DocStringSeparator:"""//
+(37:1)Other:/Feature: Calling a method/
+(38:1)Other:/  Scenario: I call a method without namespaces/
+(39:1)Other:/    Then the helper method is called/
+(40:7)DocStringSeparator:"""//
+(41:5)StepLine:When /I run `cucumber features/f.feature`/
+(42:5)StepLine:Then /it should pass/
+(43:1)Empty://
+(44:3)ScenarioLine:Scenario/A world is created using a block/
+(45:5)StepLine:Given /a file named "features/support/helpers.rb" with:/
+(46:7)DocStringSeparator:"""//
+(47:1)Other:/class Helper/
+(48:1)Other:/  def helper_method/
+(49:1)Other:/    42/
+(50:1)Other:/  end/
+(51:1)Other:/end/
+(52:1)Other://
+(53:1)Other:/World do/
+(54:1)Other:/  Helper.new/
+(55:1)Other:/end/
+(56:7)DocStringSeparator:"""//
+(57:5)StepLine:And /a file named "features/step_definitions/step.rb" with:/
+(58:7)DocStringSeparator:"""//
+(59:1)Other:/Then /^the helper method is called$/ do/
+(60:1)Other:/  expect(helper_method).to eql(42)/
+(61:1)Other:/end/
+(62:7)DocStringSeparator:"""//
+(63:5)StepLine:And /a file named "features/f.feature" with:/
+(64:7)DocStringSeparator:"""//
+(65:1)Other:/Feature: Calling a method/
+(66:1)Other:/  Scenario: I call a method from a namespace/
+(67:1)Other:/    Then the helper method is called/
+(68:7)DocStringSeparator:"""//
+(69:5)StepLine:When /I run `cucumber features/f.feature`/
+(70:5)StepLine:Then /it should pass/
+(71:1)Empty://
+(72:3)ScenarioLine:Scenario/A world is extended using a module with namespace/
+(73:5)StepLine:Given /a file named "features/support/helpers.rb" with:/
+(74:7)DocStringSeparator:"""//
+(75:1)Other:/module Helpers/
+(76:1)Other:/  def helper_method/
+(77:1)Other:/    42/
+(78:1)Other:/  end/
+(79:1)Other:/end/
+(80:1)Other://
+(81:1)Other:/World(my_namespace: Helpers)/
+(82:7)DocStringSeparator:"""//
+(83:5)StepLine:And /a file named "features/step_definitions/step.rb" with:/
+(84:7)DocStringSeparator:"""//
+(85:1)Other:/Then /^the helper method is called$/ do/
+(86:1)Other:/  expect(my_namespace.helper_method).to eql(42)/
+(87:1)Other:/end/
+(88:7)DocStringSeparator:"""//
+(89:5)StepLine:And /a file named "features/f.feature" with:/
+(90:7)DocStringSeparator:"""//
+(91:1)Other:/Feature: Calling a method/
+(92:1)Other:/  Scenario: I call a method from a namespace/
+(93:1)Other:/    Then the helper method is called/
+(94:7)DocStringSeparator:"""//
+(95:5)StepLine:When /I run `cucumber features/f.feature`/
+(96:5)StepLine:Then /it should pass/
+(97:1)Empty://
+(98:3)ScenarioLine:Scenario/A world is extended using multiple modules with different namespaces/
+(99:5)StepLine:Given /a file named "features/support/helpers.rb" with:/
+(100:7)DocStringSeparator:"""//
+(101:1)Other:/module ModuleOne/
+(102:1)Other:/  def forty_one/
+(103:1)Other:/    41/
+(104:1)Other:/  end/
+(105:1)Other:/end/
+(106:1)Other://
+(107:1)Other:/module ModuleTwo/
+(108:1)Other:/  def forty_two/
+(109:1)Other:/    42/
+(110:1)Other:/  end/
+(111:1)Other:/end/
+(112:1)Other://
+(113:1)Other:/World(module_one: ModuleOne, module_two: ModuleTwo)/
+(114:7)DocStringSeparator:"""//
+(115:5)StepLine:And /a file named "features/step_definitions/step.rb" with:/
+(116:7)DocStringSeparator:"""//
+(117:1)Other:/Then /^the helper method is called$/ do/
+(118:1)Other:/  expect(module_one.forty_one).to eql(41)/
+(119:1)Other:/  expect(module_two.forty_two).to eql(42)/
+(120:1)Other:/end/
+(121:7)DocStringSeparator:"""//
+(122:5)StepLine:And /a file named "features/f.feature" with:/
+(123:7)DocStringSeparator:"""//
+(124:1)Other:/Feature: Calling a method/
+(125:1)Other:/  Scenario: I call a method from two namespaces/
+(126:1)Other:/    Then the helper method is called/
+(127:7)DocStringSeparator:"""//
+(128:5)StepLine:When /I run `cucumber features/f.feature`/
+(129:5)StepLine:Then /it should pass/
+EOF

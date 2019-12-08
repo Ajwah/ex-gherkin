@@ -1,0 +1,267 @@
+(1:1)TagLine://1:@spawn
+(2:1)FeatureLine:Feature/Around hooks/
+(3:1)Empty://
+(4:1)Other:/  In order to support transactional scenarios for database libraries/
+(5:1)Other:/  that provide only a block syntax for transactions, Cucumber should/
+(6:1)Other:/  permit definition of Around hooks./
+(7:1)Other://
+(8:3)TagLine://3:@todo-windows
+(9:3)ScenarioLine:Scenario/A single Around hook/
+(10:5)StepLine:Given /a file named "features/step_definitions/steps.rb" with:/
+(11:7)DocStringSeparator:"""//
+(12:1)Other:/Then /^the hook is called$/ do/
+(13:1)Other:/  expect($hook_called).to be true/
+(14:1)Other:/end/
+(15:7)DocStringSeparator:"""//
+(16:5)StepLine:And /a file named "features/support/hooks.rb" with:/
+(17:7)DocStringSeparator:"""//
+(18:1)Other:/Around do |scenario, block|/
+(19:1)Other:/  $hook_called = true/
+(20:1)Other:/  block.call/
+(21:1)Other:/end/
+(22:7)DocStringSeparator:"""//
+(23:5)StepLine:And /a file named "features/f.feature" with:/
+(24:7)DocStringSeparator:"""//
+(25:1)Other:/Feature: Around hooks/
+(26:1)Other:/  Scenario: using hook/
+(27:1)Other:/    Then the hook is called/
+(28:7)DocStringSeparator:"""//
+(29:5)StepLine:When /I run `cucumber features/f.feature`/
+(30:5)StepLine:Then /it should pass with:/
+(31:7)DocStringSeparator:"""//
+(32:1)Other:/Feature: Around hooks/
+(33:1)Other://
+(34:1)Other:/  Scenario: using hook      # features/f.feature:2/
+(35:1)Other:/    Then the hook is called # features/step_definitions/steps.rb:1/
+(36:1)Other://
+(37:1)Other:/1 scenario (1 passed)/
+(38:1)Other:/1 step (1 passed)/
+(39:1)Other://
+(40:7)DocStringSeparator:"""//
+(41:1)Empty://
+(42:3)TagLine://3:@todo-windows
+(43:3)ScenarioLine:Scenario/Multiple Around hooks/
+(44:5)StepLine:Given /a file named "features/step_definitions/steps.rb" with:/
+(45:7)DocStringSeparator:"""//
+(46:1)Other:/Then /^the hooks are called in the correct order$/ do/
+(47:1)Other:/  expect($hooks_called).to eq ['A', 'B', 'C']/
+(48:1)Other:/end/
+(49:7)DocStringSeparator:"""//
+(50:5)StepLine:And /a file named "features/support/hooks.rb" with:/
+(51:7)DocStringSeparator:"""//
+(52:1)Other:/Around do |scenario, block|/
+(53:1)Other:/  $hooks_called ||= []/
+(54:1)Other:/  $hooks_called << 'A'/
+(55:1)Other:/  block.call/
+(56:1)Other:/end/
+(57:1)Other://
+(58:1)Other:/Around do |scenario, block|/
+(59:1)Other:/  $hooks_called ||= []/
+(60:1)Other:/  $hooks_called << 'B'/
+(61:1)Other:/  block.call/
+(62:1)Other:/end/
+(63:1)Other://
+(64:1)Other:/Around do |scenario, block|/
+(65:1)Other:/  $hooks_called ||= []/
+(66:1)Other:/  $hooks_called << 'C'/
+(67:1)Other:/  block.call/
+(68:1)Other:/end/
+(69:7)DocStringSeparator:"""//
+(70:5)StepLine:And /a file named "features/f.feature" with:/
+(71:7)DocStringSeparator:"""//
+(72:1)Other:/Feature: Around hooks/
+(73:1)Other:/  Scenario: using multiple hooks/
+(74:1)Other:/    Then the hooks are called in the correct order/
+(75:7)DocStringSeparator:"""//
+(76:5)StepLine:When /I run `cucumber features/f.feature`/
+(77:5)StepLine:Then /it should pass with:/
+(78:7)DocStringSeparator:"""//
+(79:1)Other:/Feature: Around hooks/
+(80:1)Other://
+(81:1)Other:/  Scenario: using multiple hooks                   # features/f.feature:2/
+(82:1)Other:/    Then the hooks are called in the correct order # features/step_definitions/steps.rb:1/
+(83:1)Other://
+(84:1)Other:/1 scenario (1 passed)/
+(85:1)Other:/1 step (1 passed)/
+(86:1)Other://
+(87:7)DocStringSeparator:"""//
+(88:1)Empty://
+(89:3)TagLine://3:@todo-windows
+(90:3)ScenarioLine:Scenario/Mixing Around, Before, and After hooks/
+(91:5)StepLine:Given /a file named "features/step_definitions/steps.rb" with:/
+(92:7)DocStringSeparator:"""//
+(93:1)Other:/Then /^the Around hook is called around Before and After hooks$/ do/
+(94:1)Other:/  expect($hooks_called).to eq ['Around', 'Before']/
+(95:1)Other:/end/
+(96:7)DocStringSeparator:"""//
+(97:5)StepLine:And /a file named "features/support/hooks.rb" with:/
+(98:7)DocStringSeparator:"""//
+(99:1)Other:/Around do |scenario, block|/
+(100:1)Other:/  $hooks_called ||= []/
+(101:1)Other:/  $hooks_called << 'Around'/
+(102:1)Other:/  block.call/
+(103:1)Other:/  $hooks_called << 'Around'/
+(104:1)Other:/  $hooks_called.should == ['Around', 'Before', 'After', 'Around'] #TODO: Find out why this fails using the new rspec expect syntax./
+(105:1)Other:/end/
+(106:1)Other://
+(107:1)Other:/Before do |scenario|/
+(108:1)Other:/  $hooks_called ||= []/
+(109:1)Other:/  $hooks_called << 'Before'/
+(110:1)Other:/end/
+(111:1)Other://
+(112:1)Other:/After do |scenario|/
+(113:1)Other:/  $hooks_called ||= []/
+(114:1)Other:/  $hooks_called << 'After'/
+(115:1)Other:/  expect($hooks_called).to eq ['Around', 'Before', 'After']/
+(116:1)Other:/end/
+(117:7)DocStringSeparator:"""//
+(118:5)StepLine:And /a file named "features/f.feature" with:/
+(119:7)DocStringSeparator:"""//
+(120:1)Other:/Feature: Around hooks/
+(121:1)Other:/  Scenario: Mixing Around, Before, and After hooks/
+(122:1)Other:/    Then the Around hook is called around Before and After hooks/
+(123:7)DocStringSeparator:"""//
+(124:5)StepLine:When /I run `cucumber features/f.feature`/
+(125:5)StepLine:Then /it should pass with:/
+(126:7)DocStringSeparator:"""//
+(127:1)Other:/Feature: Around hooks/
+(128:1)Other://
+(129:1)Other:/  Scenario: Mixing Around, Before, and After hooks               # features/f.feature:2/
+(130:1)Other:/    Then the Around hook is called around Before and After hooks # features/step_definitions/steps.rb:1/
+(131:1)Other://
+(132:1)Other:/1 scenario (1 passed)/
+(133:1)Other:/1 step (1 passed)/
+(134:1)Other://
+(135:7)DocStringSeparator:"""//
+(136:1)Empty://
+(137:3)TagLine://3:@todo-windows
+(138:3)ScenarioLine:Scenario/Around hooks with tags/
+(139:5)StepLine:Given /a file named "features/step_definitions/steps.rb" with:/
+(140:7)DocStringSeparator:"""//
+(141:1)Other:/Then /^the Around hooks with matching tags are called$/ do/
+(142:1)Other:/  expect($hooks_called).to eq ['one', 'one or two']/
+(143:1)Other:/end/
+(144:7)DocStringSeparator:"""//
+(145:5)StepLine:And /a file named "features/support/hooks.rb" with:/
+(146:7)DocStringSeparator:"""//
+(147:1)Other:/Around('@one') do |scenario, block|/
+(148:1)Other:/  $hooks_called ||= []/
+(149:1)Other:/  $hooks_called << 'one'/
+(150:1)Other:/  block.call/
+(151:1)Other:/end/
+(152:1)Other://
+(153:1)Other:/Around('@one,@two') do |scenario, block|/
+(154:1)Other:/  $hooks_called ||= []/
+(155:1)Other:/  $hooks_called << 'one or two'/
+(156:1)Other:/  block.call/
+(157:1)Other:/end/
+(158:1)Other://
+(159:1)Other:/Around('@one', '@two') do |scenario, block|/
+(160:1)Other:/  $hooks_called ||= []/
+(161:1)Other:/  $hooks_called << 'one and two'/
+(162:1)Other:/  block.call/
+(163:1)Other:/end/
+(164:1)Other://
+(165:1)Other:/Around('@two') do |scenario, block|/
+(166:1)Other:/  $hooks_called ||= []/
+(167:1)Other:/  $hooks_called << 'two'/
+(168:1)Other:/  block.call/
+(169:1)Other:/end/
+(170:7)DocStringSeparator:"""//
+(171:5)StepLine:And /a file named "features/f.feature" with:/
+(172:7)DocStringSeparator:"""//
+(173:1)Other:/Feature: Around hooks/
+(174:1)Other:/  @one/
+(175:1)Other:/  Scenario: Around hooks with tags/
+(176:1)Other:/    Then the Around hooks with matching tags are called/
+(177:7)DocStringSeparator:"""//
+(178:5)StepLine:When /I run `cucumber -q -t @one features/f.feature`/
+(179:5)StepLine:Then /it should pass with:/
+(180:7)DocStringSeparator:"""//
+(181:1)Other:/Feature: Around hooks/
+(182:1)Other://
+(183:1)Other:/  @one/
+(184:1)Other:/  Scenario: Around hooks with tags/
+(185:1)Other:/    Then the Around hooks with matching tags are called/
+(186:1)Other://
+(187:1)Other:/1 scenario (1 passed)/
+(188:1)Other:/1 step (1 passed)/
+(189:1)Other://
+(190:7)DocStringSeparator:"""//
+(191:1)Empty://
+(192:3)TagLine://3:@todo-windows
+(193:3)ScenarioLine:Scenario/Around hooks with scenario outlines/
+(194:5)StepLine:Given /a file named "features/step_definitions/steps.rb" with:/
+(195:7)DocStringSeparator:"""//
+(196:1)Other:/Then /^the hook is called$/ do/
+(197:1)Other:/  expect($hook_called).to be true/
+(198:1)Other:/end/
+(199:7)DocStringSeparator:"""//
+(200:5)StepLine:And /a file named "features/support/hooks.rb" with:/
+(201:7)DocStringSeparator:"""//
+(202:1)Other:/Around do |scenario, block|/
+(203:1)Other:/  $hook_called = true/
+(204:1)Other:/  block.call/
+(205:1)Other:/end/
+(206:7)DocStringSeparator:"""//
+(207:5)StepLine:And /a file named "features/f.feature" with:/
+(208:7)DocStringSeparator:"""//
+(209:1)Other:/Feature: Around hooks with scenario outlines/
+(210:1)Other:/  Scenario Outline: using hook/
+(211:1)Other:/    Then the hook is called/
+(212:1)Other://
+(213:1)Other:/    Examples:/
+(214:1)Other:/      | Number |/
+(215:1)Other:/      | one    |/
+(216:1)Other:/      | two    |/
+(217:7)DocStringSeparator:"""//
+(218:5)StepLine:When /I run `cucumber features/f.feature`/
+(219:5)StepLine:Then /it should pass with:/
+(220:7)DocStringSeparator:"""//
+(221:1)Other:/Feature: Around hooks with scenario outlines/
+(222:1)Other://
+(223:1)Other:/  Scenario Outline: using hook # features/f.feature:2/
+(224:1)Other:/    Then the hook is called    # features/f.feature:3/
+(225:1)Other://
+(226:1)Other:/    Examples:/
+(227:1)Other:/      | Number |/
+(228:1)Other:/      | one    |/
+(229:1)Other:/      | two    |/
+(230:1)Other://
+(231:1)Other:/2 scenarios (2 passed)/
+(232:1)Other:/2 steps (2 passed)/
+(233:1)Other://
+(234:7)DocStringSeparator:"""//
+(235:1)Empty://
+(236:3)TagLine://3:@todo-windows
+(237:3)ScenarioLine:Scenario/Around Hooks and the Custom World/
+(238:5)StepLine:Given /a file named "features/step_definitions/steps.rb" with:/
+(239:7)DocStringSeparator:"""//
+(240:1)Other:/Then /^the world should be available in the hook$/ do/
+(241:1)Other:/  $previous_world = self/
+(242:1)Other:/  expect($hook_world).to eq(self)/
+(243:1)Other:/end/
+(244:1)Other://
+(245:1)Other:/Then /^what$/ do/
+(246:1)Other:/  expect($hook_world).not_to eq($previous_world)/
+(247:1)Other:/end/
+(248:7)DocStringSeparator:"""//
+(249:5)StepLine:And /a file named "features/support/hooks.rb" with:/
+(250:7)DocStringSeparator:"""//
+(251:1)Other:/Around do |scenario, block|/
+(252:1)Other:/  $hook_world = self/
+(253:1)Other:/  block.call/
+(254:1)Other:/end/
+(255:7)DocStringSeparator:"""//
+(256:5)StepLine:And /a file named "features/f.feature" with:/
+(257:7)DocStringSeparator:"""//
+(258:1)Other:/Feature: Around hooks/
+(259:1)Other:/  Scenario: using hook/
+(260:1)Other:/    Then the world should be available in the hook/
+(261:1)Other://
+(262:1)Other:/  Scenario: using the same hook/
+(263:1)Other:/    Then what/
+(264:7)DocStringSeparator:"""//
+(265:5)StepLine:When /I run `cucumber features/f.feature`/
+(266:5)StepLine:Then /it should pass/
+EOF

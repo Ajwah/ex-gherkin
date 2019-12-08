@@ -1,0 +1,34 @@
+(1:1)FeatureLine:Feature/Post Configuration Hook [#423]/
+(2:1)Empty://
+(3:1)Other:/  In order to extend Cucumber/
+(4:1)Other:/  As a developer/
+(5:1)Other:/  I want to manipulate the Cucumber configuration after it has been created/
+(6:1)Other://
+(7:3)ScenarioLine:Scenario/Changing the output format/
+(8:5)StepLine:Given /a file named "features/support/env.rb" with:/
+(9:7)DocStringSeparator:"""//
+(10:1)Other:/AfterConfiguration do |config|/
+(11:1)Other:/  config.formats << ['html', {}, config.out_stream]/
+(12:1)Other:/end/
+(13:7)DocStringSeparator:"""//
+(14:5)StepLine:When /I run `cucumber features`/
+(15:5)StepLine:Then /the stderr should not contain anything/
+(16:5)StepLine:And /the output should contain:/
+(17:7)DocStringSeparator:"""//
+(18:1)Other:/html/
+(19:7)DocStringSeparator:"""//
+(20:1)Empty://
+(21:3)ScenarioLine:Scenario/feature directories read from configuration/
+(22:5)StepLine:Given /a file named "features/support/env.rb" with:/
+(23:7)DocStringSeparator:"""//
+(24:1)Other:/AfterConfiguration do |config|/
+(25:1)Other:/  config.out_stream << "AfterConfiguration hook read feature directories: #{config.feature_dirs.join(', ')}"/
+(26:1)Other:/end/
+(27:7)DocStringSeparator:"""//
+(28:5)StepLine:When /I run `cucumber features`/
+(29:5)StepLine:Then /the stderr should not contain anything/
+(30:5)StepLine:And /the output should contain:/
+(31:7)DocStringSeparator:"""//
+(32:1)Other:/AfterConfiguration hook read feature directories: features/
+(33:7)DocStringSeparator:"""//
+EOF

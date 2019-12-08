@@ -1,0 +1,47 @@
+(1:1)TagLine://1:@spawn,8:@wip-jruby
+(2:1)FeatureLine:Feature/Raketask/
+(3:1)Empty://
+(4:1)Other:/  In order to use cucumber's rake task/
+(5:1)Other:/  As a Cuker/
+(6:1)Other:/  I do not want to see rake's backtraces when it fails/
+(7:1)Other:/  Also I want to get zero exit status code on failures/
+(8:1)Other:/  And non-zero exit status code when it pases/
+(9:1)Other://
+(10:3)BackgroundLine:Background//
+(11:5)StepLine:Given /the standard step definitions/
+(12:5)StepLine:Given /a file named "features/passing_and_failing.feature" with:/
+(13:7)DocStringSeparator:"""//
+(14:1)Other:/Feature: Sample/
+(15:1)Other://
+(16:1)Other:/  Scenario: Passing/
+(17:1)Other:/    Given this step passes/
+(18:1)Other://
+(19:1)Other:/  Scenario: Failing/
+(20:1)Other:/    Given this step raises an error/
+(21:7)DocStringSeparator:"""//
+(22:5)StepLine:Given /a file named "Rakefile" with:/
+(23:7)DocStringSeparator:"""//
+(24:1)Other:/  require 'cucumber/rake/task'/
+(25:1)Other://
+(26:1)Other:/  SAMPLE_FEATURE_FILE = 'features/passing_and_failing.feature'/
+(27:1)Other://
+(28:1)Other:/  Cucumber::Rake::Task.new(:pass) do |t|/
+(29:1)Other:/    t.cucumber_opts = "#{SAMPLE_FEATURE_FILE}:3"/
+(30:1)Other:/  end/
+(31:1)Other://
+(32:1)Other:/  Cucumber::Rake::Task.new(:fail) do |t|/
+(33:1)Other:/    t.cucumber_opts = "#{SAMPLE_FEATURE_FILE}:6"/
+(34:1)Other:/  end/
+(35:7)DocStringSeparator:"""//
+(36:1)Empty://
+(37:3)TagLine://3:@todo-windows
+(38:3)ScenarioLine:Scenario/Passing feature/
+(39:5)StepLine:When /I run `bundle exec rake pass`/
+(40:5)StepLine:Then /the exit status should be 0/
+(41:1)Empty://
+(42:3)TagLine://3:@todo-windows
+(43:3)ScenarioLine:Scenario/Failing feature/
+(44:5)StepLine:When /I run `bundle exec rake fail`/
+(45:5)StepLine:Then /the exit status should be 1/
+(46:5)StepLine:But /the output should not contain "rake aborted!"/
+EOF

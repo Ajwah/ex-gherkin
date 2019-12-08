@@ -2,7 +2,7 @@ defmodule Gherkin.Scanner.LanguageSupport do
   @gherkin_languages_source Application.get_env(:ex_gherkin, :file).source
   @gherkin_languages_resource Application.get_env(:ex_gherkin, :file).resource
   @homonyms Application.get_env(:ex_gherkin, :homonyms)
-  @moduledoc_homonyms @homonyms |> Enum.map(&("      * '#{&1}'")) |> Enum.join("\n")
+  @moduledoc_homonyms @homonyms |> Enum.map(&"      * '#{&1}'") |> Enum.join("\n")
 
   @moduledoc """
   The main purpose of this module is to facilitate full international
@@ -95,8 +95,14 @@ defmodule Gherkin.Scanner.LanguageSupport do
   Saves parsed content to: '#{@gherkin_languages_resource}' in `binary`
   format.
   """
-  def unload(source \\ @gherkin_languages_source, resource \\ @gherkin_languages_resource, homonyms \\ @homonyms, languages \\ :all) do
-    content = source
+  def unload(
+        source \\ @gherkin_languages_source,
+        resource \\ @gherkin_languages_resource,
+        homonyms \\ @homonyms,
+        languages \\ :all
+      ) do
+    content =
+      source
       |> parse(homonyms, languages)
       |> :erlang.term_to_binary()
 
@@ -124,11 +130,18 @@ defmodule Gherkin.Scanner.LanguageSupport do
     |> Enum.reduce(%{}, fn {language, translations}, a ->
       {%{homonyms: homonyms}, remainder} =
         Enum.reduce(translations, %{}, fn
-          {"name", val}, a -> Map.put(a, :name, val)
-          {"native", val}, a -> Map.put(a, :native, val)
-          {key, vals}, a -> normalized_key = handle_key(key)
-            {homonyms, remainder} = vals
-              |> Enum.uniq
+          {"name", val}, a ->
+            Map.put(a, :name, val)
+
+          {"native", val}, a ->
+            Map.put(a, :native, val)
+
+          {key, vals}, a ->
+            normalized_key = handle_key(key)
+
+            {homonyms, remainder} =
+              vals
+              |> Enum.uniq()
               |> seperate_out_homonyms(all_homonyms)
 
             a
@@ -141,20 +154,28 @@ defmodule Gherkin.Scanner.LanguageSupport do
       normalized_homonyms =
         homonyms
         |> Enum.reduce(%{}, fn
-          {_, :none}, a -> a
-          {keyword, homonyms_for_keyword}, a -> Enum.reduce(homonyms_for_keyword, a, fn homonym, a ->
-              put_in(a, [Access.key(homonym, %{}), keyword], next_keyword(keyword, homonym, homonyms))
+          {_, :none}, a ->
+            a
+
+          {keyword, homonyms_for_keyword}, a ->
+            Enum.reduce(homonyms_for_keyword, a, fn homonym, a ->
+              put_in(
+                a,
+                [Access.key(homonym, %{}), keyword],
+                next_keyword(keyword, homonym, homonyms)
+              )
             end)
         end)
         |> Enum.reduce(%{}, fn {homonym, keywords_sequence}, a ->
-          default_homonym = cond do
-            keywords_sequence[:given] -> :given
-            keywords_sequence[:when] -> :when
-            keywords_sequence[:then] -> :then
-            keywords_sequence[:and]  -> :and
-            keywords_sequence[:but]  -> :but
-            true -> raise "Developer Error. Keywords Sequence Has No Members"
-          end
+          default_homonym =
+            cond do
+              keywords_sequence[:given] -> :given
+              keywords_sequence[:when] -> :when
+              keywords_sequence[:then] -> :then
+              keywords_sequence[:and] -> :and
+              keywords_sequence[:but] -> :but
+              true -> raise "Developer Error. Keywords Sequence Has No Members"
+            end
 
           put_in(a, [Access.key(homonym, keywords_sequence), :default], default_homonym)
         end)
@@ -165,7 +186,9 @@ defmodule Gherkin.Scanner.LanguageSupport do
   end
 
   defp filter_languages_to_use(all_json_entries, :all), do: all_json_entries
-  defp filter_languages_to_use(all_json_entries, languages), do: Enum.filter(all_json_entries, fn {k, _} -> k in languages end)
+
+  defp filter_languages_to_use(all_json_entries, languages),
+    do: Enum.filter(all_json_entries, fn {k, _} -> k in languages end)
 
   defp seperate_out_homonyms(words, homonyms) do
     words

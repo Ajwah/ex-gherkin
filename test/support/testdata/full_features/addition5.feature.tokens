@@ -1,0 +1,18 @@
+(1:1)FeatureLine:Feature/Addition/
+(2:1)Empty://
+(3:1)Comment:/  # Inputs represented as datatable and are supplied as examples/
+(4:3)ScenarioLine:Scenario Outline/Sum of two numbers/
+(5:1)Empty://
+(6:5)StepLine:Given /user wants to sum the following numbers:/
+(7:7)TableRow://9:firstNumber,25:secondNumber
+(8:7)TableRow://9:<firstNumber>,25:<secondNumber>
+(9:1)Empty://
+(10:5)StepLine:When /user executes sum function/
+(11:5)StepLine:Then /the sum is <result>/
+(12:1)Empty://
+(13:5)ExamplesLine:Examples//
+(14:7)TableRow://9:firstNumber,23:secondNumber,38:result
+(15:7)TableRow://9:10,23:20,38:30
+(16:7)TableRow://9:50,23:50,38:100
+(17:1)Empty://
+EOF

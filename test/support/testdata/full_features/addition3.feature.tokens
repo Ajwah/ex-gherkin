@@ -1,0 +1,13 @@
+(1:1)FeatureLine:Feature/Addition/
+(2:1)Empty://
+(3:1)Comment:/  # Using Cucumber DataTable to get all inputs - addition of 3 numbers/
+(4:3)ScenarioLine:Scenario/Sum of multiple numbers/
+(5:1)Empty://
+(6:5)StepLine:Given /user wants to sum the following numbers:/
+(7:7)TableRow://9:10
+(8:7)TableRow://9:20
+(9:7)TableRow://9:30
+(10:5)StepLine:When /user executes sum function/
+(11:5)StepLine:Then /the sum is 60/
+(12:1)Empty://
+EOF

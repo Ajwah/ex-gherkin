@@ -1,0 +1,113 @@
+(1:1)FeatureLine:Feature/Parameter Types/
+(2:1)Empty://
+(3:1)Other:/  Parameter Types allow you to convert primitive string arguments captured in step definitions/
+(4:1)Other:/  into more meaningful data types./
+(5:1)Other://
+(6:3)BackgroundLine:Background//
+(7:1)Other:/    Let's just create a simple feature for testing out parameter types./
+(8:1)Other:/    We also have a Person class that we need to be able to build./
+(9:1)Other://
+(10:5)StepLine:Given /a file named "features/foo.feature" with:/
+(11:7)DocStringSeparator:"""//
+(12:1)Other:/Feature:/
+(13:1)Other:/  Scenario:/
+(14:1)Other:/    Given Joe has gone home/
+(15:1)Other:/    When Sally contacts Joe/
+(16:7)DocStringSeparator:"""//
+(17:5)StepLine:And /a file named "features/step_definitions/steps.rb" with:/
+(18:7)DocStringSeparator:"""//
+(19:1)Other:/# It works with Regular Expressions/
+(20:1)Other:/Given /([A-Z]\w+) has gone home/ do |person|/
+(21:1)Other:/  expect(person.name).to eq 'Joe'/
+(22:1)Other:/end/
+(23:1)Other://
+(24:1)Other:/# It works with Cucumber Expressions too/
+(25:1)Other:/When "{person} contacts {person}" do |contacter, contactee|/
+(26:1)Other:/  expect(contacter.name).to eq 'Sally'/
+(27:1)Other:/  expect(contactee.name).to eq 'Joe'/
+(28:1)Other:/end/
+(29:7)DocStringSeparator:"""//
+(30:5)StepLine:And /a file named "features/support/env.rb" with:/
+(31:7)DocStringSeparator:"""//
+(32:1)Other:/class Person/
+(33:1)Other:/  attr_reader :name/
+(34:1)Other://
+(35:1)Other:/  def initialize(name)/
+(36:1)Other:/    @name = name/
+(37:1)Other:/  end/
+(38:1)Other:/end/
+(39:7)DocStringSeparator:"""//
+(40:1)Empty://
+(41:3)ScenarioLine:Scenario/Parameter type defined with ParameterType method/
+(42:1)Other:/    This is the most basic way to use a parameter type./
+(43:1)Other://
+(44:5)StepLine:Given /a file named "features/support/parameter_types.rb" with:/
+(45:7)DocStringSeparator:"""//
+(46:1)Other:/ParameterType(/
+(47:1)Other:/  name: 'person',/
+(48:1)Other:/  regexp: /[A-Z]\w+/,/
+(49:1)Other:/  transformer: -> (name) { Person.new(name) }/
+(50:1)Other:/)/
+(51:7)DocStringSeparator:"""//
+(52:5)StepLine:When /I run `cucumber features/foo.feature`/
+(53:5)StepLine:Then /it should pass/
+(54:1)Empty://
+(55:3)ScenarioLine:Scenario/Parameter type delegating to World/
+(56:5)StepLine:Given /a file named "features/support/parameter_types.rb" with:/
+(57:7)DocStringSeparator:"""//
+(58:1)Other:/ParameterType(/
+(59:1)Other:/  name: 'person',/
+(60:1)Other:/  regexp: /[A-Z]\w+/,/
+(61:1)Other:/  transformer: -> (name) { make_person(name) },/
+(62:1)Other:/  use_for_snippets: false/
+(63:1)Other:/)/
+(64:7)DocStringSeparator:"""//
+(65:5)StepLine:Given /a file named "features/support/world.rb" with:/
+(66:7)DocStringSeparator:"""//
+(67:1)Other:/module MyWorld/
+(68:1)Other:/  def make_person(name)/
+(69:1)Other:/    Person.new(name)/
+(70:1)Other:/  end/
+(71:1)Other:/end/
+(72:1)Other:/World(MyWorld)/
+(73:7)DocStringSeparator:"""//
+(74:5)StepLine:When /I run `cucumber features/foo.feature`/
+(75:5)StepLine:Then /it should pass/
+(76:1)Empty://
+(77:3)ScenarioLine:Scenario/Parameter type with group nested in optional group/
+(78:5)StepLine:Given /a file named "features/support/parameter_types.rb" with:/
+(79:7)DocStringSeparator:"""//
+(80:1)Other:/ParameterType(/
+(81:1)Other:/  name: "Employer",/
+(82:1)Other:/  regexp: /Employer(?: "([^"]*)")?/,/
+(83:1)Other:/  transformer: -> (name = nil) do/
+(84:1)Other:/    name || 'Unnamed'/
+(85:1)Other:/  end/
+(86:1)Other:/)/
+(87:1)Other://
+(88:1)Other:/ParameterType(/
+(89:1)Other:/  name: 'person',/
+(90:1)Other:/  regexp: /[A-Z]\w+/,/
+(91:1)Other:/  transformer: -> (name) { Person.new(name) }/
+(92:1)Other:/)/
+(93:7)DocStringSeparator:"""//
+(94:5)StepLine:And /a file named "features/employees.feature" with:/
+(95:7)DocStringSeparator:"""//
+(96:1)Other:/Feature: Employees/
+(97:1)Other:/  Scenario: Unnamed/
+(98:1)Other:/    Given the Employer/
+(99:1)Other:/    Then the name should be "Unnamed"/
+(100:7)DocStringSeparator:"""//
+(101:5)StepLine:And /a file named "features/step_definitions/employee_steps.rb" with:/
+(102:7)DocStringSeparator:"""//
+(103:1)Other:/Given "the {Employer}" do |name|/
+(104:1)Other:/  @name = name/
+(105:1)Other:/end/
+(106:1)Other://
+(107:1)Other:/Given "the name should be {string}" do |name|/
+(108:1)Other:/  expect(name).to eq(@name)/
+(109:1)Other:/end/
+(110:7)DocStringSeparator:"""//
+(111:5)StepLine:When /I run `cucumber features/employees.feature --strict`/
+(112:5)StepLine:Then /it should pass/
+EOF

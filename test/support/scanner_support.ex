@@ -5,10 +5,11 @@ defmodule ScannerSupport do
   def to_feature_tokens_format(tokens) do
     {contents, _, _} =
       tokens
-      |> Enum.reduce({[], false, :none}, fn {label, label_text, location, text},
+      |> Enum.reduce({[], false, :none}, fn _token = {label, label_text, location, text},
                                             {contents, docstring_ctx?, previous} ->
         # indent tag
         #
+        # IO.inspect(token, label: :token)
         {formatted, previous} =
           if label in [:content, :empty] && docstring_ctx? do
             {format(:other, label_text, text), :other}

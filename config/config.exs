@@ -4,7 +4,7 @@ gherkin_languages = "gherkin-languages"
 config :ex_gherkin,
   file: %{
     source: "#{gherkin_languages}.json",
-    resource: "#{gherkin_languages}.few.terms",
+    resource: "#{gherkin_languages}.few.terms"
   },
   homonyms: ["Агар ", "* ", "अनी ", "Tha ", "Þá ", "Ða ", "Þa "]
 
