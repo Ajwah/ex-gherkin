@@ -3,7 +3,7 @@ defmodule UtilsTest do
 
   use ExUnit.Case
 
-  alias Gherkin.Scanner.Utils
+  alias ExGherkin.Scanner.Utils
 
   def data_table_pipe_splitter(line, offset) do
     line

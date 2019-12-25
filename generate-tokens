@@ -1,12 +1,20 @@
 #!/usr/bin/env ruby
-$VERBOSE=nil # Shut up JRuby warnings on Travis
+
 require 'gherkin/parser'
 require 'gherkin/token_formatter_builder'
+# require 'gherkin/ast_builder'
+
 
 parser = Gherkin::Parser.new(Gherkin::TokenFormatterBuilder.new)
+# ast_parser = Gherkin::Parser.new(Gherkin::AstBuilder.new)
+
 files = ARGV
 files.each do |file|
   File.open(file, 'r:UTF-8') do |io|
-    File.write("#{file}.tokens", parser.parse(io))
+    parser.parse(io)
+    # File.write("#{file}.tokens", parser.parse(io))
+    # File.open("#{file}.tokens", 'r:UTF-8') do |io|
+    #   File.write("#{file}.ast.ndjson", ast_parser.parse(io))
+    # end
   end
 end

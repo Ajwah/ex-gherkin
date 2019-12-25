@@ -1,4 +1,4 @@
-defmodule Gherkin.Scanner do
+defmodule ExGherkin.Scanner do
   @moduledoc false
   alias __MODULE__.{
     Context,
@@ -7,11 +7,8 @@ defmodule Gherkin.Scanner do
     Utils
   }
 
-  def tokenize(path: path) do
-    path
-    |> File.stream!()
-    |> tokenize
-  end
+  def tokenize!(content), do: tokenize(content)
+  def tokenize!(content, context = %Context{}), do: tokenize(content, context)
 
   def tokenize(content), do: tokenize(content, Context.new())
 
@@ -51,14 +48,15 @@ defmodule Gherkin.Scanner do
   end
 
   def map_to_token(_, trimmed_line, index, _, context = %Context{doc_string: {_, _}}) do
-    if trimmed_line == "\\\"\\\"\\\"" do
-      {handle_plain_text("\"\"\"", index, 1), context}
-    else
-      {handle_plain_text(trimmed_line, index, 1), context}
+    trimmed_line
+    |> case do
+      "\\\"\\\"\\\"" -> {handle_plain_text("\"\"\"", index, 1), context}
+      "" -> {Token.content(index, 1, ""), context}
+      _ -> {handle_plain_text(trimmed_line, index, 1), context}
     end
   end
 
-  @languages Gherkin.Scanner.LanguageSupport.all()
+  @languages ExGherkin.Scanner.LanguageSupport.all()
   # @languages []
 
   Enum.each(@languages, fn {language,
@@ -201,7 +199,6 @@ defmodule Gherkin.Scanner do
     end)
 
     Enum.each(when_phrasals, fn phrasal ->
-      # IO.puts(":when, #{language}, #{phrasal}")
       def map_to_token(
             unquote(language),
             <<unquote(phrasal), rest::binary>>,
@@ -214,7 +211,6 @@ defmodule Gherkin.Scanner do
     end)
 
     Enum.each(then_phrasals, fn phrasal ->
-      # IO.puts(":then, #{language}, #{phrasal}")
       def map_to_token(
             unquote(language),
             <<unquote(phrasal), rest::binary>>,

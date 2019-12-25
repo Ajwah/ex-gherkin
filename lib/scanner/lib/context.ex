@@ -1,4 +1,4 @@
-defmodule Gherkin.Scanner.Context do
+defmodule ExGherkin.Scanner.Context do
   @moduledoc false
   defstruct doc_string: false, stack: [], language: "en", original_line: "", stepline: false
 

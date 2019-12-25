@@ -1,4 +1,4 @@
-defmodule Gherkin.Scanner.LanguageSupport do
+defmodule ExGherkin.Scanner.LanguageSupport do
   @gherkin_languages_source Application.get_env(:ex_gherkin, :file).source
   @gherkin_languages_resource Application.get_env(:ex_gherkin, :file).resource
   @homonyms Application.get_env(:ex_gherkin, :homonyms)

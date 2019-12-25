@@ -1,0 +1,302 @@
+(1:1)Language:/en/
+(2:1)Empty://
+(3:1)TagLine://1:@first_tag,12:@second_tag
+(4:5)TagLine://5:@third_tag
+(5:1)Empty://
+(6:1)Comment:/# This is a random comment interspersing our tags for some/
+(7:1)Comment:/# informant reason/
+(8:1)Empty://
+(9:1)Empty://
+(10:1)TagLine://1:@tag1,7:@tag2,14:@tag3,22:@tag4
+(11:1)FeatureLine:Feature/Some feature/
+(12:1)Other:/In an attempt to assert that every Gherkin keyword is being/
+(13:1)Other:/parsed correctly, this feature with all possible permutations/
+(14:1)Other:/is being coined./
+(15:1)Other://
+(16:1)Other:/Top to bottom we should have following structure:/
+(17:1)Other:/    language/
+(18:1)Other:/    feature-tags/
+(19:1)Other:/    feature with title/
+(20:1)Other:/    feature-description/
+(21:1)Other:/    background/
+(22:1)Other:/        with title/
+(23:1)Other:/        with description/
+(24:1)Other:/        various scenarios/scenario-outlines/
+(25:1)Other:/        with/without title/
+(26:1)Other:/        with/without description/
+(27:1)Other:/        with/without scenario-tags/
+(28:1)Other:/        variety of steps/
+(29:1)Other:/        with/without step-argument(DocString or DataTable)/
+(30:1)Other:/        with/without multiple Examples/
+(31:1)Other:/            with/without tags/
+(32:1)Other:/            with/without multiple DataTables/
+(33:1)Other:/    various rules/
+(34:1)Other:/        with/without title/
+(35:1)Other:/        with/without background/
+(36:1)Other://
+(37:1)Comment:/# This represents the Background/
+(38:1)BackgroundLine:Background/a simple background/
+(39:1)Other:/    There can only be one Background./
+(40:1)Other://
+(41:1)Other:/    As such, we add description and title to show that it works/
+(42:1)Other://
+(43:5)StepLine:Given /a simple data table/
+(44:5)TableRow://7:foo,13:bar
+(45:5)TableRow://7:boz,13:boo
+(46:5)TableRow://7:boz,13:boo
+(47:5)TableRow://7:boz,13:boo
+(48:5)TableRow://7:boz,13:boo
+(49:1)Empty://
+(50:1)Comment:/# This one is a Scenario/
+(51:1)TagLine://1:@tag4,6:@tag5,11:@tag6,16:@tag7,21:@tag8,26:@tag9,31:@tag10
+(52:1)ScenarioLine:Scenario/First Scenario/
+(53:1)Other:/    This is a legit description/
+(54:1)Other:/    It pertains to a few things/
+(55:1)Other://
+(56:5)StepLine:Given /1/
+(57:5)DocStringSeparator:```/ruby/
+(58:1)Other:/1 + 1/
+(59:5)DocStringSeparator:```//
+(60:5)StepLine:And /2/
+(61:1)Comment:/    # Here is a step with DocString as Step Arg/
+(62:5)StepLine:When /3/
+(63:5)DocStringSeparator:"""//
+(64:1)Other:/This pertains to When/
+(65:5)DocStringSeparator:"""//
+(66:5)StepLine:Then /4/
+(67:1)Empty://
+(68:1)ScenarioLine:Scenario/Second Scenario/
+(69:5)StepLine:Given /A/
+(70:5)StepLine:When /B/
+(71:5)StepLine:And /C/
+(72:5)DocStringSeparator:"""/ruby/
+(73:1)Other:/1 + 1/
+(74:5)DocStringSeparator:"""//
+(75:5)StepLine:Then /D/
+(76:5)DocStringSeparator:"""/elixir/
+(77:1)Other:/1 + 1/
+(78:5)DocStringSeparator:"""//
+(79:1)Empty://
+(80:1)ScenarioLine:Scenario/Third Scenario/
+(81:1)Other:/    Here we have a Scenario with multiple `Given`s/
+(82:1)Other://
+(83:1)Other:/    Some of them even contain a DocString as a Step Argument/
+(84:1)Other://
+(85:5)StepLine:Given /1/
+(86:5)StepLine:Given /2/
+(87:5)DocStringSeparator:"""/ruby/
+(88:1)Other:/1 + 1/
+(89:5)DocStringSeparator:"""//
+(90:5)StepLine:Given /3/
+(91:5)StepLine:Given /4/
+(92:1)Empty://
+(93:1)ScenarioLine:Scenario//
+(94:5)StepLine:Given /a scenario without title <what>/
+(95:1)Empty://
+(96:5)TagLine://5:@foo
+(97:1)Comment:/    # Here we coin multiple examples/
+(98:5)ExamplesLine:Examples//
+(99:1)Other:/    In a turn of events, foo is neeeded/
+(100:5)TableRow://7:what
+(101:5)TableRow://7:foo
+(102:1)Empty://
+(103:5)TagLine://5:@bar
+(104:5)ExamplesLine:Examples//
+(105:5)TableRow://7:what
+(106:5)TableRow://7:bar
+(107:1)Empty://
+(108:1)ScenarioLine:Scenario Outline/1/
+(109:5)StepLine:Given /the <who>/
+(110:1)Empty://
+(111:5)ExamplesLine:Examples//
+(112:5)TableRow://7:who
+(113:5)TableRow://7:Bob
+(114:1)Empty://
+(115:1)ScenarioLine:Scenario Outline/2/
+(116:5)StepLine:Given /the <what>/
+(117:1)Empty://
+(118:5)ExamplesLine:Examples//
+(119:5)TableRow://7:what
+(120:5)TableRow://7:minimalism
+(121:1)Empty://
+(122:1)TagLine://1:@some_random_tag
+(123:1)ScenarioLine:Scenario Outline/3/
+(124:5)StepLine:Given /the <where>/
+(125:1)Empty://
+(126:5)ExamplesLine:Examples//
+(127:5)TableRow://7:where
+(128:5)TableRow://7:USA
+(129:1)Empty://
+(130:1)ScenarioLine:Scenario Outline/4/
+(131:1)Other:/    This Scenario Outline aims to exemplify usage of/
+(132:1)Other:/    multiple Examples/
+(133:1)Other://
+(134:1)Other:/    These Examples are being tagged/
+(135:1)Other://
+(136:5)StepLine:Given /the <why>/
+(137:1)Empty://
+(138:5)TagLine://5:@examples_tag1
+(139:5)ExamplesLine:Examples//
+(140:5)TableRow://7:why
+(141:5)TableRow://7:for the lolz
+(142:1)Empty://
+(143:5)TagLine://5:@examples_tag2
+(144:5)ExamplesLine:Examples//
+(145:5)TableRow://7:why
+(146:5)TableRow://7:for the lolz
+(147:1)Empty://
+(148:1)Empty://
+(149:1)ScenarioLine:Scenario Outline//
+(150:5)StepLine:Given /scenario outline without title <why>/
+(151:1)Empty://
+(152:5)TagLine://5:@examples_tag1
+(153:1)Comment:/    # Examples without a DataTable/
+(154:5)ExamplesLine:Examples//
+(155:1)Empty://
+(156:5)TagLine://5:@examples_tag2
+(157:5)ExamplesLine:Examples//
+(158:5)TableRow://7:why
+(159:5)TableRow://7:for the lolz
+(160:1)Empty://
+(161:1)RuleLine:Rule/This one has a title/
+(162:1)Empty://
+(163:1)Empty://
+(164:1)Empty://
+(165:1)Empty://
+(166:1)RuleLine:Rule/This one has a title and a description/
+(167:1)Other:/    This is a description for a specific rule/
+(168:1)Other://
+(169:1)Other:/    is it a nice description?/
+(170:1)RuleLine:Rule/This one has background as well/
+(171:5)BackgroundLine:Background/But no content/
+(172:1)RuleLine:Rule/This one has background as well/
+(173:5)BackgroundLine:Background/At least a description/
+(174:1)Other:/    Here is a short concise description/
+(175:1)Other://
+(176:1)Other:/            is all ok?/
+(177:1)Other:/    or are there any inconsistencies?/
+(178:1)Other://
+(179:1)RuleLine:Rule/This one has background as well/
+(180:1)Other:/    In order to ensure that Background is supported, we introduce/
+(181:1)Other://
+(182:1)Other:/        the same over here/
+(183:1)Other://
+(184:5)BackgroundLine:Background//
+(185:1)Other:/    No title for this background/
+(186:1)Other://
+(187:5)StepLine:Given /a simple data table/
+(188:5)TableRow://7:foo,13:bar
+(189:5)TableRow://7:boz,13:boo
+(190:5)TableRow://7:boz,13:boo
+(191:5)TableRow://7:boz,13:boo
+(192:5)TableRow://7:boz,13:boo
+(193:1)Empty://
+(194:5)TagLine://5:@tag4,10:@tag5,15:@tag6,20:@tag7,25:@tag8,30:@tag9,35:@tag10
+(195:5)ScenarioLine:Scenario/First Scenario/
+(196:1)Other:/    This is a legit description/
+(197:1)Other:/    It pertains to a few things/
+(198:1)Other://
+(199:5)StepLine:Given /1/
+(200:5)DocStringSeparator:```/ruby/
+(201:1)Other:/1 + 1/
+(202:5)DocStringSeparator:```//
+(203:5)StepLine:And /2/
+(204:5)StepLine:When /3/
+(205:5)DocStringSeparator:"""//
+(206:1)Other:/This pertains to When/
+(207:5)DocStringSeparator:"""//
+(208:5)StepLine:Then /4/
+(209:1)Empty://
+(210:5)ScenarioLine:Scenario/Second Scenario/
+(211:5)StepLine:Given /A/
+(212:5)StepLine:When /B/
+(213:5)StepLine:And /C/
+(214:5)DocStringSeparator:"""/ruby/
+(215:1)Other:/1 + 1/
+(216:5)DocStringSeparator:"""//
+(217:5)StepLine:Then /D/
+(218:5)DocStringSeparator:"""/elixir/
+(219:1)Other:/1 + 1/
+(220:5)DocStringSeparator:"""//
+(221:1)Empty://
+(222:5)ScenarioLine:Scenario/Third Scenario/
+(223:1)Other:/    Here we have a Scenario with multiple `Given`s/
+(224:1)Other://
+(225:1)Other:/    Some of them even contain a DocString as a Step Argument/
+(226:1)Other://
+(227:5)StepLine:Given /1/
+(228:5)StepLine:Given /2/
+(229:5)DocStringSeparator:"""/ruby/
+(230:1)Other:/1 + 1/
+(231:5)DocStringSeparator:"""//
+(232:5)StepLine:Given /3/
+(233:5)StepLine:Given /4/
+(234:1)Empty://
+(235:5)ScenarioLine:Scenario//
+(236:5)StepLine:Given /a scenario without title <what>/
+(237:1)Empty://
+(238:5)TagLine://5:@foo
+(239:5)ExamplesLine:Examples//
+(240:1)Other:/        In a turn of events, foo is neeeded/
+(241:9)TableRow://11:what
+(242:9)TableRow://11:foo
+(243:1)Empty://
+(244:5)TagLine://5:@bar
+(245:5)ExamplesLine:Examples//
+(246:9)TableRow://11:what
+(247:9)TableRow://11:bar
+(248:1)Empty://
+(249:5)ScenarioLine:Scenario Outline/1/
+(250:5)StepLine:Given /the <who>/
+(251:1)Empty://
+(252:5)ExamplesLine:Examples//
+(253:9)TableRow://11:who
+(254:9)TableRow://11:Bob
+(255:1)Empty://
+(256:5)ScenarioLine:Scenario Outline/2/
+(257:5)StepLine:Given /the <what>/
+(258:1)Empty://
+(259:5)ExamplesLine:Examples//
+(260:9)TableRow://11:what
+(261:9)TableRow://11:minimalism
+(262:1)Empty://
+(263:5)TagLine://5:@some_random_tag
+(264:5)ScenarioLine:Scenario Outline/3/
+(265:5)StepLine:Given /the <where>/
+(266:1)Empty://
+(267:5)ExamplesLine:Examples//
+(268:9)TableRow://11:where
+(269:9)TableRow://11:USA
+(270:1)Empty://
+(271:5)ScenarioLine:Scenario Outline/4/
+(272:1)Other:/    This Scenario Outline aims to exemplify usage of/
+(273:1)Other:/    multiple Examples/
+(274:1)Other://
+(275:1)Other:/    These Examples are being tagged/
+(276:1)Other://
+(277:5)StepLine:Given /the <why>/
+(278:1)Empty://
+(279:5)TagLine://5:@examples_tag1
+(280:5)ExamplesLine:Examples//
+(281:9)TableRow://11:why
+(282:9)TableRow://11:for the lolz
+(283:1)Empty://
+(284:5)TagLine://5:@examples_tag2
+(285:5)ExamplesLine:Examples//
+(286:9)TableRow://11:why
+(287:9)TableRow://11:for the lolz
+(288:1)Empty://
+(289:1)Empty://
+(290:5)ScenarioLine:Scenario Outline//
+(291:5)StepLine:Given /scenario outline without title <why>/
+(292:1)Empty://
+(293:5)TagLine://5:@examples_tag1
+(294:5)ExamplesLine:Examples//
+(295:9)TableRow://11:why
+(296:9)TableRow://11:for the lolz
+(297:1)Empty://
+(298:5)TagLine://5:@examples_tag2
+(299:5)ExamplesLine:Examples//
+(300:9)TableRow://11:why
+(301:9)TableRow://11:for the lolz
+EOF
