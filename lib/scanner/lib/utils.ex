@@ -1,4 +1,4 @@
-defmodule Gherkin.Scanner.Utils do
+defmodule ExGherkin.Scanner.Utils do
   @moduledoc false
 
   def data_table_pipe_splitter(line, offset_count \\ 0)
@@ -199,7 +199,6 @@ defmodule Gherkin.Scanner.Utils do
       |> trim_fixed_number_leading_white_spaces(trim_length)
       |> case do
         {trimmed_line, :wrongly_indented_line_within_doc_string} ->
-          # IO.warn("Wrongly indented line within `DocString`: #{line}")
           trimmed_line
 
         {trimmed_line, _} ->

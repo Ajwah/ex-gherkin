@@ -1,4 +1,4 @@
-defmodule Gherkin.Scanner.SyntaxError do
+defmodule ExGherkin.Scanner.SyntaxError do
   @moduledoc false
   defexception [:message, :line_number, :violation_code]
 

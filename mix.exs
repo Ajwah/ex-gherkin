@@ -24,11 +24,12 @@ defmodule ExGherkin.MixProject do
   def extra(:test), do: [:ex_unit_notifier, :mix_test_watch]
   def extra(_), do: []
   defp elixirc_paths(:test), do: ["lib", "test/support"]
-  defp elixirc_paths(_), do: ["lib"]
+  defp elixirc_paths(_), do: ["lib", "test/support"]
 
   defp deps do
     [
       {:jiffy, "~> 1.0"},
+      {:jason, "~> 1.1"},
       {:ex_unit_notifier, "~> 0.1", only: :test},
       {:mix_test_watch, "~> 1.0", only: :test, runtime: false}
     ]

@@ -1,4 +1,4 @@
-defmodule Gherkin.Scanner.Location do
+defmodule ExGherkin.Scanner.Location do
   @moduledoc """
   Keeps track of token position within file
   """

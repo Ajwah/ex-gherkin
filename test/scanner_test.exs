@@ -1,9 +1,9 @@
 defmodule ScannerTest do
   @moduledoc false
   use ExUnit.Case
-  alias Gherkin.Scanner
+  alias ExGherkin.Scanner
 
-  alias Gherkin.Scanner.{
+  alias ExGherkin.Scanner.{
     Context,
     SyntaxError
   }
@@ -28,13 +28,21 @@ defmodule ScannerTest do
   def tokenize(contents) do
     contents
     |> Scanner.tokenize()
-    |> Enum.take(2000)
+    |> Enum.to_list()
   end
 
   def tokenize(contents, context) do
     contents
-    |> Scanner.tokenize(context)
-    |> Enum.take(2000)
+    |> Scanner.tokenize!(context)
+    |> Enum.to_list()
+  end
+
+  defp tokenize_from_path(path) do
+    [path: path]
+    |> ExGherkin.prepare()
+    |> Map.get(:content)
+    |> tokenize()
+    |> ScannerSupport.to_feature_tokens_format()
   end
 
   describe "#tokenize(list) Recognizes Primitives:" do
@@ -128,11 +136,7 @@ defmodule ScannerTest do
 
       test "#{file}" do
         expected = File.read!("#{unquote(path)}.tokens")
-
-        result =
-          [path: unquote(path)]
-          |> tokenize()
-          |> ScannerSupport.to_feature_tokens_format()
+        result = tokenize_from_path(unquote(path))
 
         if expected != result do
           IO.inspect(unquote(path), label: :failed, syntax_colors: [string: :red])
@@ -206,11 +210,7 @@ defmodule ScannerTest do
 
       test "#{file}" do
         expected = File.read!("#{unquote(path)}.tokens")
-
-        result =
-          [path: unquote(path)]
-          |> tokenize()
-          |> ScannerSupport.to_feature_tokens_format()
+        result = tokenize_from_path(unquote(path))
 
         if expected != result do
           IO.inspect(unquote(path), label: :failed, syntax_colors: [string: :red])
@@ -233,12 +233,7 @@ defmodule ScannerTest do
 
       test "#{file}" do
         expected = File.read!("#{unquote(path)}.tokens")
-
-        result =
-          [path: unquote(path)]
-          # |> IO.inspect
-          |> tokenize()
-          |> ScannerSupport.to_feature_tokens_format()
+        result = tokenize_from_path(unquote(path))
 
         if expected != result do
           IO.inspect(unquote(path), label: :failed, syntax_colors: [string: :red])

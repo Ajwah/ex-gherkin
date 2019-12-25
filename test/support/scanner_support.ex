@@ -1,56 +1,91 @@
 defmodule ScannerSupport do
   @moduledoc false
-  alias Gherkin.Scanner.Utils
+  alias ExGherkin.Scanner.Utils
 
   def to_feature_tokens_format(tokens) do
-    {contents, _, _} =
+    {contents, _, _, _} =
       tokens
-      |> Enum.reduce({[], false, :none}, fn _token = {label, label_text, location, text},
-                                            {contents, docstring_ctx?, previous} ->
-        # indent tag
-        #
-        # IO.inspect(token, label: :token)
-        {formatted, previous} =
-          if label in [:content, :empty] && docstring_ctx? do
-            {format(:other, label_text, text), :other}
-          else
-            cond do
-              previous in [:other, :content] && label == :empty ->
-                {format(:other, label_text, text), :other}
+      |> Enum.reduce({[], false, false, :none}, fn
+        full_token, _ when not is_tuple(full_token) ->
+          raise "Expected a full token as a typle. Instead: #{inspect(full_token)}"
 
-              true ->
-                {format(label, label_text, text), label}
+        _token = {label, label_text, location, text},
+        {contents, docstring_ctx?, description_ctx?, previous} ->
+          # indent tag
+          #
+          description_ctx? =
+            if description_ctx? do
+              label in [:content, :empty]
+            else
+              label in [:scenarios, :scenario_outline]
             end
-          end
 
-        docstring_ctx? =
-          if label == :doc_string do
-            !docstring_ctx?
-          else
-            docstring_ctx?
-          end
+          {formatted, previous} =
+            if label in [:content, :empty] && docstring_ctx? do
+              {format(:other, label_text, text), :other}
+            else
+              cond do
+                previous in [:other, :content] && label == :empty ->
+                  {format(:other, label_text, text), :other}
 
-        formatted_location =
-          if label == :comment do
-            format_location({:location, elem(location, 1), 1})
-          else
-            format_location(location)
-          end
+                true ->
+                  {format(label, label_text, text), label}
+              end
+            end
 
-        formatted_regex =
-          if label == :comment do
-            "/#{Utils.pad_leading("#" <> text, elem(location, 2) - 1)}/"
-          else
-            format_regex(text)
-          end
+          docstring_ctx? =
+            if label == :doc_string do
+              !docstring_ctx?
+            else
+              docstring_ctx?
+            end
 
-        result = [formatted_location <> formatted <> formatted_regex | contents]
+          formatted_location =
+            if description_ctx? do
+              if label == :content do
+                format_location({:location, elem(location, 1), 1})
+              else
+                if label == :comment do
+                  format_location({:location, elem(location, 1), 1})
+                else
+                  format_location(location)
+                end
+              end
+            else
+              if label == :comment do
+                format_location({:location, elem(location, 1), 1})
+              else
+                format_location(location)
+              end
+            end
 
-        {
-          result,
-          docstring_ctx?,
-          previous
-        }
+          formatted_regex =
+            if description_ctx? do
+              if label == :content do
+                "/#{Utils.pad_leading(text, elem(location, 2) - 1)}/"
+              else
+                if label == :comment do
+                  "/#{Utils.pad_leading("#" <> text, elem(location, 2) - 1)}/"
+                else
+                  format_regex(text)
+                end
+              end
+            else
+              if label == :comment do
+                "/#{Utils.pad_leading("#" <> text, elem(location, 2) - 1)}/"
+              else
+                format_regex(text)
+              end
+            end
+
+          result = [formatted_location <> formatted <> formatted_regex | contents]
+
+          {
+            result,
+            docstring_ctx?,
+            description_ctx?,
+            previous
+          }
       end)
 
     ["EOF\n" | contents]

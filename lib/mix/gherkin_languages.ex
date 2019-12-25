@@ -1,6 +1,7 @@
 defmodule Mix.Tasks.GherkinLanguages do
   @moduledoc """
-  Parse json
+  Parse `gherkin-languages.json`
+
   """
   use Mix.Task
 
@@ -8,7 +9,7 @@ defmodule Mix.Tasks.GherkinLanguages do
   @gherkin_languages_resource Application.get_env(:ex_gherkin, :file).resource
   @homonyms Application.get_env(:ex_gherkin, :homonyms)
 
-  alias Gherkin.Scanner.LanguageSupport
+  alias ExGherkin.Scanner.LanguageSupport
   @shortdoc "Converts `gherkin-languages.json` to pallatable format"
   def run(args) do
     {opts, _, _} =

@@ -1,4 +1,4 @@
-defmodule Gherkin.Scanner.Token do
+defmodule ExGherkin.Scanner.Token do
   @moduledoc """
   A token combines following three identifiers:
     * Label
@@ -6,9 +6,9 @@ defmodule Gherkin.Scanner.Token do
     * Text
   """
 
-  import Record
-  alias Gherkin.Scanner.Location
+  alias ExGherkin.Scanner.Location
   import Location
+  import Record
 
   defrecord(:token,
     label: :feature,
