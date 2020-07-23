@@ -12,7 +12,7 @@ defmodule ExGherkin.AstNdjson.Scenario do
     examples
   """
 
-  @derive Jason.Encoder
+  @derive {Jason.Encoder, except: [:token, :parsed_sentence]}
 
   alias ExGherkin.AstNdjson.{
     Location,
@@ -26,9 +26,11 @@ defmodule ExGherkin.AstNdjson.Scenario do
             id: "",
             tags: [],
             steps: [],
-            examples: []
+            examples: [],
+            token: nil,
+            parsed_sentence: %{}
 
-  def new(name, description, keyword, location = %Location{}, tags, steps, examples, id \\ "0") do
+  def new(name, description, keyword, location = %Location{}, tags, steps, examples, token, id \\ "0") do
     %{
       scenario:
         struct(__MODULE__, %{
@@ -39,7 +41,9 @@ defmodule ExGherkin.AstNdjson.Scenario do
           tags: Util.normalize(tags),
           steps: Util.normalize(steps),
           examples: Util.normalize(examples),
-          id: id
+          id: id,
+          token: token,
+          parsed_sentence: Util.parse_sentence(name),
         })
     }
   end

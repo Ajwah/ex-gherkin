@@ -7,7 +7,7 @@ defmodule ExGherkin.AstNdjson.Tag do
     id
   """
 
-  @derive Jason.Encoder
+  @derive {Jason.Encoder, except: [:parsed_sentence]}
 
   alias ExGherkin.AstNdjson.{
     Location,
@@ -16,13 +16,15 @@ defmodule ExGherkin.AstNdjson.Tag do
 
   defstruct location: Location.new(),
             name: "",
-            id: "0"
+            id: "0",
+            parsed_sentence: %{}
 
   def new(name, location = %Location{}, id \\ "0") do
     struct(__MODULE__, %{
       location: location,
       name: Util.normalize(name),
-      id: id
+      id: id,
+      parsed_sentence: Util.parse_sentence(name),
     })
   end
 end

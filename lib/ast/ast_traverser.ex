@@ -19,7 +19,7 @@ defmodule ExGherkin.AstTraverser do
         do: comments(full_token, acc) |> Acc.local()
 
       def feature_constituents(
-            {:feature, {:meta, meta, {:type, :multiples}}, {:constituents, constituents}},
+            {token = :feature, {:meta, meta, {:type, :multiples}}, {:constituents, constituents}},
             acc = Acc.storage()
           ) do
         [
@@ -48,7 +48,7 @@ defmodule ExGherkin.AstTraverser do
         acc = acc_scenario_blocks = scenario_blocks(scenario_blocks, acc)
         acc = acc_rule_blocks = rule_blocks(rule_blocks, acc)
 
-        {Acc.local(acc_title), ctx, Acc.local(acc_tags), Acc.local(acc_description_block),
+        {token, Acc.local(acc_title), ctx, Acc.local(acc_tags), Acc.local(acc_description_block),
          Acc.local(acc_background), Acc.local(acc_scenario_blocks), Acc.local(acc_rule_blocks)}
         |> @reducer.feature_constituents.reconcile.(
           Acc.set_local(acc, feature_constituents_so_far)
@@ -62,7 +62,7 @@ defmodule ExGherkin.AstTraverser do
           do: acc
 
       def background_constituents(
-            {:background, {:meta, meta, {:type, :multiples}}, {:constituents, constituents}},
+            {:background = token, {:meta, meta, {:type, :multiples}}, {:constituents, constituents}},
             acc = Acc.storage()
           ) do
         [
@@ -78,7 +78,7 @@ defmodule ExGherkin.AstTraverser do
         acc = acc_description_block = description_block(description_block, acc)
         acc = acc_steps = steps(steps, Acc.set_local(acc, @step_constituents_initial_value))
 
-        {Acc.local(acc_title), ctx, Acc.local(acc_description_block), Acc.local(acc_steps)}
+        {token, Acc.local(acc_title), ctx, Acc.local(acc_description_block), Acc.local(acc_steps)}
         |> @reducer.background_constituents.reconcile.(
           Acc.set_local(acc, background_constituents_so_far)
         )
@@ -93,6 +93,7 @@ defmodule ExGherkin.AstTraverser do
               steps = {:steps, _, _},
               examples_blocks = {:examples_blocks, _, _}
             ],
+            token,
             acc = Acc.storage()
           ) do
         scenario_constituents_so_far = Acc.local(acc)
@@ -105,7 +106,7 @@ defmodule ExGherkin.AstTraverser do
         acc = acc_steps = steps(steps, Acc.set_local(acc, @step_constituents_initial_value))
         acc = acc_examples_blocks = examples_blocks(examples_blocks, acc)
 
-        {Acc.local(acc_title), ctx, Acc.local(acc_tags), Acc.local(acc_description_block),
+        {token, Acc.local(acc_title), ctx, Acc.local(acc_tags), Acc.local(acc_description_block),
          Acc.local(acc_steps), Acc.local(acc_examples_blocks)}
         |> @reducer.scenario_constituents.reconcile.(
           Acc.set_local(acc, scenario_constituents_so_far)
@@ -119,6 +120,7 @@ defmodule ExGherkin.AstTraverser do
               background = {:background, _, _},
               scenario_blocks = {:scenario_blocks, _, _}
             ],
+            token,
             acc = Acc.storage()
           ) do
         rule_constituents_so_far = Acc.local(acc)
@@ -137,7 +139,7 @@ defmodule ExGherkin.AstTraverser do
 
         acc = acc_scenario_blocks = scenario_blocks(scenario_blocks, acc)
 
-        {Acc.local(acc_title), ctx, Acc.local(acc_description_block), Acc.local(acc_background),
+        {token, Acc.local(acc_title), ctx, Acc.local(acc_description_block), Acc.local(acc_background),
          Acc.local(acc_scenario_blocks)}
         |> @reducer.rule_constituents.reconcile.(Acc.set_local(acc, rule_constituents_so_far))
       end
@@ -196,7 +198,7 @@ defmodule ExGherkin.AstTraverser do
             {r, Acc.local(r)}
           end
 
-        {Acc.local(acc_ctx), Acc.local(acc_step_text), acc_step_arg}
+        {step_token, Acc.local(acc_ctx), Acc.local(acc_step_text), acc_step_arg}
         |> @reducer.step_constituents.reconcile.(
           Acc.set_local(acc, step_constituents_constituents_so_far)
         )
@@ -259,26 +261,26 @@ defmodule ExGherkin.AstTraverser do
         do: data_table(data_table, acc)
 
       def handle_scenario(
-            {:scenario, {:meta, meta, {:type, :multiples}}, {:constituents, constituents}},
+            {:scenario = token, {:meta, meta, {:type, :multiples}}, {:constituents, constituents}},
             acc = Acc.storage()
           ) do
         scenario_blocks_so_far = Acc.local(acc)
 
         constituents
-        |> scenario_constituents(Acc.push_ctx(acc, {:scenario, meta(meta)}))
+        |> scenario_constituents(token, Acc.push_ctx(acc, {:scenario, meta(meta)}))
         |> @reducer.scenario.reconcile.(scenario_blocks_so_far)
         |> Acc.pop_ctx()
       end
 
       def handle_scenario(
-            {:scenario_outline, {:meta, meta, {:type, :multiples}},
+            {:scenario_outline = token, {:meta, meta, {:type, :multiples}},
              {:constituents, constituents}},
             acc = Acc.storage()
           ) do
         scenario_blocks_so_far = Acc.local(acc)
 
         constituents
-        |> scenario_constituents(Acc.push_ctx(acc, {:scenario_outline, meta(meta)}))
+        |> scenario_constituents(token, Acc.push_ctx(acc, {:scenario_outline, meta(meta)}))
         |> @reducer.scenario_outline.reconcile.(scenario_blocks_so_far)
         |> Acc.pop_ctx()
       end
@@ -306,11 +308,11 @@ defmodule ExGherkin.AstTraverser do
       end
 
       def rule_blocks_helper(
-            {:rule, {:meta, meta, {:type, :multiples}}, {:constituents, constituents}},
+            {:rule = token, {:meta, meta, {:type, :multiples}}, {:constituents, constituents}},
             acc = Acc.storage()
           ) do
         constituents
-        |> rule_constituents(Acc.push_ctx(acc, {:rule_blocks, meta(meta)}))
+        |> rule_constituents(token, Acc.push_ctx(acc, {:rule_blocks, meta(meta)}))
         |> Acc.pop_ctx()
       end
 

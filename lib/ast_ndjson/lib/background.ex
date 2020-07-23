@@ -9,7 +9,7 @@ defmodule ExGherkin.AstNdjson.Background do
     steps
   """
 
-  @derive Jason.Encoder
+  @derive {Jason.Encoder, except: [:token, :parsed_sentence]}
 
   alias ExGherkin.AstNdjson.{
     Location,
@@ -20,9 +20,11 @@ defmodule ExGherkin.AstNdjson.Background do
             description: "",
             keyword: "",
             location: Location.new(),
-            steps: []
+            steps: [],
+            token: nil,
+            parsed_sentence: %{}
 
-  def new(name, description, keyword, location = %Location{}, steps) do
+  def new(name, description, keyword, location = %Location{}, steps, token) do
     %{
       background:
         struct(__MODULE__, %{
@@ -30,7 +32,9 @@ defmodule ExGherkin.AstNdjson.Background do
           description: Util.normalize(description),
           keyword: Util.normalize(keyword),
           location: location,
-          steps: Util.normalize(steps)
+          steps: Util.normalize(steps),
+          token: token,
+          parsed_sentence: Util.parse_sentence(name),
         })
     }
   end

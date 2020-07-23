@@ -10,7 +10,7 @@ defmodule ExGherkin.AstNdjson.Step do
     doc_string
   """
 
-  @derive Jason.Encoder
+  @derive {Jason.Encoder, except: [:token, :parsed_sentence]}
 
   alias ExGherkin.AstNdjson.{
     DocString,
@@ -25,14 +25,18 @@ defmodule ExGherkin.AstNdjson.Step do
             location: Location.new(),
             id: "0",
             dataTable: nil,
-            docString: nil
+            docString: nil,
+            token: nil,
+            parsed_sentence: %{}
 
-  def new(text, keyword, location = %Location{}, id \\ "0") do
+  def new(text, keyword, location = %Location{}, token, id \\ "0") do
     struct(__MODULE__, %{
       text: Util.normalize(text),
       keyword: Util.normalize(keyword),
       location: location,
-      id: id
+      id: id,
+      token: token,
+      parsed_sentence: Util.parse_sentence(text),
     })
   end
 

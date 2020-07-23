@@ -21,7 +21,7 @@ defmodule ExGherkin.AstNdjson do
     alias DataTableRow.Cell, as: DataTableRowCell
 
     def feature_constituents_reconcile(
-          {title, ctx, tags, description, background, scenario_blocks, rule_blocks},
+          {token, title, ctx, tags, description, background, scenario_blocks, rule_blocks},
           acc = Acc.storage()
         ) do
       {
@@ -36,7 +36,7 @@ defmodule ExGherkin.AstNdjson do
 
       global_acc =
         title
-        |> Feature.new(description, keyword, language, tags, Location.new(raw_location))
+        |> Feature.new(description, keyword, language, tags, Location.new(raw_location), token)
         |> Feature.add_child(background)
         |> Feature.add_child(scenario_blocks)
         |> Feature.add_child(rule_blocks)
@@ -46,27 +46,27 @@ defmodule ExGherkin.AstNdjson do
     end
 
     def background_constituents_reconcile(
-          {title, ctx, description, steps},
+          {token, title, ctx, description, steps},
           acc = Acc.storage()
         ) do
       {raw_location, keyword} = ctx
 
       local_acc =
         title
-        |> Background.new(description, keyword, Location.new(raw_location), steps)
+        |> Background.new(description, keyword, Location.new(raw_location), steps, token)
 
       Acc.set_local(acc, [local_acc])
     end
 
     def rule_constituents_reconcile(
-          {title, ctx, description, background, scenario_blocks},
+          {token, title, ctx, description, background, scenario_blocks},
           acc = Acc.storage()
         ) do
       {raw_location, keyword} = ctx
 
       local_acc =
         title
-        |> Rule.new(description, keyword, Location.new(raw_location))
+        |> Rule.new(description, keyword, Location.new(raw_location), token)
         |> Rule.add_child(background)
         |> Rule.add_child(scenario_blocks)
         |> Rule.normalize()
@@ -74,12 +74,12 @@ defmodule ExGherkin.AstNdjson do
       Acc.set_local(acc, [local_acc | Acc.local(acc)])
     end
 
-    def step_constituents_reconcile({ctx, text, step_arg}, acc = Acc.storage()) do
+    def step_constituents_reconcile({token, ctx, text, step_arg}, acc = Acc.storage()) do
       {raw_location, keyword} = ctx
 
       local_acc =
         text
-        |> Step.new(keyword, Location.new(raw_location))
+        |> Step.new(keyword, Location.new(raw_location), token)
         |> Step.arg(step_arg)
 
       Acc.set_local(acc, [local_acc | Acc.local(acc)])
@@ -99,14 +99,14 @@ defmodule ExGherkin.AstNdjson do
       do: scenario_reconcile(acc, scenario_blocks_so_far)
 
     def scenario_constituents_reconcile(
-          {title, ctx, tags, description, steps, examples},
+          {token, title, ctx, tags, description, steps, examples},
           acc = Acc.storage()
         ) do
       {raw_location, keyword} = ctx
 
       local_acc =
         title
-        |> Scenario.new(description, keyword, Location.new(raw_location), tags, steps, examples)
+        |> Scenario.new(description, keyword, Location.new(raw_location), tags, steps, examples, token)
 
       Acc.set_local(acc, [local_acc | Acc.local(acc)])
     end

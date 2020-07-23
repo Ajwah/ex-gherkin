@@ -6,24 +6,24 @@ defmodule ExGherkin.AstTraverser.ReducerTemplate do
     alias ExGherkin.AstTraverser.Acc
 
     @callback feature_constituents_reconcile(
-                {title :: any, ctx :: any, tags :: any, description_block :: any,
+                {token :: atom, title :: any, ctx :: any, tags :: any, description_block :: any,
                  background :: any, scenario_blocks :: any, rule_blocks :: any},
                 Acc.t()
               ) :: Acc.t()
 
     @callback background_constituents_reconcile(
-                {title :: any, ctx :: any, description_block :: any, steps :: any},
+                {token :: atom, title :: any, ctx :: any, description_block :: any, steps :: any},
                 Acc.t()
               ) :: Acc.t()
 
     @callback scenario_constituents_reconcile(
-                {title :: any, ctx :: any, tags :: any, description_block :: any, steps :: any,
+                {token :: atom, title :: any, ctx :: any, tags :: any, description_block :: any, steps :: any,
                  examples_blocks :: any},
                 Acc.t()
               ) :: Acc.t()
 
     @callback rule_constituents_reconcile(
-                {title :: any, ctx :: any, description_block :: any, background :: any,
+                {token :: atom, title :: any, ctx :: any, description_block :: any, background :: any,
                  scenario_blocks :: any},
                 Acc.t()
               ) :: Acc.t()
@@ -35,7 +35,7 @@ defmodule ExGherkin.AstTraverser.ReducerTemplate do
               ) :: Acc.t()
 
     @callback step_constituents_reconcile(
-                {ctx :: any, step_text :: any, step_arg :: any},
+                {step_token :: atom, ctx :: any, step_text :: any, step_arg :: any},
                 Acc.t()
               ) :: Acc.t()
     @callback doc_string_constituents_reconcile(
@@ -97,37 +97,37 @@ defmodule ExGherkin.AstTraverser.ReducerTemplate do
       @behaviour Behaviour
 
       def feature_constituents_reconcile(
-            {_title, _ctx, _tags, _description_block, _background, _scenario_blocks,
+            {_token, _title, _ctx, _tags, _description_block, _background, _scenario_blocks,
              _rule_blocks},
             acc = Acc.storage()
           ),
           do: acc
 
       def background_constituents_reconcile(
-            {_title, _ctx, _description_block, _steps},
+            {_token, _title, _ctx, _description_block, _steps},
             acc = Acc.storage()
           ),
           do: acc
 
       def scenario_constituents_reconcile(
-            {_title, _ctx, _tags, _description_block, _steps, _examples_blocks},
+            {_token, _title, _ctx, _tags, _description_block, _steps, _examples_blocks},
             acc = Acc.storage()
           ),
           do: acc
 
       def rule_constituents_reconcile(
-            {_title, _ctx, _description_block, _background, _scenario_blocks},
+            {_token, _title, _ctx, _description_block, _background, _scenario_blocks},
             acc = Acc.storage()
           ),
           do: acc
 
       def examples_constituents_reconcile(
-            {_ctx, _tags, _description_block, _data_table},
+            {_title, _ctx, _tags, _description_block, _data_table},
             acc = Acc.storage()
           ),
           do: acc
 
-      def step_constituents_reconcile({_ctx, _step_text, _step_arg}, acc = Acc.storage()), do: acc
+      def step_constituents_reconcile({_step_token, _ctx, _step_text, _step_arg}, acc = Acc.storage()), do: acc
 
       def doc_string_constituents_reconcile(
             {_ctx, _delimiter_tag, _doc_string_contents},

@@ -76,7 +76,7 @@ defmodule ExGherkin.Scanner do
                               homonyms: homonym_phrasals
                             }} ->
     Enum.each(homonym_phrasals, fn {phrasal, next_in_sequence_lookup} ->
-      {%{default: default_homonym}, next_in_sequence_lookup} =
+      {%{default: _default_homonym}, _next_in_sequence_lookup} =
         Map.split(next_in_sequence_lookup, [:default])
 
       def map_to_token(
@@ -86,10 +86,12 @@ defmodule ExGherkin.Scanner do
             column,
             context = %Context{}
           ) do
-        {:token, prev_keyword, _, _, _} = Context.peek(context)
+        {:token, _prev_keyword, _, _, _} = Context.peek(context)
 
-        unquote(Macro.escape(next_in_sequence_lookup))
-        |> Map.get(prev_keyword, unquote(default_homonym))
+        #unquote(Macro.escape(next_in_sequence_lookup))
+        #|> Map.get(prev_keyword, unquote(default_homonym))
+
+        :and
         |> case do
           :given ->
             handle_given(

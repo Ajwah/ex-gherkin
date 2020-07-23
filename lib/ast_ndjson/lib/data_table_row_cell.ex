@@ -6,7 +6,7 @@ defmodule ExGherkin.AstNdjson.DataTable.Row.Cell do
     value
   """
 
-  @derive Jason.Encoder
+  @derive {Jason.Encoder, except: [:token, :parsed_sentence]}
 
   alias ExGherkin.AstNdjson.{
     Location,
@@ -14,12 +14,14 @@ defmodule ExGherkin.AstNdjson.DataTable.Row.Cell do
   }
 
   defstruct location: Location.new(),
-            value: ""
+            value: "",
+            parsed_sentence: %{}
 
   def new(value, location = %Location{}) do
     struct(__MODULE__, %{
       location: location,
-      value: Util.normalize(value)
+      value: Util.normalize(value),
+      parsed_sentence: Util.parse_sentence(value),
     })
   end
 end

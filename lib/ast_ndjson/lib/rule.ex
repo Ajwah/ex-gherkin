@@ -8,7 +8,7 @@ defmodule ExGherkin.AstNdjson.Rule do
     children
   """
 
-  @derive Jason.Encoder
+  @derive {Jason.Encoder, except: [:token, :parsed_sentence]}
 
   alias ExGherkin.AstNdjson.{
     Location,
@@ -19,16 +19,20 @@ defmodule ExGherkin.AstNdjson.Rule do
             description: "",
             location: Location.new(),
             keyword: "",
-            children: []
+            children: [],
+            token: nil,
+            parsed_sentence: %{}
 
-  def new(name, description, keyword, location = %Location{}) do
+  def new(name, description, keyword, location = %Location{}, token) do
     %{
       rule:
         struct(__MODULE__, %{
           name: Util.normalize(name),
           description: Util.normalize(description),
           keyword: Util.normalize(keyword),
-          location: location
+          location: location,
+          token: token,
+          parsed_sentence: Util.parse_sentence(name),
         })
     }
   end
