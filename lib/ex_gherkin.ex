@@ -1,5 +1,8 @@
 defmodule ExGherkin do
-  @moduledoc false
+  @moduledoc """
+  Library to parse Gherkin files.
+  Kindly consult README for more details
+  """
 
   defstruct [
     :feature_file,
