@@ -254,12 +254,12 @@ defmodule ExGherkin.AstNdjson do
     def doc_string_constituents_ctx(acc = Acc.storage()),
       do: Acc.set_local(acc, acc |> Acc.peek_ctx() |> elem(1))
 
-    def doc_string_constituents_reconcile({ctx, content_type, content}, acc = Acc.storage()) do
+    def doc_string_constituents_reconcile({ctx, media_type, content}, acc = Acc.storage()) do
       {raw_location, delimiter} = ctx
 
       local_acc =
         content
-        |> DocString.new(content_type, delimiter, Location.new(raw_location))
+        |> DocString.new(media_type, delimiter, Location.new(raw_location))
 
       Acc.set_local(acc, local_acc)
     end

@@ -21,9 +21,10 @@ defmodule ExGherkin.AstNdjson.Rule do
             keyword: "",
             children: [],
             token: nil,
+            id: "",
             parsed_sentence: %{}
 
-  def new(name, description, keyword, location = %Location{}, token) do
+  def new(name, description, keyword, location = %Location{}, token, id \\ "0") do
     %{
       rule:
         struct(__MODULE__, %{
@@ -32,6 +33,7 @@ defmodule ExGherkin.AstNdjson.Rule do
           keyword: Util.normalize(keyword),
           location: location,
           token: token,
+          id: id,
           parsed_sentence: Util.parse_sentence(name),
         })
     }

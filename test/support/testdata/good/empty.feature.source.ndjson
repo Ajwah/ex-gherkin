@@ -1,9 +1,1 @@
-{
-  "source": {
-    "media": {
-      "contentType": "text/x.cucumber.gherkin+plain",
-      "encoding": "UTF8"
-    },
-    "uri": "testdata/good/empty.feature"
-  }
-}
+{"source":{"mediaType":"text/x.cucumber.gherkin+plain","uri":"testdata/good/empty.feature"}}

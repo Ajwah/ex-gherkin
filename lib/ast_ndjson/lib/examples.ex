@@ -27,9 +27,10 @@ defmodule ExGherkin.AstNdjson.Examples do
             tableHeader: %{},
             tableBody: %{},
             tags: [],
+            id: "",
             parsed_sentence: %{}
 
-  def new(name, description, keyword, tags, location = %Location{}, data_table_rows) do
+  def new(name, description, keyword, tags, location = %Location{}, data_table_rows, id \\ "0") do
     {header_section, body_section} = split_data_table_rows(data_table_rows)
 
     struct(__MODULE__, %{
@@ -40,6 +41,7 @@ defmodule ExGherkin.AstNdjson.Examples do
       tags: Util.normalize(tags),
       tableHeader: Util.normalize(header_section),
       tableBody: Util.normalize(body_section),
+      id: id,
       parsed_sentence: Util.parse_sentence(name),
     })
   end
