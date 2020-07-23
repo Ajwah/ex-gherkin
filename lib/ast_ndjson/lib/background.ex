@@ -22,9 +22,10 @@ defmodule ExGherkin.AstNdjson.Background do
             location: Location.new(),
             steps: [],
             token: nil,
+            id: "",
             parsed_sentence: %{}
 
-  def new(name, description, keyword, location = %Location{}, steps, token) do
+  def new(name, description, keyword, location = %Location{}, steps, token, id \\ "0") do
     %{
       background:
         struct(__MODULE__, %{
@@ -34,6 +35,7 @@ defmodule ExGherkin.AstNdjson.Background do
           location: location,
           steps: Util.normalize(steps),
           token: token,
+          id: id,
           parsed_sentence: Util.parse_sentence(name),
         })
     }

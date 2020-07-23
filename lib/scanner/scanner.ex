@@ -51,6 +51,7 @@ defmodule ExGherkin.Scanner do
     trimmed_line
     |> case do
       "\\\"\\\"\\\"" -> {handle_plain_text("\"\"\"", index, 1), context}
+      "\\`\\`\\`" -> {handle_plain_text("```", index, 1), context}
       "" -> {Token.content(index, 1, ""), context}
       _ -> {handle_plain_text(trimmed_line, index, 1), context}
     end
@@ -297,7 +298,7 @@ defmodule ExGherkin.Scanner do
       |> String.trim_trailing("|")
       |> Utils.data_table_pipe_splitter(column)
       |> Enum.map(fn {offset_count, e} ->
-        {offset_count, String.trim(e)}
+        {offset_count, String.trim(e, " ")}
       end)
 
     {Token.data_table(
@@ -311,6 +312,8 @@ defmodule ExGherkin.Scanner do
   def map_to_token(_, <<"@", rest::binary>>, index, column, context = %Context{}) do
     {_, text} =
       rest
+      |> String.split(" #")
+      |> List.first
       |> String.split("@")
       |> Enum.reduce({column, []}, fn tag, {left_offset, tags} ->
         {left_offset, trimmed_leading} = Utils.count_spaces_before(tag, left_offset)

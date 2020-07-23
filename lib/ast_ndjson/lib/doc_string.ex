@@ -16,14 +16,14 @@ defmodule ExGherkin.AstNdjson.DocString do
 
   defstruct location: Location.new(),
             content: "",
-            contentType: "",
+            mediaType: "",
             delimiter: ""
 
-  def new(content, content_type, delimiter, location = %Location{}) do
+  def new(content, media_type, delimiter, location = %Location{}) do
     struct(__MODULE__, %{
       location: location,
       content: Util.normalize(content),
-      contentType: Util.normalize(content_type),
+      mediaType: Util.normalize(media_type),
       delimiter: Util.normalize(delimiter)
     })
   end
