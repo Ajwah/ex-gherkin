@@ -2,7 +2,7 @@ defmodule ExGherkin.MixProject do
   @moduledoc false
   use Mix.Project
 
-  @vsn "0.1.1"
+  @vsn "0.1.2"
   @github "https://github.com/Ajwah/ex-gherkin"
   @name "ExGherkin"
 
