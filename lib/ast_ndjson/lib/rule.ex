@@ -34,7 +34,7 @@ defmodule ExGherkin.AstNdjson.Rule do
           location: location,
           token: token,
           id: id,
-          parsed_sentence: Util.parse_sentence(name),
+          parsed_sentence: Util.parse_sentence(name)
         })
     }
   end

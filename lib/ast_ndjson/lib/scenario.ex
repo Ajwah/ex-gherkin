@@ -30,7 +30,17 @@ defmodule ExGherkin.AstNdjson.Scenario do
             token: nil,
             parsed_sentence: %{}
 
-  def new(name, description, keyword, location = %Location{}, tags, steps, examples, token, id \\ "0") do
+  def new(
+        name,
+        description,
+        keyword,
+        location = %Location{},
+        tags,
+        steps,
+        examples,
+        token,
+        id \\ "0"
+      ) do
     %{
       scenario:
         struct(__MODULE__, %{
@@ -43,7 +53,7 @@ defmodule ExGherkin.AstNdjson.Scenario do
           examples: Util.normalize(examples),
           id: id,
           token: token,
-          parsed_sentence: Util.parse_sentence(name),
+          parsed_sentence: Util.parse_sentence(name)
         })
     }
   end

@@ -21,7 +21,7 @@ defmodule ExGherkin.AstNdjson.DataTable.Row.Cell do
     struct(__MODULE__, %{
       location: location,
       value: Util.normalize(value),
-      parsed_sentence: Util.parse_sentence(value),
+      parsed_sentence: Util.parse_sentence(value)
     })
   end
 end

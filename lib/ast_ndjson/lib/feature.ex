@@ -36,7 +36,7 @@ defmodule ExGherkin.AstNdjson.Feature do
       tags: Util.normalize(tags),
       location: location,
       token: token,
-      parsed_sentence: Util.parse_sentence(name),
+      parsed_sentence: Util.parse_sentence(name)
     })
   end
 

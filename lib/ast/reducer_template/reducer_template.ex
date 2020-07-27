@@ -17,14 +17,14 @@ defmodule ExGherkin.AstTraverser.ReducerTemplate do
               ) :: Acc.t()
 
     @callback scenario_constituents_reconcile(
-                {token :: atom, title :: any, ctx :: any, tags :: any, description_block :: any, steps :: any,
-                 examples_blocks :: any},
+                {token :: atom, title :: any, ctx :: any, tags :: any, description_block :: any,
+                 steps :: any, examples_blocks :: any},
                 Acc.t()
               ) :: Acc.t()
 
     @callback rule_constituents_reconcile(
-                {token :: atom, title :: any, ctx :: any, description_block :: any, background :: any,
-                 scenario_blocks :: any},
+                {token :: atom, title :: any, ctx :: any, description_block :: any,
+                 background :: any, scenario_blocks :: any},
                 Acc.t()
               ) :: Acc.t()
 
@@ -127,7 +127,11 @@ defmodule ExGherkin.AstTraverser.ReducerTemplate do
           ),
           do: acc
 
-      def step_constituents_reconcile({_step_token, _ctx, _step_text, _step_arg}, acc = Acc.storage()), do: acc
+      def step_constituents_reconcile(
+            {_step_token, _ctx, _step_text, _step_arg},
+            acc = Acc.storage()
+          ),
+          do: acc
 
       def doc_string_constituents_reconcile(
             {_ctx, _delimiter_tag, _doc_string_contents},

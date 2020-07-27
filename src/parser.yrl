@@ -208,23 +208,29 @@ step_block -> thens : '$1'.
 step_block -> ands : '$1'.
 step_block -> buts : '$1'.
 
-givens -> given givens: [step_component('$1') | '$2'].
+givens -> given content : return_error('$2', 'plain_content_within_step_block').
+whens -> 'when' content : return_error('$2', 'plain_content_within_step_block').
+thens -> then content : return_error('$2', 'plain_content_within_step_block').
+ands -> and content : return_error('$2', 'plain_content_within_step_block').
+buts -> but content : return_error('$2', 'plain_content_within_step_block').
+
+givens -> given givens : [step_component('$1') | '$2'].
 givens -> given step_arg : [step_component('$1', '$2')].
 givens -> given : [step_component('$1')].
 
-whens -> 'when' whens: [step_component('$1') | '$2'].
+whens -> 'when' whens : [step_component('$1') | '$2'].
 whens -> 'when' step_arg : [step_component('$1', '$2')].
 whens -> 'when' : [step_component('$1')].
 
-thens -> then thens: [step_component('$1') | '$2'].
+thens -> then thens : [step_component('$1') | '$2'].
 thens -> then step_arg : [step_component('$1', '$2')].
 thens -> then : [step_component('$1')].
 
-ands -> 'and' ands: [step_component('$1') | '$2'].
+ands -> 'and' ands : [step_component('$1') | '$2'].
 ands -> 'and' step_arg : [step_component('$1', '$2')].
 ands -> 'and' : [step_component('$1')].
 
-buts -> but buts: [step_component('$1') | '$2'].
+buts -> but buts : [step_component('$1') | '$2'].
 buts -> but step_arg : [step_component('$1', '$2')].
 buts -> but : [step_component('$1')].
 

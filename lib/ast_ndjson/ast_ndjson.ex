@@ -106,7 +106,15 @@ defmodule ExGherkin.AstNdjson do
 
       local_acc =
         title
-        |> Scenario.new(description, keyword, Location.new(raw_location), tags, steps, examples, token)
+        |> Scenario.new(
+          description,
+          keyword,
+          Location.new(raw_location),
+          tags,
+          steps,
+          examples,
+          token
+        )
 
       Acc.set_local(acc, [local_acc | Acc.local(acc)])
     end

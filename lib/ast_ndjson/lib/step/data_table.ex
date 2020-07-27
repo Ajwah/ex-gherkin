@@ -19,17 +19,21 @@ defmodule ExGherkin.AstNdjson.Step.DataTable do
   end
 
   def to_map(nil, _), do: false
+
   def to_map(%__MODULE__{} = m, examples) do
     [header | values] = m.rows
-    header = header.cells |> Enum.map(&(&1.value))
+    header = header.cells |> Enum.map(& &1.value)
+
     values
     |> Enum.map(fn row ->
-      rows = row.cells
+      rows =
+        row.cells
         |> Enum.map(fn %RowCell{} = cell ->
           if cell.parsed_sentence do
             cell.parsed_sentence.vars
             |> Enum.reduce(cell.parsed_sentence.template, fn
-              var, template -> example = Map.fetch!(examples, var)
+              var, template ->
+                example = Map.fetch!(examples, var)
                 String.replace(template, "%", "#{example}", global: false)
             end)
           else

@@ -3,7 +3,6 @@ defmodule ExGherkin.Parser.SyntaxError do
   defexception [:message, :token, :label, :line, :column, :content, :error_code, :feature_file]
 
   alias __MODULE__.Message
-  alias ExGherkin.Utils
 
   def new(
         all_details = %{
@@ -68,6 +67,7 @@ defmodule ExGherkin.Parser.SyntaxError do
     message_details =
       details
       |> to_parser_details
+      |> incorporate_error_code
       |> Map.put(:feature_file, feature_file)
 
     message = Message.compose(message_details)
@@ -78,7 +78,6 @@ defmodule ExGherkin.Parser.SyntaxError do
   end
 
   def raise(details = {_, _}) do
-    Utils.introspect(details, :parser_raise)
     raise __MODULE__, details
   end
 
@@ -116,48 +115,24 @@ defmodule ExGherkin.Parser.SyntaxError do
       column: column,
       content: to_string(content) |> String.trim("\"")
     }
-    |> incorporate_error_code
   end
 
-  # defp to_parser_details([
-  #   'syntax error before: ',
-  #   [
-  #     [
-  #       123,
-  #       [
-  #         token,
-  #         44, '<<>>', 44,
-  #         [
-  #           123,
-  #           [
-  #             'location', 44, line, 44, column
-  #           ],
-  #           125
-  #         ],
-  #         44,
-  #         [
-  #           60, 60, content, 62, 62
-  #         ]
-  #       ],
-  #       125
-  #     ]
-  #   ]
-  # ]) do
-  #   {line, ""} = Integer.parse(to_string(line))
-  #   {column, ""} = Integer.parse(to_string(column))
-  #   %{
-  #     token: token |> to_string |> String.to_atom,
-  #     label: to_string(token_label) |> String.trim("\""),
-  #     line: line,
-  #     column: column,
-  #     content: to_string(content) |> String.trim("\"")
-  #   }
-  #   |> incorporate_error_code
-  # end
+  defp to_parser_details(details) do
+    %{
+      token: :"?",
+      label: "?",
+      line: "?",
+      column: "?",
+      content: to_string(details)
+    }
+  end
 
   defp incorporate_error_code(details = %{token: :language}),
     do: details |> Map.put(:error_code, :unparsable_language_token)
 
   defp incorporate_error_code(details = %{token: :feature}),
     do: details |> Map.put(:error_code, :multiple_feature_tokens)
+
+  defp incorporate_error_code(details = %{token: :"?"}),
+    do: details |> Map.put(:error_code, :unrefined_error)
 end

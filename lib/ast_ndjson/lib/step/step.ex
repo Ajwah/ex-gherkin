@@ -36,7 +36,7 @@ defmodule ExGherkin.AstNdjson.Step do
       location: location,
       id: id,
       token: token,
-      parsed_sentence: Util.parse_sentence(text),
+      parsed_sentence: Util.parse_sentence(text)
     })
   end
 

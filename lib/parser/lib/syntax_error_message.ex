@@ -106,6 +106,39 @@ defmodule ExGherkin.Parser.SyntaxError.Message do
     })
   end
 
+  def compose(details = %{error_code: error_code = :plain_content_within_step_block}) do
+    format_message(%{
+      details: details,
+      message: "Step Contains Plain Content",
+      original_line: original_tag_line(details),
+      clarrification: "Such plain content is not allowed within a StepBlock",
+      cta: """
+      Kindly exercise any of the following possibilities to resolve your issue:
+        * Either you misspelled a `GWT` token. Double check `gherkin-languages.json` for correct spelling.
+        * Either you intended to pass data to a specific step. In such case:
+          * Either encapsulate the plain content in DocString
+          * Either encapsulate the plain content in Table format
+      """,
+      error_code: error_code,
+      feature_file: details.feature_file
+    })
+  end
+
+  def compose(details = %{error_code: error_code = :unrefined_error}) do
+    format_message(%{
+      details: details,
+      message: "Unrefined Error",
+      original_line: original_tag_line(details),
+      clarrification:
+        "Most likely, the yecc parser returned an error that currently I am not properly matching against",
+      cta: """
+      Feel free to submit a PR.
+      """,
+      error_code: error_code,
+      feature_file: details.feature_file
+    })
+  end
+
   def format_message(%{
         details: details,
         message: message,
@@ -165,15 +198,19 @@ defmodule ExGherkin.Parser.SyntaxError.Message do
     end
   end
 
+  defp original_tag_line(%{content: content}) when is_binary(content), do: content
+
   defp original_tag_line(details) do
-    {line, _} =
+    {full_content_line, _} =
       details.content
-      |> Enum.reduce({"", 0}, fn {position, tag}, {line, current_length} ->
-        line = line <> String.duplicate(" ", position - current_length - 1) <> tag
-        {line, String.length(line)}
+      |> Enum.reduce({"", 0}, fn {position, tag}, {full_content_line, current_length} ->
+        full_content_line =
+          full_content_line <> String.duplicate(" ", position - current_length - 1) <> tag
+
+        {full_content_line, String.length(full_content_line)}
       end)
 
-    line
+    full_content_line
   end
 
   defp format_source(:none), do: "inline"

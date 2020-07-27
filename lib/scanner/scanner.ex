@@ -89,8 +89,8 @@ defmodule ExGherkin.Scanner do
           ) do
         {:token, _prev_keyword, _, _, _} = Context.peek(context)
 
-        #unquote(Macro.escape(next_in_sequence_lookup))
-        #|> Map.get(prev_keyword, unquote(default_homonym))
+        # unquote(Macro.escape(next_in_sequence_lookup))
+        # |> Map.get(prev_keyword, unquote(default_homonym))
 
         :and
         |> case do
@@ -313,7 +313,7 @@ defmodule ExGherkin.Scanner do
     {_, text} =
       rest
       |> String.split(" #")
-      |> List.first
+      |> List.first()
       |> String.split("@")
       |> Enum.reduce({column, []}, fn tag, {left_offset, tags} ->
         {left_offset, trimmed_leading} = Utils.count_spaces_before(tag, left_offset)

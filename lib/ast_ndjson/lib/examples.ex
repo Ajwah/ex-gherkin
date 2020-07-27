@@ -42,7 +42,7 @@ defmodule ExGherkin.AstNdjson.Examples do
       tableHeader: Util.normalize(header_section),
       tableBody: Util.normalize(body_section),
       id: id,
-      parsed_sentence: Util.parse_sentence(name),
+      parsed_sentence: Util.parse_sentence(name)
     })
   end
 
@@ -50,15 +50,16 @@ defmodule ExGherkin.AstNdjson.Examples do
   def split_data_table_rows([header]), do: {header, nil}
   def split_data_table_rows([header | body]), do: {header, body}
 
-
   def table_to_tagged_map(nil), do: false
-  def table_to_tagged_map(%__MODULE__{} = m) do
-    header = m.tableHeader.cells |> Enum.map(&(&1.value))
 
-    map = m.tableBody
+  def table_to_tagged_map(%__MODULE__{} = m) do
+    header = m.tableHeader.cells |> Enum.map(& &1.value)
+
+    map =
+      m.tableBody
       |> Enum.map(fn row ->
         header
-        |> Enum.zip(row.cells |> Enum.map(&(&1.value)))
+        |> Enum.zip(row.cells |> Enum.map(& &1.value))
         |> Enum.into(%{})
       end)
 

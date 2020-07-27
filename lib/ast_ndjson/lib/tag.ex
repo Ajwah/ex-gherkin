@@ -24,7 +24,7 @@ defmodule ExGherkin.AstNdjson.Tag do
       location: location,
       name: Util.normalize(name),
       id: id,
-      parsed_sentence: Util.parse_sentence(name),
+      parsed_sentence: Util.parse_sentence(name)
     })
   end
 end
