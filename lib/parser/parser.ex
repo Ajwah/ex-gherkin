@@ -95,6 +95,9 @@ defmodule ExGherkin.Parser do
       :data_table ->
         invalid_tagging_error(full_prev_token, :untaggable_token)
 
+      :rule ->
+        invalid_tagging_error(full_prev_token, :untaggable_token)
+
       _ ->
         {:ok,
          {full_prev_token,

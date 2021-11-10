@@ -19,7 +19,6 @@ defmodule ExGherkin.AstNdjson.Step.DataTable do
   end
 
   def to_map(nil, _), do: false
-
   def to_map(%__MODULE__{} = m, examples) do
     [header | values] = m.rows
     header = header.cells |> Enum.map(& &1.value)
@@ -44,6 +43,26 @@ defmodule ExGherkin.AstNdjson.Step.DataTable do
       header
       |> Enum.zip(rows)
       |> Enum.into(%{})
+    end)
+  end
+
+  def to_lists(nil, _), do: false
+  def to_lists(%__MODULE__{} = m, examples) do
+    m.rows
+    |> Enum.map(fn row ->
+      row.cells
+      |> Enum.map(fn %RowCell{} = cell ->
+        if cell.parsed_sentence do
+          cell.parsed_sentence.vars
+          |> Enum.reduce(cell.parsed_sentence.template, fn
+            var, template ->
+              example = Map.fetch!(examples, var)
+              String.replace(template, "%", "#{example}", global: false)
+          end)
+        else
+          cell.value
+        end
+      end)
     end)
   end
 end

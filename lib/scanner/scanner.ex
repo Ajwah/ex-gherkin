@@ -61,7 +61,7 @@ defmodule ExGherkin.Scanner do
   # @languages []
 
   Enum.each(@languages, fn {language,
-                            %{
+                            e = %{
                               feature: feature_phrasals,
                               rule: rule_phrasals,
                               background: background_phrasals,
@@ -76,6 +76,8 @@ defmodule ExGherkin.Scanner do
                               direction: language_direction,
                               homonyms: homonym_phrasals
                             }} ->
+      IO.inspect(e, label: :phrasal)
+
     Enum.each(homonym_phrasals, fn {phrasal, next_in_sequence_lookup} ->
       {%{default: _default_homonym}, _next_in_sequence_lookup} =
         Map.split(next_in_sequence_lookup, [:default])

@@ -1,6 +1,6 @@
 defmodule ExGherkin.Utils do
   @moduledoc false
-  @debug Application.get_env(:ex_gherkin, :debug, %{})
+  @debug Application.get_env(:my_ex_gherkin, :debug, %{})
 
   def introspect(content, sth = :format_message) do
     if @debug[sth] do

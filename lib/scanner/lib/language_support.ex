@@ -1,7 +1,7 @@
 defmodule ExGherkin.Scanner.LanguageSupport do
-  @gherkin_languages_source Application.get_env(:ex_gherkin, :file).source
-  @gherkin_languages_resource Application.get_env(:ex_gherkin, :file).resource
-  @homonyms Application.get_env(:ex_gherkin, :homonyms)
+  @gherkin_languages_source Application.get_env(:my_ex_gherkin, :file).source
+  @gherkin_languages_resource Application.get_env(:my_ex_gherkin, :file).resource
+  @homonyms Application.get_env(:my_ex_gherkin, :homonyms)
   @moduledoc_homonyms @homonyms |> Enum.map(&"      * '#{&1}'") |> Enum.join("\n")
 
   @moduledoc """

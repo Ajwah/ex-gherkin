@@ -4,11 +4,11 @@ defmodule ExGherkin.MixProject do
 
   @vsn "0.1.2"
   @github "https://github.com/Ajwah/ex-gherkin"
-  @name "ExGherkin"
+  @name "MyExGherkin"
 
   def project do
     [
-      app: :ex_gherkin,
+      app: :my_ex_gherkin,
       version: @vsn,
       description: "Parse Gherkin Syntax",
       package: %{

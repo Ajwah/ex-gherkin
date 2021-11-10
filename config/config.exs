@@ -1,7 +1,7 @@
 use Mix.Config
 gherkin_languages = "gherkin-languages"
 
-config :ex_gherkin,
+config :my_ex_gherkin,
   file: %{
     source: "#{gherkin_languages}.json",
     resource: "#{gherkin_languages}.few.terms"

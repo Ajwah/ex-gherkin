@@ -25,3 +25,5 @@ ex_gherkin-*.tar
 .elixir_ls/
 *.analysis
 *.trace
+.DS_Store
+.vscode/
