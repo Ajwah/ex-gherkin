@@ -1,4 +1,4 @@
-use Mix.Config
+import Config
 gherkin_languages = "gherkin-languages"
 
 config :my_ex_gherkin,
