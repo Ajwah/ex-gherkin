@@ -2,7 +2,7 @@ defmodule ExGherkin.MixProject do
   @moduledoc false
   use Mix.Project
 
-  @vsn "0.1.2"
+  @vsn "0.1.3"
   @github "https://github.com/Ajwah/ex-gherkin"
   @name "MyExGherkin"
 
@@ -21,7 +21,7 @@ defmodule ExGherkin.MixProject do
         extras: ["README.md"]
       ],
       aliases: [docs: &build_docs/1],
-      elixir: "~> 1.9",
+      elixir: "~> 1.12",
       config_path: "config/config.exs",
       elixirc_paths: elixirc_paths(Mix.env()),
       start_permanent: Mix.env() == :prod,
@@ -36,7 +36,6 @@ defmodule ExGherkin.MixProject do
     ]
   end
 
-  def extra(:test), do: [:ex_unit_notifier, :mix_test_watch]
   def extra(_), do: []
 
   defp elixirc_paths(:test), do: ["lib", "test/support"]
@@ -45,9 +44,7 @@ defmodule ExGherkin.MixProject do
   defp deps do
     [
       {:jiffy, "~> 1.0"},
-      {:jason, "~> 1.1"},
-      {:ex_unit_notifier, "~> 0.1", only: :test},
-      {:mix_test_watch, "~> 1.0", only: :test, runtime: false}
+      {:jason, "~> 1.3"}
     ]
   end
 

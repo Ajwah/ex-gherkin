@@ -13,7 +13,7 @@ defmodule ExGherkin.AstNdjson.Examples do
 
   """
 
-  @derive {Jason.Encoder, except: [:token, :parsed_sentence]}
+  @derive {Jason.Encoder, except: [:parsed_sentence]}
 
   alias ExGherkin.AstNdjson.{
     Location,

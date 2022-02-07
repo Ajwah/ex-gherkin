@@ -18,23 +18,23 @@ benefit from multi-language support and other features.
 Most likely your visit to this repo was prompted by your usage of the package [ex_cucumber](https://github.com/Ajwah/ex_cucumber).
 In such a case, then the main things you would want from this repo are:
 
-* Multi Language Support:
-  * `gherkin-languages.terms`(resource file): This binary contains all the
-  international language support you find as listed at: https://cucumber.io/docs/gherkin/reference/#overview
-  * `gherkin-languages.json`(source file): The latest version of this can be
-  downloaded from https://github.com/cucumber/cucumber/blob/master/gherkin/gherkin-languages.json. Use
-  `mix gherkin_languages` to generate the resource file after having configured `source` and `resource`
-  in `config.exs` as exemplified below.
-  * Feel free to introduce `gherkin keyword`-aliases of your own that you feel are beneficial to be included in your
-  bussiness domain.
+- Multi Language Support:
+  - `gherkin-languages.terms`(resource file): This binary contains all the
+    international language support you find as listed at: https://cucumber.io/docs/gherkin/reference/#overview
+  - `gherkin-languages.json`(source file): The latest version of this can be
+    downloaded from https://github.com/cucumber/cucumber/blob/master/gherkin/gherkin-languages.json. Use
+    `mix gherkin_languages` to generate the resource file after having configured `source` and `resource`
+    in `config.exs` as exemplified below.
+  - Feel free to introduce `gherkin keyword`-aliases of your own that you feel are beneficial to be included in your
+    bussiness domain.
 
 Kindly take note that once you have regenerated the `.terms`-file, that you will need to recompile `ex_gherkin` again.
 A simple way to do this is by `rm -rf _build` followed by `mix compile`. That should compile `ex_gherkin` with
 the `.terms`-file as is present.
 
-* Grammar:
-  * Formal Grammar Specification: https://github.com/Ajwah/ex-gherkin/blob/master/src/parser.yrl
-  * Copious Examples: https://github.com/Ajwah/ex-gherkin/tree/master/test/support/testdata
+- Grammar:
+  - Formal Grammar Specification: https://github.com/Ajwah/ex-gherkin/blob/master/src/parser.yrl
+  - Copious Examples: https://github.com/Ajwah/ex-gherkin/tree/master/test/support/testdata
 
 ## Configuration
 
@@ -42,7 +42,7 @@ the `.terms`-file as is present.
 import Config
 gherkin_languages = "gherkin-languages"
 
-config :ex_gherkin,
+config :my_ex_gherkin,
   file: %{
     # to be downloaded. Serves as input for mix task: `mix gherkin_languages`
     source: "#{gherkin_languages}.json",
@@ -71,7 +71,7 @@ directly to parse `feature`-files.
 ```elixir
 def deps do
   [
-    {:ex_gherkin, "~> 0.1.2"}
+    {:my_ex_gherkin, "~> 0.1.3"}
   ]
 end
 ```
@@ -79,24 +79,24 @@ end
 ## Tools
 
 1. Mix tasks:
-    1. `mix gherkin_languages`:
-       * input: `gherkin-languages.json`
-       * output: `gherkin-languages.terms`
-       * supply variety of options to control:
-         * which subset of languages desired
-         * homonyms
-    2. `mix ast_ndjson`:
-       * input: `*.feature`
-       * output: `*.feature.ast.ndjson`
-       * dependency: `gherkin`-executable(see below)
+   1. `mix gherkin_languages`:
+      - input: `gherkin-languages.json`
+      - output: `gherkin-languages.terms`
+      - supply variety of options to control:
+        - which subset of languages desired
+        - homonyms
+   2. `mix ast_ndjson`:
+      - input: `*.feature`
+      - output: `*.feature.ast.ndjson`
+      - dependency: `gherkin`-executable(see below)
 2. `generate-tokens`:
-   * input: `*.feature`
-   * output: `*.feature.tokens`
-   * dependency: `gherkin`-executable(see below)
+   - input: `*.feature`
+   - output: `*.feature.tokens`
+   - dependency: `gherkin`-executable(see below)
 
 The dependency `gherkin`-executable referred to above can be installed by:
 
-* `gem install cucumber`
+- `gem install cucumber`
 
 ## API
 
@@ -121,37 +121,37 @@ Feature: Minimal
 For fine granular control, there are two parts:
 
 1. `Scanner.tokenize/1,2` to tokenize the `feature` file. This leverages
-`gherkin-languages.terms` to provide `i18n`-support. This file is
-reproducible with the aid of the `mix`-task briefly docummented above,
-e.g.: `mix gherkin_languages`. Using this task, one can use a subset
-of what is contained under [gherkin-languages.json](https://github.com/cucumber/cucumber/blob/master/gherkin/gherkin-languages.json) and/or to even incorporate one's own domain-
-language specific keywords to denote `Given`, `When`, `Then` etc. An
-example of this is the file: `gherkin-languages.few.terms` which was
-primarily introduced to bring the compile-time of this project down.
-`Scanner.tokenize/1,2` [effectively iterates](https://github.com/Ajwah/ex-gherkin/blob/aa32dad70911cf5a7ead186a944dedafc10e2dd1/lib/scanner/scanner.ex#L59-L62) over this file,
-generating functions that pattern-match `i18n`-support.
+   `gherkin-languages.terms` to provide `i18n`-support. This file is
+   reproducible with the aid of the `mix`-task briefly docummented above,
+   e.g.: `mix gherkin_languages`. Using this task, one can use a subset
+   of what is contained under [gherkin-languages.json](https://github.com/cucumber/cucumber/blob/master/gherkin/gherkin-languages.json) and/or to even incorporate one's own domain-
+   language specific keywords to denote `Given`, `When`, `Then` etc. An
+   example of this is the file: `gherkin-languages.few.terms` which was
+   primarily introduced to bring the compile-time of this project down.
+   `Scanner.tokenize/1,2` [effectively iterates](https://github.com/Ajwah/ex-gherkin/blob/aa32dad70911cf5a7ead186a944dedafc10e2dd1/lib/scanner/scanner.ex#L59-L62) over this file,
+   generating functions that pattern-match `i18n`-support.
 
 2. `Parser.run/1` to convert the tokens obtained into `AST`-tree.
-Leverages `yecc` parser under the hood.
+   Leverages `yecc` parser under the hood.
 
 Kindly consult the test-files for more detailed usage.
 
 ## Road Forward
 
-* [ ] Introduce more detailed documentation:
-  * [ ] Better examples as to how to effectively use this parser
-  * [ ] Create online documentation to clarify `Syntax`-errors
-  * [ ] Provide a detailed account of the various tests implemented
-  that are to proof that this is functionally equivalent to the `ruby`-
-  implementation.
-* [ ] Refactorings:
-  * [ ] Incorporate `ExDebugger` and remove Utils.introspect
-* [ ] Take feedback from the official team to have this `repo`to be
-included in the [mono-repo](https://github.com/cucumber/cucumber)
-eventually.
-* [ ] CI/CD.
-* [X] Implement `Cucumber` using this tool. See: [ex_cucumber](https://github.com/Ajwah/ex_cucumber)
-* [X] Publish to Hex.
+- [ ] Introduce more detailed documentation:
+  - [ ] Better examples as to how to effectively use this parser
+  - [ ] Create online documentation to clarify `Syntax`-errors
+  - [ ] Provide a detailed account of the various tests implemented
+        that are to proof that this is functionally equivalent to the `ruby`-
+        implementation.
+- [ ] Refactorings:
+  - [ ] Incorporate `ExDebugger` and remove Utils.introspect
+- [ ] Take feedback from the official team to have this `repo`to be
+      included in the [mono-repo](https://github.com/cucumber/cucumber)
+      eventually.
+- [ ] CI/CD.
+- [x] Implement `Cucumber` using this tool. See: [ex_cucumber](https://github.com/Ajwah/ex_cucumber)
+- [x] Publish to Hex.
 
 ## Docs
 
