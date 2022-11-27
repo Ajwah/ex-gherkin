@@ -22,7 +22,7 @@ In such a case, then the main things you would want from this repo are:
   - `gherkin-languages.terms`(resource file): This binary contains all the
     international language support you find as listed at: https://cucumber.io/docs/gherkin/reference/#overview
   - `gherkin-languages.json`(source file): The latest version of this can be
-    downloaded from https://github.com/cucumber/cucumber/blob/master/gherkin/gherkin-languages.json. Use
+    downloaded from https://github.com/cucumber/gherkin/blob/main/gherkin-languages.json. Use
     `mix gherkin_languages` to generate the resource file after having configured `source` and `resource`
     in `config.exs` as exemplified below.
   - Feel free to introduce `gherkin keyword`-aliases of your own that you feel are beneficial to be included in your
@@ -124,7 +124,7 @@ For fine granular control, there are two parts:
    `gherkin-languages.terms` to provide `i18n`-support. This file is
    reproducible with the aid of the `mix`-task briefly docummented above,
    e.g.: `mix gherkin_languages`. Using this task, one can use a subset
-   of what is contained under [gherkin-languages.json](https://github.com/cucumber/cucumber/blob/master/gherkin/gherkin-languages.json) and/or to even incorporate one's own domain-
+   of what is contained under [gherkin-languages.json](https://github.com/cucumber/gherkin/blob/main/gherkin-languages.json) and/or to even incorporate one's own domain-
    language specific keywords to denote `Given`, `When`, `Then` etc. An
    example of this is the file: `gherkin-languages.few.terms` which was
    primarily introduced to bring the compile-time of this project down.
